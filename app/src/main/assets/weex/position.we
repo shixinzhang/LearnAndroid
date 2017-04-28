@@ -1,0 +1,64 @@
+<template>
+    <scroller style="background-color:#3a3a3a">
+        <div class="wrapper">
+            <div class="box box1">
+                <text> zhang </text>
+            </div>
+            <div class="box box2">
+                <text> shi </text>
+            </div>
+            <div class="box box3">
+                <text> xin </text>
+            </div>
+        </div>
+
+    </scroller>
+</template>
+
+<style>
+  .wrapper {
+    position:absolute;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+    width:730;
+    height:300;
+    background-color:#cccccc;
+  }
+
+  .box {
+    margin:50;
+    padding:20;
+    width:400px;
+    height:400px;
+    position:absolute;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .box1 {
+    left:0;
+    top:0;
+    background-color:#FF0000;
+  }
+
+  .box2 {
+    left:150;
+    top:150;
+    background-color:#0055dd;
+    border-radius:100;
+  }
+
+  .box3 {
+    left:300;
+    top:300;
+    background-image:linear-gradient(to bottom right, #a80077,#66ff00);
+    border-radius:200;
+  }
+
+  }
+
+  }
+
+</style>

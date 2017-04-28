@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">ShixinDemo2</string>
+    <string name="change_theme">切换日夜间模式</string>
+    <string name="hybrid_demo1">Hybrid 练习1,基本交互</string>
+    <string name="hybrid_demo2">Hybrid 练习2</string>
+    <string name="diy_demo1">自定义 View 练习1</string>
+    <string name="focusable_in_touch">熟悉focusableInTouchMode</string>
+    <string name="alpha_header_recyclerview">学习 RecyclerView 顶部悬浮条</string>
+    <string name="refresh_load_more">下拉刷新、加载更多 RecyclerView</string>
+    <string name="login">测试</string>
+    <string name="annotation">注解测试</string>
+    <string name="some_test">一些小测试</string>
+    <string name="location">高德定位</string>
+    <string name="hybrid">Hybrid</string>
+    <string name="async_task">AsyncTask原理分析</string>
+    <string name="weex1">Weex 基本组件的使用</string>
+    <string name="weex_ymc">Weex 实现 YMC 首页</string>
+    <string name="anr_test">ANR 检测</string>
+    <string name="download_test">下载 检测</string>
+    <string name="repeat_service">定时服务测试</string>
+    <string name="service_daemon">守护服务</string>
+
+    <string name="title_slider">轮播图</string>
+    <string name="title_image">图片</string>
+    <string name="title_simple">简单布局</string>
+    <string name="title_switch">开关</string>
+    <string name="title_textarea">输入框</string>
+    <string name="title_video">视频播放</string>
+    <string name="title_webview">webview</string>
+    <string name="title_list">列表</string>
+    <string name="title_load_more">下拉加载更多</string>
+    <string name="title_scroller">Scroller</string>
+    <string name="title_animation">动画</string>
+    <string name="title_picker">日期选择</string>
+    <string name="title_websocket">websocket</string>
+    <string name="title_modal">提示</string>
+    <string name="title_stream">网络</string>
+    <string name="click_auto">自动点击</string>
+    <string name="local_service_connected">服务已连接</string>
+    <string name="local_service_started">定时服务已启动</string>
+    <string name="local_service_label">服务正在重新启动</string>
+</resources>

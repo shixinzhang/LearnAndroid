@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="net.sxkeji.shixinandroiddemo2">
+
+    <uses-sdk
+        android:maxSdkVersion="16"
+        android:targetSdkVersion="25"/>
+
+    <!--用于进行网络定位-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!--用于访问GPS定位-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!--用于获取运营商信息，用于支持提供运营商信息相关的接口-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!--用于访问wifi网络信息，wifi信息会用于进行网络定位-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <!--用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <!--用于访问网络，网络定位需要上网-->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!--用于读取手机当前的状态-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <!--用于写入缓存数据到扩展存储卡-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!--用于申请调用A-GPS模块-->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+    <!--用于申请获取蓝牙信息进行室内定位-->
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
+    <application
+        android:name=".SxApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/icon_ez"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.SearchActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/AppThemeNoActionBar"/>
+        <activity
+            android:name=".activity.SearchBrandActivity"
+            android:theme="@style/AppThemeNoActionBar"/>
+
+        <activity
+            android:name=".activity.ChangeThemeActivity"
+            android:label="@string/change_theme"/>
+
+        <activity
+            android:name=".activity.DIYView1Activity"
+            android:label="@string/diy_demo1"/>
+
+        <activity
+            android:name=".activity.HybridDemo1Activity"
+            android:label="@string/hybrid_demo1"/>
+        <activity
+            android:name=".activity.HybridDemo2Activity"
+            android:label="@string/hybrid_demo2"/>
+        <activity
+            android:name=".activity.FocusInTouchModeActivity"
+            android:label="@string/focusable_in_touch"/>
+        <activity
+            android:name=".activity.SuspensionHeaderActivity"
+            android:label="@string/alpha_header_recyclerview"/>
+        <activity
+            android:name=".activity.RefreshLoadMoreActivity"
+            android:label="@string/refresh_load_more"/>
+        <activity
+            android:name=".activity.OaLoginActivity"
+            android:label="@string/login"/>
+        <activity
+            android:name=".activity.AnnotationTestActivity"
+            android:label="@string/annotation"/>
+        <activity
+            android:name=".activity.RealmTestActivity"
+            android:label="@string/some_test"/>
+        <activity
+            android:name=".activity.AmapLocationActivity"
+            android:label="@string/location"/>
+        <activity
+            android:name=".hybrid.SxWebViewActivity"
+            android:label="@string/hybrid"/>
+        <activity
+            android:name=".activity.AsyncTaskActivity"
+            android:label="@string/async_task"/>
+
+        <activity
+            android:name=".weex.WeexActivity"
+            android:label="@string/weex1"
+            android:theme="@style/AppThemeNoActionBar"/>
+
+        <activity
+            android:name=".weex.WeexYmcActivity"
+            android:label="@string/weex_ymc"
+            android:theme="@style/AppThemeNoActionBar"/>
+
+        <activity
+            android:name=".activity.ServiceTestActivity"
+            android:label="@string/repeat_service"/>
+
+        <activity
+            android:name=".activity.ANRTestActivity"
+            android:label="@string/anr_test"/>
+
+        <activity android:name=".activity.DownloadTestActivity"/>
+
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="012a484e2b4f84412fbea6736ec3658f">
+            <!--开发者申请的key-->
+        </meta-data>
+
+        <service android:name="com.amap.api.location.APSService"/>
+
+        <service
+            android:name=".service.SxService"
+            android:label="@string/repeat_service"/>
+
+        <service
+            android:name=".service.DaemonService"
+            android:label="@string/service_daemon"/>
+
+        <service
+            android:name=".service.AutoClickService"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/click_config"/>
+        </service>
+
+        <receiver
+            android:name=".receiver.RepeatReceiver">
+            <intent-filter>
+                <action android:name="top.shixinzhang.action.receiver.repeat"/>
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>

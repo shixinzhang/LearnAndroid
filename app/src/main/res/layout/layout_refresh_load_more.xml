@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:id="@+id/refresh_view"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="top"
+        android:gravity="center"
+        android:text="下拉刷新"/>
+
+    <TextView
+        android:id="@+id/load_more_view"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:text="加载更多"/>
+</FrameLayout>

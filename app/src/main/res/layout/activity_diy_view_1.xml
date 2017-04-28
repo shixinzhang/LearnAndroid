@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="8dp">
+
+    <net.sxkeji.shixinandroiddemo2.view.CircleColorView
+        android:layout_width="100dp"
+        android:layout_height="100dp"/>
+
+    <net.sxkeji.shixinandroiddemo2.view.CircleColorView
+        android:layout_width="26dp"
+        android:layout_height="26dp"/>
+
+    <LinearLayout
+        android:id="@+id/ll_color_list"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal"/>
+
+    <net.sxkeji.shixinandroiddemo2.view.ListCircleColorView
+        android:id="@+id/list_circle_color"
+        android:layout_width="wrap_content"
+        android:layout_height="10dp"
+        android:background="@color/white"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical">
+
+        <net.sxkeji.shixinandroiddemo2.view.CircleColorView
+            android:id="@+id/circle_color"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+</LinearLayout>
