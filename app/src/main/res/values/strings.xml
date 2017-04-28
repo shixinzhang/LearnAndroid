@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">ShixinDemo2</string>
     <string name="change_theme">切换日夜间模式</string>
     <string name="hybrid_demo1">Hybrid 练习1,基本交互</string>
     <string name="hybrid_demo2">Hybrid 练习2</string>

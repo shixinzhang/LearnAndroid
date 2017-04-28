@@ -12,9 +12,9 @@ import net.sxkeji.shixinandroiddemo2.util.AlarmManagerUtil;
 import java.util.HashMap;
 import java.util.Map;
 
-import top.shixinzhang.utils.DateFormatUtil;
-import top.shixinzhang.utils.LogUtil;
-import top.shixinzhang.utils.SpUtil;
+import top.shixinzhang.sxframework.utils.DateFormatUtil;
+import top.shixinzhang.sxframework.utils.LogUtil;
+import top.shixinzhang.sxframework.utils.SpUtil;
 
 /**
  * <br/> Description: 接受、执行、发送定时任务消息的广播接收者
@@ -64,7 +64,7 @@ public class RepeatReceiver extends BroadcastReceiver {
      */
     private void doRepeatJob(Context context) {
 //        setState(ConfigHelper.ACTION_REPEAT_BROADCAST_RECEIVER, State.ALREADY_STARTED);
-        Integer stopTime = SpUtil.getData(context, ConfigHelper.SP_STOP_TIME, -1);
+        Integer stopTime = SpUtil.getDataFromDefault(context, ConfigHelper.SP_STOP_TIME, -1);
         LogUtil.d(TAG, "doRepeatJob............... " + DateFormatUtil.getCurrentTime() + " ***  stop time: " + stopTime);
 
 

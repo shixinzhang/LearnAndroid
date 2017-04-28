@@ -19,8 +19,8 @@ import net.sxkeji.shixinandroiddemo2.service.SxService;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import top.shixinzhang.utils.DateFormatUtil;
-import top.shixinzhang.utils.SpUtil;
+import top.shixinzhang.sxframework.utils.DateFormatUtil;
+import top.shixinzhang.sxframework.utils.SpUtil;
 
 /**
  * <br/> Description:定时服务
@@ -149,7 +149,7 @@ public class ServiceTestActivity extends BaseActivity {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 repeatStartTimeMillis = DateFormatUtil.getTimeInMillisecond(hourOfDay, minute);
-                SpUtil.saveData(ServiceTestActivity.this, ConfigHelper.SP_START_TIME, repeatStartTimeMillis);
+                SpUtil.saveDataInDefault(ServiceTestActivity.this, ConfigHelper.SP_START_TIME, repeatStartTimeMillis);
             }
         }, 12, 0, true).show();
     }
@@ -162,7 +162,7 @@ public class ServiceTestActivity extends BaseActivity {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 repeatStopTimeMillis = DateFormatUtil.getTimeInMillisecond(hourOfDay, minute);
-                SpUtil.saveData(ServiceTestActivity.this, ConfigHelper.SP_STOP_TIME, repeatStopTimeMillis);
+                SpUtil.saveDataInDefault(ServiceTestActivity.this, ConfigHelper.SP_STOP_TIME, repeatStopTimeMillis);
             }
         }, 12, 0, true).show();
     }

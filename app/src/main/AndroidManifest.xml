@@ -148,6 +148,10 @@
             </intent-filter>
         </receiver>
 
+        <meta-data
+            android:name="${UMENG_CHANNEL_NAME}"
+            android:value="default_channel">
+        </meta-data>
     </application>
 
 </manifest>

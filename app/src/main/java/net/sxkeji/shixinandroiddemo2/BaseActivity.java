@@ -116,7 +116,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         AutoRegister register = (AutoRegister) c.getAnnotation(AutoRegister.class);
         if (register != null) {
             ActivityBean activityBean = new ActivityBean(register.label(), c);
-            MainActivity.registerActivityList(activityBean);
+//            MainActivity.registerActivityList(activityBean);
             LogUtil.i(TAG, activityBean.toString() + " 注册到首页");
         }
     }

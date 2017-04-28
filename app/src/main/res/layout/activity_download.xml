@@ -5,11 +5,23 @@
               android:gravity="center_horizontal"
               android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/tv_app_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        />
     <Button
         android:id="@+id/btn_download"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="download apk"/>
+
+    <Button
+        android:id="@+id/btn_download_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="download image"/>
 
     <Button
         android:id="@+id/btn_download_big_file"
