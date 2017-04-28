@@ -1,0 +1,29 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+
+note "拦截调用，进行额外操作，最后调用 被代理类的方法" as N1
+
+interface Subject{
+    +void doSomething()
+}
+
+class RealSubject{
+    +void doSomething()
+}
+
+class Proxy{
+    +void doSomething()
+}
+
+RealSubject ..|> Subject
+Proxy ..|> Subject
+
+RealSubject *-- Proxy : realSubject
+
+Client --* Subject
+
+N1 .. Proxy
+note left of Client : 持有抽象接口的引用
+
+@enduml

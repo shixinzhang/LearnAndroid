@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/et_normal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="正常的 EditText"
+        android:layout_margin="8dp"
+        />
+
+    <EditText
+        android:id="@+id/et_not_focus_in_touch_mode"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="不正常的 EditText"
+        android:focusableInTouchMode="false"
+        android:layout_margin="8dp"
+        />
+
+    <AutoCompleteTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

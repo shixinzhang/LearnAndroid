@@ -1,0 +1,1 @@
+include ':app', ':library', ':WeexSDK', ':utils', ':sxframework'

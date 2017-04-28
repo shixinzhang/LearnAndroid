@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:gravity="center"
+                  android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_user_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="center"
+                    android:text="who are you ?"/>
+
+                <TextView
+                    android:id="@+id/tv_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="hello"/>
+            </LinearLayout>
+        </ScrollView>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingLeft="32dp"
+            android:paddingRight="32dp">
+
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="登录"/>
+
+            <Button
+                android:id="@+id/btn_get_status"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="查询状态"/>
+
+            <Button
+                android:id="@+id/btn_check_in"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="签到"/>
+
+            <Button
+                android:id="@+id/btn_check_out"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="签退"/>
+
+            <Button
+                android:id="@+id/btn_input"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="输入"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_cover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_ez"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:scaleType="center"
+            android:src="@mipmap/icon_ez"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="shixinzhang"/>
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="come on baby!"/>
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,42 @@
+@startuml
+
+B --|> A
+
+abstract class AbstractList
+abstract AbstractCollection
+interface List
+interface Collection
+
+ShixinList --|> List
+List <|-- AbstractList
+Collection <|-- AbstractCollection
+
+Collection <|- List
+AbstractCollection <|- AbstractList
+AbstractList <|-- ArrayList
+
+class ArrayList {
+Object[] elementData
+size()
+}
+
+enum TimeUnit {
+DAYS
+HOURS
+MINUTES
+SECONDS
+}
+
+package top.shixinzhang.uml{
+    class Man{
+        -String name
+        +String getName()
+    }
+
+    class Shixin extends Man{
+        -int age
+        +int getAge()
+    }
+}
+
+@enduml

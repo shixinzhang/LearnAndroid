@@ -1,0 +1,121 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.dodola.rocoofix'
+apply plugin: 'realm-android'
+apply plugin: 'android-apt'
+
+def commandValue = "default value ~"
+
+android {
+    signingConfigs {
+        debugSigning {
+            keyAlias 'shixinzhang'
+            keyPassword 'zsx250'
+            storeFile file('/Users/zhangshixin/AndroidStudioProjects/ShixinDemo2/app/debugkeystore.jks')
+            storePassword 'zsx250'
+        }
+    }
+    compileSdkVersion 24
+    buildToolsVersion '25.0.2'
+    defaultConfig {
+        applicationId "net.sxkeji.shixinandroiddemo2"
+        minSdkVersion 16
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+
+        //enable multi dex
+        multiDexEnabled true
+//        必须加，否则64位手机无法加载so文件
+        ndk {
+            abiFilters "x86"
+            abiFilters "armeabi"
+        }
+
+        commandValue = project.getProperties().get("Value")
+        //通过 gradle 命令行传入参数： gradle assemble{BuildType} -PValue=value 传递
+        if (commandValue == null || "".equals(commandValue)) {
+            commandValue = "cannot read value from command line"
+        }
+//        buildConfigField("String", "value", commandValue)
+        print("value=" + commandValue)
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable true
+        }
+
+        shixin {
+
+        }
+    }
+
+    productFlavors {
+        dev {
+//            minSdkVersion 21
+        }
+    }
+
+    packagingOptions {
+        exclude 'com.android.support:support-annotations:25.1.0'
+    }
+}
+
+//去除重复的依赖
+configurations {
+    all*.exclude group: 'com.android.support', module: 'support-v4-25.0.0'
+//    all*.exclude group: 'com.android.support', module: 'support-annotations'
+}
+
+repositories {
+    jcenter()
+}
+
+//rocoo_fix {
+//    includePackage = ['com/dodola/rocoosample']//指定将来可能需要制作补丁的package(就是指定插庄的范围)
+//    excludeClass = ['BaseApplication.class']//将不需要加到patch里的类写在这里(不需要插庄的类)
+//
+//    preVersionPath = '1'//注意：此项属性只在需要制作补丁的时候才需开启！！如果不需要制作补丁则需要去掉此项
+//
+//    enable = true//注意：关掉此项会无法生成Hash.txt文件
+//
+//    scanref=true//默认为 false，开启这个选项会将与补丁 class 相引用的 class 都打入包中来解决 ART 虚拟机崩溃问题，功能 Beta 中
+//}
+
+final COMPAT_VERSION = "24.2.0"
+dependencies {
+    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile "com.android.support:recyclerview-v7:$COMPAT_VERSION"
+    compile "com.android.support:cardview-v7:$COMPAT_VERSION"
+    compile "com.android.support:support-annotations:$COMPAT_VERSION"
+    compile "com.android.support:design:$COMPAT_VERSION"
+    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'com.squareup.okhttp:okhttp-ws:2.3.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta3'
+    compile 'io.reactivex:rxjava:1.0.14'
+    compile 'io.reactivex:rxandroid:1.0.1'
+    compile 'com.github.ismaeltoe:flowlayout:1.0'
+    compile 'com.google.code.gson:gson:2.4'
+    compile 'com.alibaba:fastjson:1.1.46.android'
+//    compile 'com.taobao.android:weex_sdk:0.10.0@aar'
+    compile 'com.amap.api:location:3.3.0'
+    compile 'com.github.anrwatchdog:anrwatchdog:1.3.0'
+    //    compile 'com.dodola:rocoo:1.1'
+    //    compile fileTree(include: ['*.jar'], dir: 'libs')
+//    testCompile 'junit:junit:4.12'
+//    compile 'com.android.support.test.espresso:espresso-core:2.2.2', {
+//        exclude group: 'com.android.support', module: 'support-annotations'
+//    }
+    compile project(path: ':WeexSDK')
+    compile project(path: ':utils')
+    compile project(path: ':sxframework')
+}
