@@ -11,6 +11,13 @@
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
         />
+
+    <Button
+        android:id="@+id/btn_check_update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="检测是否需要更新"/>
+
     <Button
         android:id="@+id/btn_download"
         android:layout_width="wrap_content"

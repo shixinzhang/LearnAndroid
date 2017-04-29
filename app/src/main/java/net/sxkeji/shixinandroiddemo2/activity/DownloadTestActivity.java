@@ -17,6 +17,7 @@ import top.shixinzhang.sxframework.AppInfo;
 import top.shixinzhang.sxframework.network.download.IDownloader;
 import top.shixinzhang.sxframework.network.download.imp.DefaultDownloader;
 import top.shixinzhang.sxframework.update.APKDownloader;
+import top.shixinzhang.sxframework.update.model.UpdateInfo;
 import top.shixinzhang.sxframework.utils.ApplicationUtil;
 import top.shixinzhang.sxframework.utils.DateFormatUtil;
 
@@ -48,6 +49,22 @@ public class DownloadTestActivity extends BaseActivity {
         setContentView(R.layout.activity_download);
         ButterKnife.bind(this);
         loadData();
+    }
+
+    @OnClick(R.id.btn_check_update)
+    public void checkUpdate() {
+
+        UpdateInfo updateInfo = new UpdateInfo.Builder()
+                .needUpdate(true)
+                .appName("shixinzhangApp")
+                .appVersion("1.2.0")
+                .downType(1)
+                .forceUpdate(false)
+                .silentDownload(true)
+                .downloadUrl(TEST_APK_URL)
+                .build();
+
+
     }
 
     @OnClick(R.id.btn_download)
@@ -97,7 +114,7 @@ public class DownloadTestActivity extends BaseActivity {
                     + "\n versionCode:" + packageInfo.versionCode + "\n lastUpdateTime:" + DateFormatUtil.getDateString(packageInfo.lastUpdateTime));
         }
 
-        mDownloader =  DefaultDownloader.getInstance(DownloadTestActivity.this);
+        mDownloader = DefaultDownloader.getInstance(DownloadTestActivity.this);
     }
 
     @Override

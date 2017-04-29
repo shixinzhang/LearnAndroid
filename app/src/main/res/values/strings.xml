@@ -15,7 +15,7 @@
     <string name="weex1">Weex 基本组件的使用</string>
     <string name="weex_ymc">Weex 实现 YMC 首页</string>
     <string name="anr_test">ANR 检测</string>
-    <string name="download_test">下载 检测</string>
+    <string name="download_test">更新、下载测试</string>
     <string name="repeat_service">定时服务测试</string>
     <string name="service_daemon">守护服务</string>
 

@@ -63,10 +63,10 @@ public class OaLoginActivity extends BaseActivity {
     private String[] mAddressArray = {"上海市普陀区光复西路靠近汇银铭尊6号楼", "上海市长宁区泸定路桥靠近泸定路桥",
             "上海市长宁区威宁路靠近上海浦东发展银行(天山路支行)", "上海市长宁区威宁路靠近海益商务大厦"};
     private String mAddr;
-    private final String MY_ACCOUNT = "zhangshixin";
-    private final String MY_PWD = "Yuntu@123";
-//    private final String MY_ACCOUNT = "larryzhang";
-//    private final String MY_PWD = "zszh0822";
+//    private final String MY_ACCOUNT = "zhangshixin";
+//    private final String MY_PWD = "Yuntu@123";
+    private final String MY_ACCOUNT = "larryzhang";
+    private final String MY_PWD = "zszh0822";
 //    private final String MY_ACCOUNT = "youngwang";    //貌似是错的
 //    private final String MY_PWD = "sh5201314";
 
