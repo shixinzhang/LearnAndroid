@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
 
 import net.sxkeji.shixinandroiddemo2.activity.ANRTestActivity;
@@ -23,6 +24,7 @@ import net.sxkeji.shixinandroiddemo2.activity.RefreshLoadMoreActivity;
 import net.sxkeji.shixinandroiddemo2.activity.SearchActivity;
 import net.sxkeji.shixinandroiddemo2.activity.ServiceTestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.SuspensionHeaderActivity;
+import net.sxkeji.shixinandroiddemo2.activity.launchmode.StandardActivity;
 import net.sxkeji.shixinandroiddemo2.adapter.ActivityListAdapter;
 import net.sxkeji.shixinandroiddemo2.adapter.rvbaseadapter.BaseQuickAdapter;
 import net.sxkeji.shixinandroiddemo2.bean.ActivityBean;
@@ -31,12 +33,12 @@ import net.sxkeji.shixinandroiddemo2.utils.SystemUtil;
 import net.sxkeji.shixinandroiddemo2.weex.WeexActivity;
 import net.sxkeji.shixinandroiddemo2.weex.WeexYmcActivity;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import top.shixinzhang.sxframework.utils.LogUtil;
 
 /**
  * 吸取之前那个 demo 的问题，不乱引入第三方，记住！
@@ -87,6 +89,7 @@ public class MainActivity extends BaseActivity {
                 new ActivityBean("搜索", SearchActivity.class),
                 new ActivityBean(getString(R.string.repeat_service), ServiceTestActivity.class),
                 new ActivityBean("夜间模式", ChangeThemeActivity.class),
+                new ActivityBean("启动模式", StandardActivity.class),
                 new ActivityBean("Hybrid 练习1", HybridDemo1Activity.class),
                 new ActivityBean(getString(R.string.diy_demo1), DIYView1Activity.class),
                 new ActivityBean(getString(R.string.focusable_in_touch), FocusInTouchModeActivity.class),
@@ -125,7 +128,7 @@ public class MainActivity extends BaseActivity {
                         intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                     }
                 }
-                startActivity(intent);
+                getApplicationContext().startActivity(intent);
             }
         });
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -141,7 +144,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        showInfoLog("onSaveInstanceState");
         outState.putString(INSTANCE_STATE_TEST, "shixinzhang");
         super.onSaveInstanceState(outState);
 
@@ -151,6 +153,28 @@ public class MainActivity extends BaseActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         String saveState = savedInstanceState.getString(INSTANCE_STATE_TEST);
-        showInfoLog("onRestoreInstanceState" + saveState);
+        showInfoLog("onRestoreInstanceState： " + saveState);
+    }
+
+    @Override
+    public boolean onKeyMultiple(int keyCode, int repeatCount, KeyEvent event) {
+        LogUtil.i(TAG, "onKeyMultiple " + keyCode + ", repeat " + repeatCount + "event: " + event);
+        return super.onKeyMultiple(keyCode, repeatCount, event);
+    }
+
+    /**
+     * 让按返回键时不执行 onDestroy 方法
+     *
+     * @param keyCode
+     * @param event
+     * @return
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            moveTaskToBack(true);   //将当前 Activity 的 Task 放到 Activity 栈的后边
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

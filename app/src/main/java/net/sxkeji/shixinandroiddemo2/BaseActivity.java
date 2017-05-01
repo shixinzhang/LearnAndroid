@@ -1,6 +1,7 @@
 package net.sxkeji.shixinandroiddemo2;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -151,6 +152,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(msg)) {
             Toast.makeText(this, msg, duration).show();
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        showInfoLog("onNewIntent");
     }
 
     @Override
