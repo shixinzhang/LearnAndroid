@@ -3,7 +3,6 @@ package net.sxkeji.shixinandroiddemo2.activity;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.widget.Button;
 import android.widget.TextView;
 
 import net.sxkeji.shixinandroiddemo2.BaseActivity;
@@ -13,11 +12,10 @@ import net.sxkeji.shixinandroiddemo2.annotation.AutoRegister;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import top.shixinzhang.sxframework.AppInfo;
 import top.shixinzhang.sxframework.network.download.IDownloader;
 import top.shixinzhang.sxframework.network.download.imp.DefaultDownloader;
 import top.shixinzhang.sxframework.update.APKDownloader;
-import top.shixinzhang.sxframework.update.model.UpdateInfo;
+import top.shixinzhang.sxframework.update.model.UpdateResponseInfo;
 import top.shixinzhang.sxframework.utils.ApplicationUtil;
 import top.shixinzhang.sxframework.utils.DateFormatUtil;
 
@@ -54,7 +52,7 @@ public class DownloadTestActivity extends BaseActivity {
     @OnClick(R.id.btn_check_update)
     public void checkUpdate() {
 
-        UpdateInfo updateInfo = new UpdateInfo.Builder()
+        UpdateResponseInfo updateInfo = new UpdateResponseInfo.Builder()
                 .needUpdate(true)
                 .appName("shixinzhangApp")
                 .appVersion("1.2.0")

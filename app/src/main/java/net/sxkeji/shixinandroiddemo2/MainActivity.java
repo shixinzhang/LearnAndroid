@@ -115,6 +115,14 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initViews() {
+//        Intent intent = new Intent(this, SearchActivity.class);
+//        intent.setAction("top.shixinzhang.action.test");
+//        intent.setData();
+//        intent.addCategory("top.shixinzhang.category.test");
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        startActivity(intent);
+//        sendStickyBroadcast();
         mActivityListAdapter = new ActivityListAdapter(this, mActivityNameList);
         mActivityListAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override

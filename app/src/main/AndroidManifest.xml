@@ -128,9 +128,17 @@
 
         <activity
             android:name=".activity.launchmode.SingleTaskActivity"
+            android:alwaysRetainTaskState="true"
             android:label="singleTask"
             android:launchMode="singleTask"
-            android:taskAffinity="top.shixinzhang.task2"/>
+            android:taskAffinity="top.shixinzhang.task2">
+            <intent-filter>
+                <action android:name="top.shixinzhang.action.test"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="top.shixinzhang.category.test"/>
+                <data android:mimeType="text/plain"/>
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".activity.launchmode.SingleInstanceActivity"
