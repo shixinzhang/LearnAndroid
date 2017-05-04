@@ -66,7 +66,7 @@ public class MainActivity extends BaseActivity {
             new AlertDialog
                     .Builder(this)
                     .setTitle("提示")
-                    .setMessage("是否前往开启辅助辅助")
+                    .setMessage("是否前往开启辅助服务")
                     .setPositiveButton("是", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -136,7 +136,7 @@ public class MainActivity extends BaseActivity {
                         intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                     }
                 }
-                getApplicationContext().startActivity(intent);
+                startActivity(intent);
             }
         });
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);

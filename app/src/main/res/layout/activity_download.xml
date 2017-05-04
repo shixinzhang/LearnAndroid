@@ -25,6 +25,12 @@
         android:text="download apk"/>
 
     <Button
+        android:id="@+id/btn_test_auto_install"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="测试自动安装 apk"/>
+
+    <Button
         android:id="@+id/btn_download_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

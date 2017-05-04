@@ -10,6 +10,7 @@ import net.sxkeji.shixinandroiddemo2.service.AutoClickService;
 
 /**
  * <br/> Description:
+ * <p> 系统功能检查
  * <p>
  * <br/> Created by shixinzhang on 17/3/31.
  * <p>

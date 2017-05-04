@@ -11,8 +11,10 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * <br/> Description: 使用辅助功能模拟点击事件
@@ -34,6 +36,8 @@ public class AutoClickService extends AccessibilityService {
     private final String ALL_MEMBER_CLASS_NAME = "com.tencent.mm.plugin.chatroom.ui.SeeRoomMemberUI";   //群成员页面
     private final String PROFILE_CLASS_NAME = "com.tencent.mm.plugin.profile.ui.ContactInfoUI"; //联系人详细资料页面
 
+    private Set<String> installViewSet = new HashSet<>();
+
 //    private static volatile Map<String, Boolean> friendsNameStateMap;    //好友名称和是否好友的状态
 
     @Override
@@ -51,18 +55,25 @@ public class AutoClickService extends AccessibilityService {
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return super.onStartCommand(intent, flags, startId);
+//        installViewSet.add()
+    }
+
+    @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         Log.i(TAG, event.getPackageName().toString() + " , " + event.getClassName().toString());
 
         String packageName = event.getPackageName().toString();
-        if (!CLICK_PACKAGE_NAME.equals(packageName) && !INSTALL_PACKAGE_NAME.equals(packageName)) {
-            return;
-        }
+//        if (!CLICK_PACKAGE_NAME.equals(packageName) && !INSTALL_PACKAGE_NAME.equals(packageName)) {
+//            return;
+//        }
         int eventType = event.getEventType();
         switch (eventType) {
             case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
             case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:  //监听进入界面
                 String className = event.getClassName().toString();
+
                 if (CLICK_CLASS_NAME.equals(className)) {   //在群信息第一页
                     openAllMemberPage();
                 }

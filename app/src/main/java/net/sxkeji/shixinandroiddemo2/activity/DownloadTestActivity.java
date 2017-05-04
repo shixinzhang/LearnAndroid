@@ -9,6 +9,8 @@ import net.sxkeji.shixinandroiddemo2.BaseActivity;
 import net.sxkeji.shixinandroiddemo2.R;
 import net.sxkeji.shixinandroiddemo2.annotation.AutoRegister;
 
+import java.io.IOException;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -35,7 +37,8 @@ public class DownloadTestActivity extends BaseActivity {
     @BindView(R.id.tv_app_info)
     TextView mTvAppInfo;
 
-    private String TEST_APK_URL = "http://shixinoss.oss-cn-shanghai.aliyuncs.com/apk/shixin_wandoujia_release_6.0_2017-04-28.apk";
+    private String TEST_APK_URL2 = "http://www.wandoujia.com/apps/com.dianping.v1/binding?source=wandoujia-web_direct_binded";
+//    private String TEST_APK_URL = "http://shixinoss.oss-cn-shanghai.aliyuncs.com/apk/shixin_wandoujia_release_6.0_2017-04-28.apk";
     private String TEST_BIG_FILE_URL = "http://shixinoss.oss-cn-shanghai.aliyuncs.com/install/%E9%B8%9F%E5%93%A5%E7%9A%84Linux%E7%A7%81%E6%88%BF%E8%8F%9C%E5%9F%BA%E7%A1%80%E7%AF%87%E7%AC%AC%E4%B8%89%E7%89%88.pdf";
     private String TEST_IMG_URL = "http://shixinoss.oss-cn-shanghai.aliyuncs.com/image/%E6%B8%85%E6%99%A8.jpeg";
 
@@ -59,10 +62,19 @@ public class DownloadTestActivity extends BaseActivity {
                 .downType(1)
                 .forceUpdate(false)
                 .silentDownload(true)
-                .downloadUrl(TEST_APK_URL)
+                .downloadUrl(TEST_APK_URL2)
                 .build();
 
 
+    }
+
+    @OnClick(R.id.btn_test_auto_install)
+    public void autoInstall() {
+        try {
+            ApplicationUtil.autoInstallApp("shixinzhang.apk");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @OnClick(R.id.btn_download)
@@ -71,7 +83,7 @@ public class DownloadTestActivity extends BaseActivity {
                 .context(this)
                 .apkName("shixinzhang.apk")
                 .title("shixinzhang app")
-                .url(TEST_APK_URL)
+                .url(TEST_APK_URL2)
                 .build()
                 .download();
     }

@@ -93,6 +93,7 @@ android {
 
     packagingOptions {
         exclude 'com.android.support:support-annotations:25.1.0'
+        exclude 'META-INF/rxjava.properties'
     }
 }
 
@@ -135,8 +136,8 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta3'
-    compile 'io.reactivex:rxjava:1.0.14'
-    compile 'io.reactivex:rxandroid:1.0.1'
+//    compile 'io.reactivex:rxjava:1.0.14'
+//    compile 'io.reactivex:rxandroid:1.0.1'
     compile 'com.github.ismaeltoe:flowlayout:1.0'
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.alibaba:fastjson:1.1.46.android'
