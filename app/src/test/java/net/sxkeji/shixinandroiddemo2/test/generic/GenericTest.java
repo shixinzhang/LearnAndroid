@@ -332,7 +332,7 @@ public class GenericTest {
     }
 
     /**
-     * 在整个类所有 Test 之前运行
+     * 在整个类所有 ANRHandler 之前运行
      */
     @BeforeClass
     public static void beforeClass(){
@@ -340,7 +340,7 @@ public class GenericTest {
     }
     
     /**
-     * before 每一个 Test 前运行，初始化资源
+     * before 每一个 ANRHandler 前运行，初始化资源
      */
     @Before
     public void beforeTest(){
@@ -369,7 +369,7 @@ public class GenericTest {
     }
 
     /**
-     * after 每一个 Test 运行，释放资源
+     * after 每一个 ANRHandler 运行，释放资源
      */
     @After
     public void afterTest(){

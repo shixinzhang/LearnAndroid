@@ -1,10 +1,8 @@
 package net.sxkeji.shixinandroiddemo2;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.multidex.MultiDexApplication;
-import android.widget.Toast;
 
 import com.github.anrwatchdog.ANRError;
 import com.github.anrwatchdog.ANRWatchDog;
@@ -19,6 +17,7 @@ import net.sxkeji.shixinandroiddemo2.weex.adapter.PlayDebugAdapter;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import top.shixinzhang.sxframework.statistic.CrashHandler;
 import top.shixinzhang.sxframework.utils.ApplicationUtil;
 
 /**
@@ -41,6 +40,8 @@ public class SxApplication extends MultiDexApplication {
         addLifecycleListener();
 
         registerHybridHandler();
+
+        CrashHandler.init(this);
 
 //        initANRWatch();
 

@@ -136,9 +136,21 @@
             android:taskAffinity="top.shixinzhang.task2">
             <intent-filter>
                 <action android:name="top.shixinzhang.action.test"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="top.shixinzhang.category.test"/>
-                <data android:mimeType="text/plain"/>
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:host="myapp.mycompany.com"
+                    android:scheme="myapp"/>
             </intent-filter>
         </activity>
 

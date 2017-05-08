@@ -64,7 +64,7 @@ public class TestFlow {
 //     * }
 //     *
 //     */
-//    @Test
+//    @ANRHandler
 //    public void testByTestMap() {
 //        for (final View caseView : mCaseListIndexView) {
 //
