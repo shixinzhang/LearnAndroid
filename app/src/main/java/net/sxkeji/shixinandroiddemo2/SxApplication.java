@@ -83,8 +83,21 @@ public class SxApplication extends MultiDexApplication {
         );
     }
 
+    /**
+     * 注册 Hybrid 工厂
+     */
     private void registerHybridHandler() {
         HybridFactory.getInstance().registerHandlers(UIHandler.class);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
 
     }
 
@@ -94,7 +107,7 @@ public class SxApplication extends MultiDexApplication {
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-
+                initCommonView(activity, savedInstanceState);
             }
 
             @Override
@@ -127,5 +140,15 @@ public class SxApplication extends MultiDexApplication {
 
             }
         });
+    }
+
+    /**
+     * 初始化通用布局，类似以前在 BaseActivity 干的事
+     *
+     * @param activity
+     * @param savedInstanceState
+     */
+    private void initCommonView(Activity activity, Bundle savedInstanceState) {
+
     }
 }

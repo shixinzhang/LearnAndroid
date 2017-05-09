@@ -16,6 +16,7 @@ import net.sxkeji.shixinandroiddemo2.activity.AsyncTaskActivity;
 import net.sxkeji.shixinandroiddemo2.activity.ChangeThemeActivity;
 import net.sxkeji.shixinandroiddemo2.activity.DIYView1Activity;
 import net.sxkeji.shixinandroiddemo2.activity.DownloadTestActivity;
+import net.sxkeji.shixinandroiddemo2.activity.FloatTrackerActivity;
 import net.sxkeji.shixinandroiddemo2.activity.FocusInTouchModeActivity;
 import net.sxkeji.shixinandroiddemo2.activity.HybridDemo1Activity;
 import net.sxkeji.shixinandroiddemo2.activity.OaLoginActivity;
@@ -29,7 +30,7 @@ import net.sxkeji.shixinandroiddemo2.adapter.ActivityListAdapter;
 import net.sxkeji.shixinandroiddemo2.adapter.rvbaseadapter.BaseQuickAdapter;
 import net.sxkeji.shixinandroiddemo2.bean.ActivityBean;
 import net.sxkeji.shixinandroiddemo2.hybrid.SxWebViewActivity;
-import net.sxkeji.shixinandroiddemo2.utils.SystemUtil;
+import net.sxkeji.shixinandroiddemo2.service.AssistantService;
 import net.sxkeji.shixinandroiddemo2.weex.WeexActivity;
 import net.sxkeji.shixinandroiddemo2.weex.WeexYmcActivity;
 
@@ -39,6 +40,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import top.shixinzhang.sxframework.utils.LogUtil;
+import top.shixinzhang.sxframework.utils.SettingUtil;
 
 /**
  * 吸取之前那个 demo 的问题，不乱引入第三方，记住！
@@ -62,7 +64,7 @@ public class MainActivity extends BaseActivity {
         loadData();
         initViews();
 
-        if (!SystemUtil.checkIfOpenAccessibility(this)) {
+        if (!SettingUtil.checkAccessibilityOpen(this, AssistantService.class)) {
             new AlertDialog
                     .Builder(this)
                     .setTitle("提示")
@@ -70,7 +72,7 @@ public class MainActivity extends BaseActivity {
                     .setPositiveButton("是", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            SystemUtil.jumpToSettingAccessibility(MainActivity.this);
+                            SettingUtil.jumpToSettingAccessibility(MainActivity.this);
                         }
                     })
                     .setNegativeButton("否", null)
@@ -104,7 +106,8 @@ public class MainActivity extends BaseActivity {
                 new ActivityBean(getString(R.string.weex1), WeexActivity.class),
                 new ActivityBean(getString(R.string.weex_ymc), WeexYmcActivity.class),
                 new ActivityBean(getString(R.string.anr_test), ANRTestActivity.class),
-                new ActivityBean(getString(R.string.download_test), DownloadTestActivity.class));
+                new ActivityBean(getString(R.string.download_test), DownloadTestActivity.class),
+                new ActivityBean(getString(R.string.float_tracker), FloatTrackerActivity.class));
     }
 
     public static void registerActivityList(ActivityBean... activityBeans) {

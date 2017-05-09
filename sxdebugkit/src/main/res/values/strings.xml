@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">sxdebugkit</string>
+    <string name="accessibility_service_description">开启后显示前台Activity信息</string>
+</resources>

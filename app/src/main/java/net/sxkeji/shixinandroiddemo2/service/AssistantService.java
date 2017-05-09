@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * <br/> Description: 使用辅助功能模拟点击事件
+ * <br/> Description: 使用辅助功能模拟点击事件、悬浮窗显示信息
  * <p>
  * <br/> Created by shixinzhang on 17/3/31.
  * <p>
@@ -26,18 +26,16 @@ import java.util.Set;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public class AutoClickService extends AccessibilityService {
+public class AssistantService extends AccessibilityService {
     private final String TAG = this.getClass().getSimpleName();
 
-    private final String CLICK_PACKAGE_NAME = "com.tencent.mm";
+    private final String WX_PACKAGE_NAME = "com.tencent.mm";
     private final String INSTALL_PACKAGE_NAME = "com.android.packageinstaller"; //安装管理器
 
     private final String CLICK_CLASS_NAME = "com.tencent.mm.plugin.chatroom.ui.ChatroomInfoUI";     //群信息页面进
     private final String ALL_MEMBER_CLASS_NAME = "com.tencent.mm.plugin.chatroom.ui.SeeRoomMemberUI";   //群成员页面
     private final String PROFILE_CLASS_NAME = "com.tencent.mm.plugin.profile.ui.ContactInfoUI"; //联系人详细资料页面
-
-    private Set<String> installViewSet = new HashSet<>();
-
+    private final String GROUP_CHAT_CLASS_NAME = "com.tencent.mm.ui.contact.ChatroomContactUI"; //群聊页面
 //    private static volatile Map<String, Boolean> friendsNameStateMap;    //好友名称和是否好友的状态
 
     @Override
@@ -49,15 +47,13 @@ public class AutoClickService extends AccessibilityService {
 
         //也可以在这里配置信息
         showToast("自动点击服务已开启，请打开微信");
-
-//        new AlertDialog.Builder(getApplicationContext())
-//                .setTitle("已连接").show();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+
         return super.onStartCommand(intent, flags, startId);
-//        installViewSet.add()
     }
 
     @Override
@@ -65,29 +61,54 @@ public class AutoClickService extends AccessibilityService {
         Log.i(TAG, event.getPackageName().toString() + " , " + event.getClassName().toString());
 
         String packageName = event.getPackageName().toString();
-//        if (!CLICK_PACKAGE_NAME.equals(packageName) && !INSTALL_PACKAGE_NAME.equals(packageName)) {
-//            return;
-//        }
         int eventType = event.getEventType();
         switch (eventType) {
-            case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
+//            case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
             case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:  //监听进入界面
                 String className = event.getClassName().toString();
 
-                if (CLICK_CLASS_NAME.equals(className)) {   //在群信息第一页
-                    openAllMemberPage();
+                if (packageName.equals(WX_PACKAGE_NAME)) {
+                    autoClickWx(event, className);
                 }
-                if (ALL_MEMBER_CLASS_NAME.equals(className)) { //在所有群成员页面
-                    openFriendsInfoPages();
-                }
-                if (PROFILE_CLASS_NAME.equals(className)) {    //在详细资料页面
-                    getFriendInfoAndSendRequest();
-                }
-
-
                 break;
         }
 
+    }
+
+    /**
+     * 微信中的自动点击
+     *
+     * @param event
+     * @param className
+     */
+    private void autoClickWx(AccessibilityEvent event, String className) {
+        if (GROUP_CHAT_CLASS_NAME.equals(className)) {  //在群聊页面
+            iterateOpenGroupChat(event);
+        }
+        if (CLICK_CLASS_NAME.equals(className)) {   //在群信息第一页
+            openAllMemberPage();
+        }
+        if (ALL_MEMBER_CLASS_NAME.equals(className)) { //在所有群成员页面
+            openFriendsInfoPages();
+        }
+        if (PROFILE_CLASS_NAME.equals(className)) {    //在详细资料页面
+            getFriendInfoAndSendRequest();
+        }
+    }
+
+    /**
+     * 挨个点击群聊
+     * @param event
+     */
+    private void iterateOpenGroupChat(AccessibilityEvent event) {
+        AccessibilityNodeInfo listNode = findNodeInfosById("com.tencent.mm:id/hr"); //ListView
+        if (listNode != null){
+            int groupChatCount = listNode.getChildCount();
+            for (int i = 0; i < groupChatCount; i++) {
+                AccessibilityNodeInfo child = listNode.getChild(i);
+                child.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/a1h");
+            }
+        }
     }
 
     /**
@@ -133,7 +154,6 @@ public class AutoClickService extends AccessibilityService {
 
     /**
      * 获取好友信息，如果不是好友就加好友
-     *
      */
     private void getFriendInfoAndSendRequest() {
 
@@ -231,7 +251,7 @@ public class AutoClickService extends AccessibilityService {
     //通过id查找
     public AccessibilityNodeInfo findNodeInfosById(String resId) {
         AccessibilityNodeInfo currentRootNode = getRootInActiveWindow();
-        if (currentRootNode == null){
+        if (currentRootNode == null) {
             return null;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {

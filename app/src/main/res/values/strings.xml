@@ -34,9 +34,10 @@
     <string name="title_websocket">websocket</string>
     <string name="title_modal">提示</string>
     <string name="title_stream">网络</string>
-    <string name="click_auto">自动点击</string>
+    <string name="accessibility_service_description">开启自动点击、悬浮窗显示信息等功能</string>
     <string name="local_service_connected">服务已连接</string>
     <string name="local_service_started">定时服务已启动</string>
     <string name="local_service_label">服务正在重新启动</string>
     <string name="chooser_title">拭心让你选一个</string>
+    <string name="float_tracker">悬浮Activity信息</string>
 </resources>

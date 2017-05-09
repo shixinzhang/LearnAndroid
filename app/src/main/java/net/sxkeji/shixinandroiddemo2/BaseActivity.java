@@ -15,11 +15,7 @@ import net.sxkeji.shixinandroiddemo2.annotation.AutoRegister;
 import net.sxkeji.shixinandroiddemo2.annotation.ContentView;
 import net.sxkeji.shixinandroiddemo2.bean.ActivityBean;
 
-import java.lang.annotation.Annotation;
-
 import top.shixinzhang.sxframework.utils.LogUtil;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * description: 基类
