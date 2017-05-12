@@ -16,8 +16,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import top.shixinzhang.sxframework.network.download.IDownloader;
 import top.shixinzhang.sxframework.network.download.imp.DefaultDownloader;
-import top.shixinzhang.sxframework.update.APKDownloader;
-import top.shixinzhang.sxframework.update.model.UpdateResponseInfo;
+import top.shixinzhang.sxframework.manager.update.APKDownloader;
+import top.shixinzhang.sxframework.manager.update.model.UpdateResponseInfo;
 import top.shixinzhang.sxframework.utils.ApplicationUtil;
 import top.shixinzhang.sxframework.utils.DateFormatUtil;
 

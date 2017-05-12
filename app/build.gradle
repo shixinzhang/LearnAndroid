@@ -5,7 +5,7 @@ apply plugin: 'android-apt'
 
 def commandValue = "default value ~"
 def assembleTime() {
-    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("GMT+8"))
 }
 
 android {
@@ -73,7 +73,7 @@ android {
             variant.outputs.each { output ->
                 def outputFile = output.outputFile
                 if (outputFile != null && outputFile.name.endsWith(".apk")) {
-                    def apkName = "shixin_${flavorName}_${variant.buildType.name}_${defaultConfig.versionName}_${assembleTime()}.apk"
+                    def apkName = "shixin_${flavorName}_${variant.buildType.name}_v${defaultConfig.versionName}_${assembleTime()}.apk"
                     output.outputFile = new File(outputFile.parent, apkName)
                 }
             }
