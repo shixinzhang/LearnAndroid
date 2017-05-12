@@ -1,6 +1,5 @@
 package net.sxkeji.shixinandroiddemo2.receiver;
 
-import android.app.AlarmManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,9 +11,9 @@ import net.sxkeji.shixinandroiddemo2.util.AlarmManagerUtil;
 import java.util.HashMap;
 import java.util.Map;
 
-import top.shixinzhang.sxframework.utils.DateFormatUtil;
-import top.shixinzhang.sxframework.utils.LogUtil;
-import top.shixinzhang.sxframework.utils.SpUtil;
+import top.shixinzhang.sxframework.utils.DateFormatUtils;
+import top.shixinzhang.sxframework.utils.LogUtils;
+import top.shixinzhang.sxframework.utils.SpUtils;
 
 /**
  * <br/> Description: 接受、执行、发送定时任务消息的广播接收者
@@ -42,10 +41,10 @@ public class RepeatReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent == null) {
-            LogUtil.w(TAG, "action is null !: ");
+            LogUtils.w(TAG, "action is null !: ");
             return;
         }
-        LogUtil.i(TAG, "action: " + intent.getAction() + DateFormatUtil.getCurrentTime());
+        LogUtils.i(TAG, "action: " + intent.getAction() + DateFormatUtils.getCurrentTime());
 
         switch (intent.getAction()) {
             case ConfigHelper.ACTION_REPEAT_BROADCAST_RECEIVER:
@@ -64,8 +63,8 @@ public class RepeatReceiver extends BroadcastReceiver {
      */
     private void doRepeatJob(Context context) {
 //        setState(ConfigHelper.ACTION_REPEAT_BROADCAST_RECEIVER, State.ALREADY_STARTED);
-        Integer stopTime = SpUtil.getDataFromDefault(context, ConfigHelper.SP_STOP_TIME, -1);
-        LogUtil.d(TAG, "doRepeatJob............... " + DateFormatUtil.getCurrentTime() + " ***  stop time: " + stopTime);
+        Integer stopTime = SpUtils.getDataFromDefault(context, ConfigHelper.SP_STOP_TIME, -1);
+        LogUtils.d(TAG, "doRepeatJob............... " + DateFormatUtils.getCurrentTime() + " ***  stop time: " + stopTime);
 
 
         if (System.currentTimeMillis() >= stopTime) {

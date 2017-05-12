@@ -39,8 +39,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import top.shixinzhang.sxframework.utils.LogUtil;
-import top.shixinzhang.sxframework.utils.SettingUtil;
+import top.shixinzhang.sxframework.utils.LogUtils;
+import top.shixinzhang.sxframework.utils.SettingUtils;
 
 /**
  * 吸取之前那个 demo 的问题，不乱引入第三方，记住！
@@ -64,7 +64,7 @@ public class MainActivity extends BaseActivity {
         loadData();
         initViews();
 
-        if (!SettingUtil.checkAccessibilityOpen(this, AssistantService.class)) {
+        if (!SettingUtils.checkAccessibilityOpen(this, AssistantService.class)) {
             new AlertDialog
                     .Builder(this)
                     .setTitle("提示")
@@ -72,7 +72,7 @@ public class MainActivity extends BaseActivity {
                     .setPositiveButton("是", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            SettingUtil.jumpToSettingAccessibility(MainActivity.this);
+                            SettingUtils.jumpToSettingAccessibility(MainActivity.this);
                         }
                     })
                     .setNegativeButton("否", null)
@@ -169,7 +169,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onKeyMultiple(int keyCode, int repeatCount, KeyEvent event) {
-        LogUtil.i(TAG, "onKeyMultiple " + keyCode + ", repeat " + repeatCount + "event: " + event);
+        LogUtils.i(TAG, "onKeyMultiple " + keyCode + ", repeat " + repeatCount + "event: " + event);
         return super.onKeyMultiple(keyCode, repeatCount, event);
     }
 

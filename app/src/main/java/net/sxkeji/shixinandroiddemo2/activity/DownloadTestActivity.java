@@ -18,8 +18,8 @@ import top.shixinzhang.sxframework.network.download.IDownloader;
 import top.shixinzhang.sxframework.network.download.imp.DefaultDownloader;
 import top.shixinzhang.sxframework.manager.update.APKDownloader;
 import top.shixinzhang.sxframework.manager.update.model.UpdateResponseInfo;
-import top.shixinzhang.sxframework.utils.ApplicationUtil;
-import top.shixinzhang.sxframework.utils.DateFormatUtil;
+import top.shixinzhang.sxframework.utils.ApplicationUtils;
+import top.shixinzhang.sxframework.utils.DateFormatUtils;
 
 /**
  * Description:
@@ -71,7 +71,7 @@ public class DownloadTestActivity extends BaseActivity {
     @OnClick(R.id.btn_test_auto_install)
     public void autoInstall() {
         try {
-            ApplicationUtil.autoInstallApp("shixinzhang.apk");
+            ApplicationUtils.autoInstallApp("shixinzhang.apk");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -118,10 +118,10 @@ public class DownloadTestActivity extends BaseActivity {
 
     @Override
     public void loadData() {
-        PackageInfo packageInfo = ApplicationUtil.getCurrentAppInfo(this);
+        PackageInfo packageInfo = ApplicationUtils.getCurrentAppInfo(this);
         if (packageInfo != null) {
             mTvAppInfo.setText(packageInfo.packageName + "\n versionName:" + packageInfo.versionName
-                    + "\n versionCode:" + packageInfo.versionCode + "\n lastUpdateTime:" + DateFormatUtil.getDateString(packageInfo.lastUpdateTime));
+                    + "\n versionCode:" + packageInfo.versionCode + "\n lastUpdateTime:" + DateFormatUtils.getDateString(packageInfo.lastUpdateTime));
         }
 
         mDownloader = DefaultDownloader.getInstance(DownloadTestActivity.this);

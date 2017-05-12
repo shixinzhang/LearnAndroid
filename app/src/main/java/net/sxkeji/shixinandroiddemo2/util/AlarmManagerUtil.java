@@ -10,8 +10,8 @@ import android.support.annotation.NonNull;
 import net.sxkeji.shixinandroiddemo2.helper.ConfigHelper;
 import net.sxkeji.shixinandroiddemo2.receiver.RepeatReceiver;
 
-import top.shixinzhang.sxframework.utils.DateFormatUtil;
-import top.shixinzhang.sxframework.utils.LogUtil;
+import top.shixinzhang.sxframework.utils.DateFormatUtils;
+import top.shixinzhang.sxframework.utils.LogUtils;
 
 /**
  * <br/> Description: 定时器任务工具类
@@ -47,7 +47,7 @@ public final class AlarmManagerUtil {
      * @param intervalTimeMillis 间隔时间
      */
     public static void repeat(@NonNull Context context, String action, Long startTimeMillis, Long intervalTimeMillis) {
-        LogUtil.i(TAG, "repeat " + action + " send at: " + DateFormatUtil.getDateString(startTimeMillis));
+        LogUtils.i(TAG, "repeat " + action + " send at: " + DateFormatUtils.getDateString(startTimeMillis));
 
         PendingIntent sender = getRepeatSender(context, action);
 
@@ -67,7 +67,7 @@ public final class AlarmManagerUtil {
      * @param action
      */
     public static void cancel(@NonNull Context context, @NonNull String action) {
-        LogUtil.i(TAG, "cancel " + action);
+        LogUtils.i(TAG, "cancel " + action);
 
         PendingIntent sender = getRepeatSender(context, action);
 

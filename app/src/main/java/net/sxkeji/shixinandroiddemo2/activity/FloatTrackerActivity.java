@@ -11,8 +11,8 @@ import net.sxkeji.shixinandroiddemo2.service.AssistantService;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import top.shixinzhang.sxframework.utils.AlertUtil;
-import top.shixinzhang.sxframework.utils.SettingUtil;
+import top.shixinzhang.sxframework.utils.AlertUtils;
+import top.shixinzhang.sxframework.utils.SettingUtils;
 
 /**
  * Description:
@@ -35,14 +35,14 @@ public class FloatTrackerActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_float_tracker);
         ButterKnife.bind(this);
-        SettingUtil.checkOverlayPermission(this, getPackageName());
+        SettingUtils.checkOverlayPermission(this, getPackageName());
     }
 
     @OnClick(R.id.btn_open_float_button)
     public void openFloatButton() {
-        if (!SettingUtil.checkAccessibilityOpen(this, AssistantService.class)) {
-            AlertUtil.toastShort(this, "获取Activity信息需开启辅助服务");
-            SettingUtil.jumpToSettingAccessibility(FloatTrackerActivity.this);
+        if (!SettingUtils.checkAccessibilityOpen(this, AssistantService.class)) {
+            AlertUtils.toastShort(this, "获取Activity信息需开启辅助服务");
+            SettingUtils.jumpToSettingAccessibility(FloatTrackerActivity.this);
         }
     }
 

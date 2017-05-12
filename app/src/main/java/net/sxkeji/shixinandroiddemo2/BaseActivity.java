@@ -15,7 +15,7 @@ import net.sxkeji.shixinandroiddemo2.annotation.AutoRegister;
 import net.sxkeji.shixinandroiddemo2.annotation.ContentView;
 import net.sxkeji.shixinandroiddemo2.bean.ActivityBean;
 
-import top.shixinzhang.sxframework.utils.LogUtil;
+import top.shixinzhang.sxframework.utils.LogUtils;
 
 /**
  * description: 基类
@@ -114,7 +114,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (register != null) {
             ActivityBean activityBean = new ActivityBean(register.label(), c);
 //            MainActivity.registerActivityList(activityBean);
-            LogUtil.i(TAG, activityBean.toString() + " 注册到首页");
+            LogUtils.i(TAG, activityBean.toString() + " 注册到首页");
         }
     }
 

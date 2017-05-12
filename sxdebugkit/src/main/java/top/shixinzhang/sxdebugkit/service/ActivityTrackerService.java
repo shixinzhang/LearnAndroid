@@ -2,10 +2,9 @@ package top.shixinzhang.sxdebugkit.service;
 
 import android.accessibilityservice.AccessibilityService;
 import android.content.Intent;
-import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
-import top.shixinzhang.sxframework.utils.LogUtil;
+import top.shixinzhang.sxframework.utils.LogUtils;
 
 /**
  * Description:
@@ -39,12 +38,12 @@ public class ActivityTrackerService extends AccessibilityService {
 
     @Override
     public void onInterrupt() {
-        LogUtil.d(TAG, "辅助服务即将被关闭");
+        LogUtils.d(TAG, "辅助服务即将被关闭");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        LogUtil.d(TAG, "辅助服务即将被关闭");
+        LogUtils.d(TAG, "辅助服务即将被关闭");
     }
 }

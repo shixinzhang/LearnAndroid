@@ -18,7 +18,7 @@ import net.sxkeji.shixinandroiddemo2.weex.adapter.PlayDebugAdapter;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import top.shixinzhang.sxframework.statistic.CrashHandler;
-import top.shixinzhang.sxframework.utils.ApplicationUtil;
+import top.shixinzhang.sxframework.utils.ApplicationUtils;
 
 /**
  * <br/> Description:
@@ -55,9 +55,9 @@ public class SxApplication extends MultiDexApplication {
             @Override
             public void onAppNotResponding(ANRError error) {
                 System.out.println(error.getMessage() + ", " + System.currentTimeMillis());
-                String foregroundAppName = ApplicationUtil.getForegroundAppName(getBaseContext());
+                String foregroundAppName = ApplicationUtils.getForegroundAppName(getBaseContext());
                 System.out.println(foregroundAppName);
-                ApplicationUtil.startApplication(getBaseContext(), "com.tencent.mm");
+                ApplicationUtils.startApplication(getBaseContext(), "com.tencent.mm");
                 System.exit(0);
             }
         }).start();

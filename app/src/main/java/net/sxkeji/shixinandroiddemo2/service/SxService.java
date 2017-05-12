@@ -8,16 +8,14 @@ import android.content.res.Configuration;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import net.sxkeji.shixinandroiddemo2.R;
 import net.sxkeji.shixinandroiddemo2.activity.ServiceTestActivity;
 import net.sxkeji.shixinandroiddemo2.helper.ConfigHelper;
-import net.sxkeji.shixinandroiddemo2.receiver.RepeatReceiver;
 import net.sxkeji.shixinandroiddemo2.util.AlarmManagerUtil;
 
-import top.shixinzhang.sxframework.utils.DateFormatUtil;
-import top.shixinzhang.sxframework.utils.LogUtil;
+import top.shixinzhang.sxframework.utils.DateFormatUtils;
+import top.shixinzhang.sxframework.utils.LogUtils;
 
 /**
  * <br/> Description: 服务
@@ -134,11 +132,11 @@ public class SxService extends BaseService {
         private final String TAG = this.getClass().getSimpleName();
 
         public void doSomething() {
-            LogUtil.d(TAG, "doSomething");
+            LogUtils.d(TAG, "doSomething");
         }
 
         public void startRepeatTaskAtTime(long timeMillis) {
-            LogUtil.d(TAG, "定时任务执行时间：" + DateFormatUtil.getDateString(timeMillis));
+            LogUtils.d(TAG, "定时任务执行时间：" + DateFormatUtils.getDateString(timeMillis));
 
             mRepeatTaskStartTime = timeMillis;
             AlarmManagerUtil.startRepeatTask(getBaseContext(), timeMillis);
