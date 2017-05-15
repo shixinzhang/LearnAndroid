@@ -10,7 +10,7 @@ import android.support.annotation.NonNull;
 import net.sxkeji.shixinandroiddemo2.helper.ConfigHelper;
 import net.sxkeji.shixinandroiddemo2.receiver.RepeatReceiver;
 
-import top.shixinzhang.sxframework.utils.DateFormatUtils;
+import top.shixinzhang.sxframework.utils.DateUtils;
 import top.shixinzhang.sxframework.utils.LogUtils;
 
 /**
@@ -47,7 +47,7 @@ public final class AlarmManagerUtil {
      * @param intervalTimeMillis 间隔时间
      */
     public static void repeat(@NonNull Context context, String action, Long startTimeMillis, Long intervalTimeMillis) {
-        LogUtils.i(TAG, "repeat " + action + " send at: " + DateFormatUtils.getDateString(startTimeMillis));
+        LogUtils.i(TAG, "repeat " + action + " send at: " + DateUtils.getDateString(startTimeMillis));
 
         PendingIntent sender = getRepeatSender(context, action);
 

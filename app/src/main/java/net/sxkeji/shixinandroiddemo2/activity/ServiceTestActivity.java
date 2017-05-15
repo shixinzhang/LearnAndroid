@@ -19,7 +19,7 @@ import net.sxkeji.shixinandroiddemo2.service.SxService;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import top.shixinzhang.sxframework.utils.DateFormatUtils;
+import top.shixinzhang.sxframework.utils.DateUtils;
 import top.shixinzhang.sxframework.utils.SpUtils;
 
 /**
@@ -148,7 +148,7 @@ public class ServiceTestActivity extends BaseActivity {
         new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                repeatStartTimeMillis = DateFormatUtils.getTimeInMillisecond(hourOfDay, minute);
+                repeatStartTimeMillis = DateUtils.getTimeInMillisecond(hourOfDay, minute);
                 SpUtils.saveDataInDefault(ServiceTestActivity.this, ConfigHelper.SP_START_TIME, repeatStartTimeMillis);
             }
         }, 12, 0, true).show();
@@ -161,7 +161,7 @@ public class ServiceTestActivity extends BaseActivity {
         new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                repeatStopTimeMillis = DateFormatUtils.getTimeInMillisecond(hourOfDay, minute);
+                repeatStopTimeMillis = DateUtils.getTimeInMillisecond(hourOfDay, minute);
                 SpUtils.saveDataInDefault(ServiceTestActivity.this, ConfigHelper.SP_STOP_TIME, repeatStopTimeMillis);
             }
         }, 12, 0, true).show();

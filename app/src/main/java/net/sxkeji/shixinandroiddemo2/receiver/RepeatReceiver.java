@@ -11,7 +11,7 @@ import net.sxkeji.shixinandroiddemo2.util.AlarmManagerUtil;
 import java.util.HashMap;
 import java.util.Map;
 
-import top.shixinzhang.sxframework.utils.DateFormatUtils;
+import top.shixinzhang.sxframework.utils.DateUtils;
 import top.shixinzhang.sxframework.utils.LogUtils;
 import top.shixinzhang.sxframework.utils.SpUtils;
 
@@ -44,7 +44,7 @@ public class RepeatReceiver extends BroadcastReceiver {
             LogUtils.w(TAG, "action is null !: ");
             return;
         }
-        LogUtils.i(TAG, "action: " + intent.getAction() + DateFormatUtils.getCurrentTime());
+        LogUtils.i(TAG, "action: " + intent.getAction() + DateUtils.getCurrentTime());
 
         switch (intent.getAction()) {
             case ConfigHelper.ACTION_REPEAT_BROADCAST_RECEIVER:
@@ -63,8 +63,8 @@ public class RepeatReceiver extends BroadcastReceiver {
      */
     private void doRepeatJob(Context context) {
 //        setState(ConfigHelper.ACTION_REPEAT_BROADCAST_RECEIVER, State.ALREADY_STARTED);
-        Integer stopTime = SpUtils.getDataFromDefault(context, ConfigHelper.SP_STOP_TIME, -1);
-        LogUtils.d(TAG, "doRepeatJob............... " + DateFormatUtils.getCurrentTime() + " ***  stop time: " + stopTime);
+        Integer stopTime = (Integer) SpUtils.getDataFromDefault(context, ConfigHelper.SP_STOP_TIME, Integer.valueOf(-1));
+        LogUtils.d(TAG, "doRepeatJob............... " + DateUtils.getCurrentTime() + " ***  stop time: " + stopTime);
 
 
         if (System.currentTimeMillis() >= stopTime) {

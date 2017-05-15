@@ -14,7 +14,7 @@ import net.sxkeji.shixinandroiddemo2.activity.ServiceTestActivity;
 import net.sxkeji.shixinandroiddemo2.helper.ConfigHelper;
 import net.sxkeji.shixinandroiddemo2.util.AlarmManagerUtil;
 
-import top.shixinzhang.sxframework.utils.DateFormatUtils;
+import top.shixinzhang.sxframework.utils.DateUtils;
 import top.shixinzhang.sxframework.utils.LogUtils;
 
 /**
@@ -136,7 +136,7 @@ public class SxService extends BaseService {
         }
 
         public void startRepeatTaskAtTime(long timeMillis) {
-            LogUtils.d(TAG, "定时任务执行时间：" + DateFormatUtils.getDateString(timeMillis));
+            LogUtils.d(TAG, "定时任务执行时间：" + DateUtils.getDateString(timeMillis));
 
             mRepeatTaskStartTime = timeMillis;
             AlarmManagerUtil.startRepeatTask(getBaseContext(), timeMillis);
