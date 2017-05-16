@@ -2,7 +2,6 @@ package net.sxkeji.shixinandroiddemo2.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -65,10 +64,10 @@ public class OaLoginActivity extends BaseActivity {
     private String mAddr;
 //    private final String MY_ACCOUNT = "zhangshixin";
 //    private final String MY_PWD = "Yuntu@123";
-    private final String MY_ACCOUNT = "larryzhang";
-    private final String MY_PWD = "zszh0822";
-//    private final String MY_ACCOUNT = "youngwang";    //貌似是错的
-//    private final String MY_PWD = "sh5201314";
+//    private final String MY_ACCOUNT = "larryzhang";
+//    private final String MY_PWD = "zszh0822";
+    private final String MY_ACCOUNT = "youngwang";    //貌似是错的
+    private final String MY_PWD = "Sh5201314";
 
     private String mBaseUrl = "http://oa.yaomaiche.com:89";
 
