@@ -1,0 +1,51 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.ximpleware</groupId>
+  <artifactId>vtd-xml</artifactId>
+  <version>2.11</version>
+  <packaging>jar</packaging>
+
+  <name>vtd-xml</name>
+  <description>XimpleWare's VTD-XML is, far and away, the industry's most advanced and powerful XML processing model for SOA and Cloud Computing</description>
+  <url>http://vtd-xml.sourceforge.net/</url>
+
+  <licenses>
+    <license>
+      <name>GNU GENERAL PUBLIC LICENSE Version 2, June 1991</name>
+      <url>http://www.gnu.org/licenses/old-licenses/gpl-2.0</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>jzhang</id>
+      <name>Jimmy Zhang</name>
+      <email>jzhang@ximpleware.com</email>
+      <organization>ximpleware</organization>
+      <organizationUrl>http://ximpleware.com</organizationUrl>
+    </developer>
+  </developers>
+  
+
+  <scm>
+    <url>git://vtd-xml.git.sourceforge.net/gitroot/vtd-xml/vtd-xml</url>
+  </scm>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.0</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
+
+</project>
+

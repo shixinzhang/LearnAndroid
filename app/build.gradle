@@ -100,6 +100,12 @@ android {
 //        incremental true  //被遗弃了
 //        javaMaxHeapSize "4g"
     }
+
+    lintOptions {
+        warningsAsErrors true
+        abortOnError true
+        htmlReport true
+    }
 }
 
 task clean(type: Delete) {
