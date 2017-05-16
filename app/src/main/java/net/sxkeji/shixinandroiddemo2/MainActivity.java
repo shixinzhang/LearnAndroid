@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.LongSparseArray;
 import android.view.KeyEvent;
 import android.view.View;
 
@@ -29,16 +30,23 @@ import net.sxkeji.shixinandroiddemo2.activity.launchmode.StandardActivity;
 import net.sxkeji.shixinandroiddemo2.adapter.ActivityListAdapter;
 import net.sxkeji.shixinandroiddemo2.adapter.rvbaseadapter.BaseQuickAdapter;
 import net.sxkeji.shixinandroiddemo2.bean.ActivityBean;
+import net.sxkeji.shixinandroiddemo2.bean.WxFriendRequestBean;
+import net.sxkeji.shixinandroiddemo2.helper.ConfigHelper;
 import net.sxkeji.shixinandroiddemo2.hybrid.SxWebViewActivity;
 import net.sxkeji.shixinandroiddemo2.service.AssistantService;
 import net.sxkeji.shixinandroiddemo2.weex.WeexActivity;
 import net.sxkeji.shixinandroiddemo2.weex.WeexYmcActivity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import top.shixinzhang.sxframework.config.Config;
+import top.shixinzhang.sxframework.utils.FileUtils;
 import top.shixinzhang.sxframework.utils.LogUtils;
 import top.shixinzhang.sxframework.utils.SettingUtils;
 
@@ -63,6 +71,7 @@ public class MainActivity extends BaseActivity {
 
         loadData();
         initViews();
+        testSerializable();
 
         if (!SettingUtils.checkAccessibilityOpen(this, AssistantService.class)) {
             new AlertDialog
@@ -78,6 +87,29 @@ public class MainActivity extends BaseActivity {
                     .setNegativeButton("否", null)
                     .show();
         }
+    }
+
+    private void testSerializable() {
+        WxFriendRequestBean wxFriendRequestBean = new WxFriendRequestBean();
+        HashMap<String, String> friendMap = new HashMap<>();
+        friendMap.put("shixin", "已申请");
+        wxFriendRequestBean.setFriendNameStateMap(friendMap);
+        wxFriendRequestBean.setSaveTimeMillis(System.currentTimeMillis());
+        List<String> groupList = new LinkedList<>();
+        groupList.add("what");
+        wxFriendRequestBean.setFinishedGroupList(groupList);
+
+        HashMap<String, List<String>> groupNameMap = new HashMap<>();
+        groupNameMap.put("309", Arrays.asList("zhoumi", "bobo"));
+        wxFriendRequestBean.setGroupNameMap(groupNameMap);
+
+        String serializablePath = ConfigHelper.DATA_EXT_DIR + "obj.txt";
+        FileUtils.saveObject(wxFriendRequestBean, serializablePath);
+
+        LogUtils.d(TAG, "序列化成功");
+
+        WxFriendRequestBean friendRequestBean = FileUtils.readObject(serializablePath);
+        LogUtils.d(friendRequestBean.toString());
     }
 
     @Override

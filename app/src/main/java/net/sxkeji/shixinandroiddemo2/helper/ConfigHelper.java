@@ -1,5 +1,9 @@
 package net.sxkeji.shixinandroiddemo2.helper;
 
+import android.os.Environment;
+
+import java.io.File;
+
 /**
  * <br/> Description: 配置信息
  * <p>
@@ -11,6 +15,10 @@ package net.sxkeji.shixinandroiddemo2.helper;
  */
 
 public class ConfigHelper {
+
+    public static final String FOLDER = "shixinzhang";
+    public static String DATA_EXT_DIR = Environment.getExternalStorageDirectory() + File.separator + FOLDER + File.separator;
+
     public final static String ACTION_START_DAEMON_SERVICE = "top.shixinzhang.action.service.start.daemon";
 
     public final static String ACTION_START_SX_SERVICE = "top.shixinzhang.action.service.start.sx";
