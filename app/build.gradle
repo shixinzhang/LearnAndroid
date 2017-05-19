@@ -166,4 +166,6 @@ dependencies {
     compile project(path: ':WeexSDK')
     compile project(':sxframework')
     compile project(':sxdebugkit')
+//    compile project(path: ':service')
+    compile project(path: ':service')
 }

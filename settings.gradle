@@ -1,1 +1,1 @@
-include ':app', ':sxframework', ':WeexSDK', ':sxdebugkit'
+include ':app', ':sxframework', ':WeexSDK', ':sxdebugkit', ':service'

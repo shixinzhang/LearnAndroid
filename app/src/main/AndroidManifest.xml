@@ -169,6 +169,11 @@
             android:label="@string/float_tracker"
             android:launchMode="singleTop"/>
 
+        <activity
+            android:name=".activity.ipc.AidlTestActivity"
+            android:label="@string/aidl_test"
+            android:launchMode="singleTop"/>
+
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="012a484e2b4f84412fbea6736ec3658f">

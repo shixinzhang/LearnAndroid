@@ -26,6 +26,7 @@ import net.sxkeji.shixinandroiddemo2.activity.RefreshLoadMoreActivity;
 import net.sxkeji.shixinandroiddemo2.activity.SearchActivity;
 import net.sxkeji.shixinandroiddemo2.activity.ServiceTestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.SuspensionHeaderActivity;
+import net.sxkeji.shixinandroiddemo2.activity.ipc.AidlTestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.launchmode.StandardActivity;
 import net.sxkeji.shixinandroiddemo2.adapter.ActivityListAdapter;
 import net.sxkeji.shixinandroiddemo2.adapter.rvbaseadapter.BaseQuickAdapter;
@@ -139,7 +140,8 @@ public class MainActivity extends BaseActivity {
                 new ActivityBean(getString(R.string.weex_ymc), WeexYmcActivity.class),
                 new ActivityBean(getString(R.string.anr_test), ANRTestActivity.class),
                 new ActivityBean(getString(R.string.download_test), DownloadTestActivity.class),
-                new ActivityBean(getString(R.string.float_tracker), FloatTrackerActivity.class));
+                new ActivityBean(getString(R.string.float_tracker), FloatTrackerActivity.class),
+                new ActivityBean(getString(R.string.aidl_test), AidlTestActivity.class));
     }
 
     public static void registerActivityList(ActivityBean... activityBeans) {

@@ -16,6 +16,8 @@
 #   public *;
 #}
 
+# 保留行号
+-keepattributes SourceFile,LineNumberTable
 
 -ignorewarnings
 -keep public class * extends android.os.Binder
