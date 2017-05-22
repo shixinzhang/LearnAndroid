@@ -27,7 +27,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import net.sxkeji.shixinandroiddemo2.BaseActivity;
+import net.sxkeji.shixinandroiddemo2.IMyAidl;
 import net.sxkeji.shixinandroiddemo2.R;
+import net.sxkeji.shixinandroiddemo2.bean.Person;
+import net.sxkeji.shixinandroiddemo2.service.MyAidlService;
 
 import java.util.List;
 import java.util.Random;
@@ -36,8 +39,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import top.shixinzhang.service.IMyAidl;
-import top.shixinzhang.service.Person;
 
 /**
  * Description:
@@ -56,7 +57,7 @@ public class AidlTestActivity extends BaseActivity {
     @BindView(R.id.btn_add_person)
     Button mBtnAddPerson;
 
-    private IMyAidl mAidl;
+    private IMyAidl mAidl, mAidl2;
 
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
@@ -80,16 +81,24 @@ public class AidlTestActivity extends BaseActivity {
     }
 
     private void bindService() {
-        Intent intent = new Intent();
-        intent.setComponent(new ComponentName("top.shixinzhang.service", "top.shixinzhang.service.MyAidlService"));
-        bindService(intent, mConnection, BIND_AUTO_CREATE);
+//        Intent intent = new Intent(this, MyAidlService.class);
+        Intent intent = new Intent("net.sxkeji.shixinandroiddemo2.service.MyAidlService").setPackage("net.sxkeji.shixinandroiddemo2");
+//
+//        String packageName = getPackageName();
+//        String name = MyAidlService.class.getName();
+//
+//        intent.setComponent(new ComponentName("net.sxkeji.shixinandroiddemo2", "net.sxkeji.shixinandroiddemo2.service.MyAidlService"));
+//        bindService(intent, mConnection, BIND_AUTO_CREATE);
+
+        Intent intent1 = new Intent(getApplicationContext(), MyAidlService.class);
+        bindService(intent1, mConnection, BIND_AUTO_CREATE);
     }
 
 
     @OnClick(R.id.btn_add_person)
     public void addPerson() {
-        Random random = new Random(10);
-        Person person = new Person("shixin" + random.nextInt());
+        Random random = new Random();
+        Person person = new Person("shixin" + random.nextInt(10));
 
         try {
             mAidl.addPerson(person);

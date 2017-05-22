@@ -72,7 +72,7 @@ public class MainActivity extends BaseActivity {
 
         loadData();
         initViews();
-        testSerializable();
+//        testSerializable();
 
         if (!SettingUtils.checkAccessibilityOpen(this, AssistantService.class)) {
             new AlertDialog

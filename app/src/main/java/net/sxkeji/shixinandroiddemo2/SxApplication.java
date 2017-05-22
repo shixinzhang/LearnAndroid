@@ -143,7 +143,7 @@ public class SxApplication extends MultiDexApplication {
     }
 
     /**
-     * 初始化通用布局，类似以前在 BaseActivity 干的事
+     * 初始化通用布局，比如 ActionBar 之类的，能干类似以前在 BaseActivity 干的事
      *
      * @param activity
      * @param savedInstanceState

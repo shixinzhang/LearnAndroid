@@ -209,6 +209,12 @@
             </intent-filter>
         </receiver>
 
+        <service
+            android:name="net.sxkeji.shixinandroiddemo2.service.MyAidlService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":aidl"/>
+
         <meta-data
             android:name="${UMENG_CHANNEL_NAME}"
             android:value="default_channel">

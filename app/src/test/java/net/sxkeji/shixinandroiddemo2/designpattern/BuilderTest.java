@@ -1,6 +1,6 @@
 package net.sxkeji.shixinandroiddemo2.designpattern;
 
-import net.sxkeji.shixinandroiddemo2.bean.Person;
+import net.sxkeji.shixinandroiddemo2.bean.People;
 import net.sxkeji.shixinandroiddemo2.test.designpattern.PersonThree;
 import net.sxkeji.shixinandroiddemo2.test.designpattern.PersonTwo;
 
@@ -39,10 +39,10 @@ public class BuilderTest {
         stack.add(null);
         System.out.println(stack);
 
-        Deque<Person> deque = new LinkedList<>();
+        Deque<People> deque = new LinkedList<>();
         deque.addFirst(null);
 
-        PriorityBlockingQueue<Person> p = new PriorityBlockingQueue<>();
+        PriorityBlockingQueue<People> p = new PriorityBlockingQueue<>();
         p.add(null);
 
 //        ArrayBlockingQueue

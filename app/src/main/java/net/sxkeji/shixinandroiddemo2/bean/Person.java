@@ -1,71 +1,72 @@
+/*
+ * Copyright (c) 2017. shixinzhang (shixinzhang2016@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package net.sxkeji.shixinandroiddemo2.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
- * description:
- * <br/>
- * author: shixinzhang
- * <br/>
- * data: 10/5/2016
+ * Description:
+ * <br>
+ * <p>
+ * <br> Created by shixinzhang on 17/5/18.
+ * <p>
+ * <br> Email: shixinzhang2016@gmail.com
+ * <p>
+ * <a  href="https://about.me/shixinzhang">About me</a>
  */
-public class Person implements Comparable {
-    private String name;
-    private int age;
 
-    public Person(String name, int age) {
-        this.name = name;
-        this.age = age;
+public class Person implements Parcelable {
+    private String mName;
+
+    public Person(String name) {
+        mName = name;
     }
 
-    public String getName() {
-        return name;
+    protected Person(Parcel in) {
+        mName = in.readString();
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public static final Creator<Person> CREATOR = new Creator<Person>() {
+        @Override
+        public Person createFromParcel(Parcel in) {
+            return new Person(in);
+        }
 
-    public int getAge() {
-        return age;
-    }
+        @Override
+        public Person[] newArray(int size) {
+            return new Person[size];
+        }
+    };
 
-    public void setAge(int age) {
-        this.age = age;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Person)) return false;
-
-        Person person = (Person) o;
-
-        if (getAge() != person.getAge()) return false;
-        return getName() != null ? getName().equals(person.getName()) : person.getName() == null;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = getName() != null ? getName().hashCode() : 0;
-        result = 31 * result + getAge();
-        return result;
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mName);
     }
 
     @Override
     public String toString() {
         return "Person{" +
-                "name='" + name + '\'' +
-                ", age=" + age +
+                "mName='" + mName + '\'' +
                 '}';
-    }
-
-    @Override
-    public int compareTo(Object another) {
-        if (another instanceof Person) {
-            Person another1 = (Person) another;
-            //按照年龄排序
-            return getAge() - another1.getAge();
-        }
-        return 0;
     }
 }

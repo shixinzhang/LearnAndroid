@@ -1,6 +1,6 @@
 package net.sxkeji.shixinandroiddemo2.test.collection;
 
-import net.sxkeji.shixinandroiddemo2.bean.Person;
+import net.sxkeji.shixinandroiddemo2.bean.People;
 
 import org.junit.Test;
 
@@ -54,8 +54,8 @@ public class MapTestTest {
         map.put("zsx",222);
 
         //key 用 Set 存放，所以 key 要想不允许重复， key **对应的类就要重写 hashCode 和 equals 方法**
-        map.put(new Person("zsx",18),22);
-        map.put(new Person("zsx",18),25);   //put, 存在就覆盖
+        map.put(new People("zsx",18),22);
+        map.put(new People("zsx",18),25);   //put, 存在就覆盖
 
 //        System.out.println("remove " + map.remove("zsx"));      //remove, 删除并返回指定 key 对应的 value
 
@@ -78,7 +78,7 @@ public class MapTestTest {
         Map map = new HashMap();
         map.put(null,null);
         map.put("zsx",222);
-        map.put(new Person("zsx",18),22);
+        map.put(new People("zsx",18),22);
 
         //1.遍历 key 集合
         Set set = map.keySet();
@@ -122,7 +122,7 @@ public class MapTestTest {
         Map map = new LinkedHashMap();
         map.put(null,null);
         map.put("zsx",222);
-        map.put(new Person("zsx",18),22);
+        map.put(new People("zsx",18),22);
 
         Set entrySet = map.entrySet();
         for (Object o : entrySet) {
@@ -154,9 +154,9 @@ public class MapTestTest {
 
 //        Map map = new TreeMap(comparator);
         Map map = new TreeMap();
-        map.put(new Person("A",20), 90);
-        map.put(new Person("S",30), 60);
-        map.put(new Person("C",18), 70);
+        map.put(new People("A",20), 90);
+        map.put(new People("S",30), 60);
+        map.put(new People("C",18), 70);
 
         System.out.println(map);
     }

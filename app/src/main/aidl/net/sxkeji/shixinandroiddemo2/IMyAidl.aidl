@@ -1,8 +1,8 @@
 // IMyAidl.aidl
-package top.shixinzhang.service;
+package net.sxkeji.shixinandroiddemo2;
 
 // Declare any non-default types here with import statements
-import top.shixinzhang.service.Person;
+import net.sxkeji.shixinandroiddemo2.bean.Person;
 
 interface IMyAidl {
     /**
