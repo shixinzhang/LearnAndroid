@@ -16,6 +16,7 @@
 
 package net.sxkeji.shixinandroiddemo2.activity.ipc;
 
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -30,6 +31,7 @@ import net.sxkeji.shixinandroiddemo2.BaseActivity;
 import net.sxkeji.shixinandroiddemo2.IMyAidl;
 import net.sxkeji.shixinandroiddemo2.R;
 import net.sxkeji.shixinandroiddemo2.bean.Person;
+import net.sxkeji.shixinandroiddemo2.receiver.RepeatReceiver;
 import net.sxkeji.shixinandroiddemo2.service.MyAidlService;
 
 import java.util.List;
@@ -82,18 +84,30 @@ public class AidlTestActivity extends BaseActivity {
 
     private void bindService() {
 //        Intent intent = new Intent(this, MyAidlService.class);
-        Intent intent = new Intent("net.sxkeji.shixinandroiddemo2.service.MyAidlService").setPackage("net.sxkeji.shixinandroiddemo2");
+//        Intent intent = new Intent("net.sxkeji.shixinandroiddemo2.service.MyAidlService").setPackage("net.sxkeji.shixinandroiddemo2");
 //
 //        String packageName = getPackageName();
 //        String name = MyAidlService.class.getName();
 //
-//        intent.setComponent(new ComponentName("net.sxkeji.shixinandroiddemo2", "net.sxkeji.shixinandroiddemo2.service.MyAidlService"));
-//        bindService(intent, mConnection, BIND_AUTO_CREATE);
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName("top.shixinzhang.myapplication", "top.shixinzhang.myapplication.service.MyAidlService"));
+        bindService(intent, mConnection, BIND_AUTO_CREATE);
 
         Intent intent1 = new Intent(getApplicationContext(), MyAidlService.class);
         bindService(intent1, mConnection, BIND_AUTO_CREATE);
     }
 
+    private void starServiceWithBroadcast(){
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, RepeatReceiver.class), 0);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("receiver", pendingIntent);
+        Intent intent = new Intent(getApplicationContext(), MyAidlService.class);
+        intent.putExtras(bundle);
+        startService(intent);
+    }
+
+    private void startForegroundService(){
+    }
 
     @OnClick(R.id.btn_add_person)
     public void addPerson() {

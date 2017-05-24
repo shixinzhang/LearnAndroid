@@ -160,6 +160,8 @@ public class SxService extends BaseService {
                 .build();
 
         mNotificationManager.notify(NOTIFICATION, notification);
+
+        startForeground(NOTIFICATION, notification);
     }
 
 }
