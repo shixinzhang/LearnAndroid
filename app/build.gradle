@@ -163,6 +163,7 @@ dependencies {
     //    compile 'com.android.support.test.espresso:espresso-core:2.2.2', {
     //        exclude group: 'com.android.support', module: 'support-annotations'
     //    }
+    compile 'com.qiniu:qiniu-android-sdk:7.2.+'
     compile project(path: ':WeexSDK')
     compile project(':sxframework')
     compile project(':sxdebugkit')

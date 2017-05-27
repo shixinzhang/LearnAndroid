@@ -59,7 +59,7 @@ public class AidlTestActivity extends BaseActivity {
     @BindView(R.id.btn_add_person)
     Button mBtnAddPerson;
 
-    private IMyAidl mAidl, mAidl2;
+    private IMyAidl mAidl;
 
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override

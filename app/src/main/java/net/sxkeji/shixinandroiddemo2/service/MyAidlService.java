@@ -47,7 +47,7 @@ public class MyAidlService extends Service {
     private ArrayList<Person> mPersons;
 
     /**
-     * 继承生成的本地 Binder ，实现 AIDL 制定的方法
+     * 创建生成的本地 Binder 对象，实现 AIDL 制定的方法
      */
     private IBinder mIBinder = new IMyAidl.Stub() {
 

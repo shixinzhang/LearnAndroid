@@ -2,6 +2,7 @@ package net.sxkeji.shixinandroiddemo2;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.multidex.MultiDexApplication;
 
 import com.github.anrwatchdog.ANRError;
@@ -37,17 +38,36 @@ public class SxApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
 
+        if (BuildConfig.DEBUG) {
+            enableStrictMode();
+        }
+
         addLifecycleListener();
 
         registerHybridHandler();
 
-        CrashHandler.init(this);
+//        CrashHandler.init(this);
 
 //        initANRWatch();
 
 //        initRealm();
 
         initWeex();
+    }
+
+    private void enableStrictMode() {
+        //ALL_THREAD_DETECT_BITS = DETECT_DISK_WRITE | DETECT_DISK_READ | DETECT_NETWORK | DETECT_CUSTOM | DETECT_RESOURCE_MISMATCH;
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                .detectAll()
+                .penaltyLog()   //在 adb logcat 中显示异常日志
+                .build());
+
+        //DETECT_VM_ACTIVITY_LEAKS | DETECT_VM_CURSOR_LEAKS| DETECT_VM_CLOSABLE_LEAKS | DETECT_VM_REGISTRATION_LEAKS| DETECT_VM_FILE_URI_EXPOSURE;
+        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                .detectAll()    //检查 Activity 、游标、文件、数据库等泄漏
+                .penaltyLog()
+                .penaltyDeath() //直接奔溃
+                .build());
     }
 
     private void initANRWatch() {

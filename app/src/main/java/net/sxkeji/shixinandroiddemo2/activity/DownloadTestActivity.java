@@ -14,7 +14,7 @@ import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import top.shixinzhang.sxframework.network.download.IDownloader;
+import top.shixinzhang.sxframework.network.download.IAPKDownloader;
 import top.shixinzhang.sxframework.network.download.imp.DefaultDownloader;
 import top.shixinzhang.sxframework.manager.update.APKDownloader;
 import top.shixinzhang.sxframework.manager.update.model.UpdateResponseInfo;
@@ -42,7 +42,7 @@ public class DownloadTestActivity extends BaseActivity {
     private String TEST_BIG_FILE_URL = "http://shixinoss.oss-cn-shanghai.aliyuncs.com/install/%E9%B8%9F%E5%93%A5%E7%9A%84Linux%E7%A7%81%E6%88%BF%E8%8F%9C%E5%9F%BA%E7%A1%80%E7%AF%87%E7%AC%AC%E4%B8%89%E7%89%88.pdf";
     private String TEST_IMG_URL = "http://shixinoss.oss-cn-shanghai.aliyuncs.com/image/%E6%B8%85%E6%99%A8.jpeg";
 
-    private IDownloader mDownloader;
+    private IAPKDownloader mApkDownloader;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,24 +90,24 @@ public class DownloadTestActivity extends BaseActivity {
 
     @OnClick(R.id.btn_download_big_file)
     public void downloadBigFile() {
-        mDownloader
+        mApkDownloader
                 .setUrl(TEST_BIG_FILE_URL)
                 .setNotificationTitle("pdf download")
                 .setNotificationDesc("shixinzhang 正在下载中...")
                 .setFileName("test.pdf")
                 .prepare()
-                .startDownload();
+                .download(null, null);
     }
 
     @OnClick(R.id.btn_download_image)
     public void downloadImage() {
-        mDownloader
+        mApkDownloader
                 .setUrl(TEST_IMG_URL)
                 .setNotificationTitle("Image")
                 .setNotificationDesc("shixinzhang 正在下载中...")
                 .setFileName("test.png")
                 .prepare()
-                .startDownload();
+                .download(null, null);
     }
 
 
@@ -124,7 +124,7 @@ public class DownloadTestActivity extends BaseActivity {
                     + "\n versionCode:" + packageInfo.versionCode + "\n lastUpdateTime:" + DateUtils.getDateString(packageInfo.lastUpdateTime));
         }
 
-        mDownloader = DefaultDownloader.getInstance(DownloadTestActivity.this);
+        mApkDownloader = DefaultDownloader.getInstance(DownloadTestActivity.this);
     }
 
     @Override
