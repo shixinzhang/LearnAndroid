@@ -5,7 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextSwitcher;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import net.sxkeji.shixinandroiddemo2.BaseActivity;
 import net.sxkeji.shixinandroiddemo2.R;
@@ -16,6 +19,8 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import top.shixinzhang.sxframework.views.MarqueeTextView;
 
 /**
  * description:
@@ -32,6 +37,14 @@ public class DIYView1Activity extends BaseActivity {
     LinearLayout mLlColorList;
     @BindView(R.id.list_circle_color)
     ListCircleColorView mListCircleColor;
+    @BindView(R.id.ts_activities)
+    TextSwitcher mTsActivities;
+
+    String[] activityTitles = new String[]{"震惊，最帅安卓开发张拭心竟然这样评价上海", "这个故事男人听了沉默，女人听了流泪",
+            "一生劳碌的他在去世前竟然说出这样的话"};
+    int currentTitle;
+    @BindView(R.id.mtv_activities)
+    MarqueeTextView mMtvActivities;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,10 +52,24 @@ public class DIYView1Activity extends BaseActivity {
         setContentView(R.layout.activity_diy_view_1);
         ButterKnife.bind(this);
         initViews();
+
     }
 
     @Override
     public void initViews() {
+        mTsActivities.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                TextView textView = new TextView(DIYView1Activity.this);
+                textView.setTextSize(16);
+                textView.setTextColor(Color.MAGENTA);
+                return textView;
+            }
+        });
+        clickTitle();
+
+        initMarqueueView();
+
         mCircleColor.setCircleSize(8);
         mCircleColor.setCircleColor(Color.parseColor("#ffffff"));
         mCircleColor.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +109,16 @@ public class DIYView1Activity extends BaseActivity {
         colorList.add(Color.WHITE);
         mListCircleColor.setColorList(colorList);
         mListCircleColor.show();
+    }
+
+    private void initMarqueueView() {
+        mMtvActivities.setResources(activityTitles);
+        mMtvActivities.setTextStillTime(3_000L);
+    }
+
+    @OnClick(R.id.ts_activities)
+    public void clickTitle() {
+        mTsActivities.setText(activityTitles[currentTitle++ % activityTitles.length]);
     }
 
     @Override

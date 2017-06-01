@@ -5,6 +5,22 @@
               android:orientation="vertical"
               android:padding="8dp">
 
+    <TextSwitcher
+        android:id="@+id/ts_activities"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textAlignment="center"
+        android:inAnimation="@anim/slide_in_v"
+        android:outAnimation="@anim/slide_out_v"
+        android:background="#efefef"
+        android:layout_gravity="center"
+        android:layout_margin="8dp"/>
+
+    <top.shixinzhang.sxframework.views.MarqueeTextView
+        android:id="@+id/mtv_activities"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+
     <net.sxkeji.shixinandroiddemo2.view.CircleColorView
         android:layout_width="100dp"
         android:layout_height="100dp"/>

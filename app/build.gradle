@@ -31,10 +31,10 @@ android {
         //enable multi dex
         multiDexEnabled true
 //        必须加，否则64位手机无法加载so文件
-        ndk {
-            abiFilters "x86"
-            abiFilters "armeabi"
-        }
+//        ndk {
+//            abiFilters "x86"
+//            abiFilters "armeabi"
+//        }
 
         commandValue = project.getProperties().get("Value")
         //通过 gradle 命令行传入参数： gradle assemble{BuildType} -PValue=value 传递
