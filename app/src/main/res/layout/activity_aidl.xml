@@ -25,12 +25,36 @@
         android:id="@+id/tv_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="这里将展示结果"/>
+        android:layout_marginTop="30dp"
+        android:text="这里将展示 AIDL 通信结果"/>
+
 
     <Button
         android:id="@+id/btn_add_person"
         android:layout_width="wrap_content"
-        android:layout_marginTop="30dp"
         android:layout_height="wrap_content"
-        android:text="add person"/>
+        android:text="Add person with AIDL"
+        android:textAllCaps="false"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/colorAccent"/>
+
+    <EditText
+        android:id="@+id/et_msg_content"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#33333333"
+        android:hint="这里输入要发送给服务端的消息"
+        android:textSize="16sp"/>
+
+    <Button
+        android:id="@+id/btn_send_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send msg with Messenger"
+        android:textAllCaps="false"/>
 </LinearLayout>

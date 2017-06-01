@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.LongSparseArray;
 import android.view.KeyEvent;
 import android.view.View;
 
@@ -27,7 +26,7 @@ import net.sxkeji.shixinandroiddemo2.activity.SearchActivity;
 import net.sxkeji.shixinandroiddemo2.activity.ServiceTestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.SuspensionHeaderActivity;
 import net.sxkeji.shixinandroiddemo2.activity.http.OkHttp3TestActivity;
-import net.sxkeji.shixinandroiddemo2.activity.ipc.AidlTestActivity;
+import net.sxkeji.shixinandroiddemo2.activity.ipc.IPCTestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.launchmode.StandardActivity;
 import net.sxkeji.shixinandroiddemo2.adapter.ActivityListAdapter;
 import net.sxkeji.shixinandroiddemo2.adapter.rvbaseadapter.BaseQuickAdapter;
@@ -39,7 +38,6 @@ import net.sxkeji.shixinandroiddemo2.service.AssistantService;
 import net.sxkeji.shixinandroiddemo2.weex.WeexActivity;
 import net.sxkeji.shixinandroiddemo2.weex.WeexYmcActivity;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -47,7 +45,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import top.shixinzhang.sxframework.config.Config;
 import top.shixinzhang.sxframework.utils.FileUtils;
 import top.shixinzhang.sxframework.utils.LogUtils;
 import top.shixinzhang.sxframework.utils.SettingUtils;
@@ -142,7 +139,7 @@ public class MainActivity extends BaseActivity {
                 new ActivityBean(getString(R.string.anr_test), ANRTestActivity.class),
                 new ActivityBean(getString(R.string.download_test), DownloadTestActivity.class),
                 new ActivityBean(getString(R.string.float_tracker), FloatTrackerActivity.class),
-                new ActivityBean(getString(R.string.aidl_test), AidlTestActivity.class),
+                new ActivityBean(getString(R.string.ipc_test), IPCTestActivity.class),
                 new ActivityBean(getString(R.string.okhttp_test), OkHttp3TestActivity.class));
     }
 

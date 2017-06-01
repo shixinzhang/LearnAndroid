@@ -170,8 +170,8 @@
             android:launchMode="singleTop"/>
 
         <activity
-            android:name=".activity.ipc.AidlTestActivity"
-            android:label="@string/aidl_test"
+            android:name=".activity.ipc.IPCTestActivity"
+            android:label="@string/ipc_test"
             android:launchMode="singleTop"/>
 
 
@@ -220,6 +220,11 @@
             android:enabled="true"
             android:exported="true"
             android:process=":aidl"/>
+
+        <service
+            android:name=".service.MessengerService"
+            android:exported="true"
+            android:process=":messenger"/>
 
         <meta-data
             android:name="${UMENG_CHANNEL_NAME}"
