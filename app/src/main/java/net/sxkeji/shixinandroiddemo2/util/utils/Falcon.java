@@ -1,4 +1,4 @@
-package net.sxkeji.shixinandroiddemo2.utils;
+package net.sxkeji.shixinandroiddemo2.util.utils;
 
 import android.app.Activity;
 import android.graphics.Bitmap;

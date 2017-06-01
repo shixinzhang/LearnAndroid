@@ -202,6 +202,7 @@ public class IPCTestActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         unbindService(mAIDLConnection);
+        unbindService(mMessengerConnection);
     }
 
     @Override

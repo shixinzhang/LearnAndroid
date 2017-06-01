@@ -1,4 +1,4 @@
-package net.sxkeji.shixinandroiddemo2.utils;
+package net.sxkeji.shixinandroiddemo2.util.utils;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -6,15 +6,12 @@ import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Environment;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ScrollView;
 
-import com.taobao.weex.ui.view.WXScrollView;
 import com.taobao.weex.ui.view.listview.WXRecyclerView;
 
 import java.io.File;

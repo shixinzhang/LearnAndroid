@@ -1,4 +1,4 @@
-package net.sxkeji.shixinandroiddemo2.utils;
+package net.sxkeji.shixinandroiddemo2.util.utils;
 
 /**
  * Created by admin on 16/7/20.

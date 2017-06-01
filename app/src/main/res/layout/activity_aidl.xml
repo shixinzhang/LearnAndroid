@@ -43,11 +43,20 @@
         android:layout_marginTop="30dp"
         android:background="@color/colorAccent"/>
 
+    <TextView
+        android:id="@+id/tv_messenger_service_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="当前状态："/>
+
     <EditText
         android:id="@+id/et_msg_content"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="#33333333"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:hint="这里输入要发送给服务端的消息"
         android:textSize="16sp"/>
 
