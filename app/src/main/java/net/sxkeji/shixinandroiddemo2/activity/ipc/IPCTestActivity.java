@@ -18,14 +18,19 @@ package net.sxkeji.shixinandroiddemo2.activity.ipc;
 
 import android.app.PendingIntent;
 import android.content.ComponentName;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -37,6 +42,7 @@ import net.sxkeji.shixinandroiddemo2.IMyAidl;
 import net.sxkeji.shixinandroiddemo2.R;
 import net.sxkeji.shixinandroiddemo2.bean.Person;
 import net.sxkeji.shixinandroiddemo2.helper.ConfigHelper;
+import net.sxkeji.shixinandroiddemo2.provider.IPCPersonProvider;
 import net.sxkeji.shixinandroiddemo2.receiver.RepeatReceiver;
 import net.sxkeji.shixinandroiddemo2.service.MessengerService;
 import net.sxkeji.shixinandroiddemo2.service.MyAidlService;
@@ -47,7 +53,7 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import top.shixinzhang.sxframework.config.Config;
+import top.shixinzhang.sxframework.utils.DateUtils;
 import top.shixinzhang.sxframework.utils.LogUtils;
 
 
@@ -73,6 +79,10 @@ public class IPCTestActivity extends BaseActivity {
     EditText mEtMsgContent;
     @BindView(R.id.btn_send_msg)
     Button mBtnSendMsg;
+    @BindView(R.id.tv_messenger_service_state)
+    TextView mTvMessengerServiceState;
+    @BindView(R.id.tv_cp_result)
+    TextView mTvCpResult;
 
     private IMyAidl mAidl;
 
@@ -95,8 +105,8 @@ public class IPCTestActivity extends BaseActivity {
     Messenger mClientMessenger = new Messenger(new Handler() {
         @Override
         public void handleMessage(final Message msg) {
-            if (msg != null && msg.arg1 == ConfigHelper.MSG_ID_SERVER){
-                if (msg.getData() == null){
+            if (msg != null && msg.arg1 == ConfigHelper.MSG_ID_SERVER) {
+                if (msg.getData() == null) {
                     return;
                 }
 
@@ -113,21 +123,57 @@ public class IPCTestActivity extends BaseActivity {
         @Override
         public void onServiceConnected(final ComponentName name, final IBinder service) {
             mServerMessenger = new Messenger(service);
+            mTvMessengerServiceState.setText(mTvMessengerServiceState.getText().toString() + " 服务已连接");
         }
 
         @Override
         public void onServiceDisconnected(final ComponentName name) {
             mServerMessenger = null;
+            mTvMessengerServiceState.setText(mTvMessengerServiceState.getText().toString() + " 服务断开");
         }
     };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_aidl);
+        setContentView(R.layout.activity_ipc);
         ButterKnife.bind(this);
         bindAIDLService();
         bindMessengerService();
+
+        getContentFromContentProvider();
+    }
+
+    private int id = 2;
+
+    private void getContentFromContentProvider() {
+        Uri uri = IPCPersonProvider.PERSON_CONTENT_URI;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("_id", id++);
+        contentValues.put("name", "rourou" + DateUtils.getCurrentTime());
+        contentValues.put("description", "beautiful girl");
+        ContentResolver contentResolver = getContentResolver();
+        contentResolver.insert(uri, contentValues);
+
+        Cursor cursor = contentResolver.query(uri, new String[]{"name", "description"}, null, null, null, null);
+        if (cursor == null) {
+            return;
+        }
+        StringBuilder cursorResult = new StringBuilder("DB 查询结果：");
+        while (cursor.moveToNext()) {
+            String result = cursor.getString(0) + ", " + cursor.getString(1);
+            LogUtils.d(TAG, "DB 查询结果：" + result);
+            cursorResult.append("\n").append(result);
+        }
+        mTvCpResult.setText(cursorResult.toString());
+        cursor.close();
+
+    }
+
+
+    @OnClick(R.id.btn_add_person_to_db)
+    public void addPersonToDB() {
+        getContentFromContentProvider();
     }
 
     private void bindMessengerService() {

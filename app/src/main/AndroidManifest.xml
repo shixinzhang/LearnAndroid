@@ -32,6 +32,15 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <!--<uses-permission android:name="android.permission.INSTALL_PACKAGES"/>-->
 
+    <uses-permission android:name="top.shixinzhang.permission.READ_CONTENT"/>
+
+    <!--读内容提供者的权限-->
+    <permission
+        android:name="top.shixinzhang.permission.READ_CONTENT"
+        android:label="Permission for read content provider"
+        android:protectionLevel="normal"
+        />
+
     <application
         android:name=".SxApplication"
         android:allowBackup="false"
@@ -225,6 +234,15 @@
             android:name=".service.MessengerService"
             android:exported="true"
             android:process=":messenger"/>
+
+        <provider
+            android:name=".provider.IPCPersonProvider"
+            android:authorities="net.sxkeji.shixinandroiddemo2.provider.IPCPersonProvider"
+            android:exported="true"
+            android:grantUriPermissions="true"
+            android:process=":provider"
+            android:readPermission="top.shixinzhang.permission.READ_CONTENT">
+        </provider>
 
         <meta-data
             android:name="${UMENG_CHANNEL_NAME}"
