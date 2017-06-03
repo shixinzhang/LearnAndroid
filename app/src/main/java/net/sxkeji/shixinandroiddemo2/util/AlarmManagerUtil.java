@@ -31,11 +31,11 @@ public final class AlarmManagerUtil {
     private static final int NO_SENSE_CODE = 0;
 
     public static void startRepeatTask(Context context, long startTimeMillis) {
-        AlarmManagerUtil.repeat(context, ConfigHelper.ACTION_REPEAT_BROADCAST_RECEIVER, startTimeMillis, ConfigHelper.DEFAULT_REPEAT_INTERVAL);
+        repeat(context, ConfigHelper.ACTION_REPEAT_BROADCAST_RECEIVER, startTimeMillis, ConfigHelper.DEFAULT_REPEAT_INTERVAL);
     }
 
     public static void stopRepeatTask(Context context) {
-        AlarmManagerUtil.cancel(context, ConfigHelper.ACTION_REPEAT_BROADCAST_RECEIVER);
+        cancel(context, ConfigHelper.ACTION_REPEAT_BROADCAST_RECEIVER);
     }
 
     /**

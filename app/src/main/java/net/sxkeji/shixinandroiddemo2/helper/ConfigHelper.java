@@ -32,8 +32,9 @@ public class ConfigHelper {
     public static final String SP_START_TIME = "start_time";    //定时任务开始时间
     public static final String SP_STOP_TIME = "stop_time";      //定时任务结束时间
 
-    //IPC Message 参数名
+    //IPC
     public static final int MSG_ID_CLIENT = 0x001;
     public static final int MSG_ID_SERVER = 0x002;
     public static final String MSG_CONTENT = "msg_content";
+    public static final int TEST_SOCKET_PORT = 8688;
 }

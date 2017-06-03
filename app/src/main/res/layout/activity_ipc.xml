@@ -22,8 +22,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_result"
@@ -92,5 +92,15 @@
             android:layout_height="wrap_content"
             android:text="add data to content provider"
             android:textAllCaps="false"/>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/colorAccent"/>
+
+        <include layout="@layout/include_socket"/>
     </LinearLayout>
 </ScrollView>

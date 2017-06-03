@@ -42,4 +42,5 @@
     <string name="float_tracker">悬浮Activity信息</string>
     <string name="ipc_test">IPC test</string>
     <string name="okhttp_test">OkHttp3 test</string>
+    <string name="socket_test">socket test</string>
 </resources>

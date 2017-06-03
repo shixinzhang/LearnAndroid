@@ -39,7 +39,7 @@ public class SxApplication extends MultiDexApplication {
         super.onCreate();
 
         if (BuildConfig.DEBUG) {
-            enableStrictMode();
+//            enableStrictMode();
         }
 
         addLifecycleListener();

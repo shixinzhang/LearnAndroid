@@ -235,6 +235,11 @@
             android:exported="true"
             android:process=":messenger"/>
 
+        <service
+            android:name=".service.TCPServerService"
+            android:exported="true"
+            android:process=":socket"/>
+
         <provider
             android:name=".provider.IPCPersonProvider"
             android:authorities="net.sxkeji.shixinandroiddemo2.provider.IPCPersonProvider"

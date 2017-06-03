@@ -27,6 +27,7 @@ import net.sxkeji.shixinandroiddemo2.activity.ServiceTestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.SuspensionHeaderActivity;
 import net.sxkeji.shixinandroiddemo2.activity.http.OkHttp3TestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.ipc.IPCTestActivity;
+import net.sxkeji.shixinandroiddemo2.activity.ipc.SocketTestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.launchmode.StandardActivity;
 import net.sxkeji.shixinandroiddemo2.adapter.ActivityListAdapter;
 import net.sxkeji.shixinandroiddemo2.adapter.rvbaseadapter.BaseQuickAdapter;
