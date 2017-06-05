@@ -27,7 +27,6 @@ import net.sxkeji.shixinandroiddemo2.activity.ServiceTestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.SuspensionHeaderActivity;
 import net.sxkeji.shixinandroiddemo2.activity.http.OkHttp3TestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.ipc.IPCTestActivity;
-import net.sxkeji.shixinandroiddemo2.activity.ipc.SocketTestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.launchmode.StandardActivity;
 import net.sxkeji.shixinandroiddemo2.adapter.ActivityListAdapter;
 import net.sxkeji.shixinandroiddemo2.adapter.rvbaseadapter.BaseQuickAdapter;
@@ -40,12 +39,14 @@ import net.sxkeji.shixinandroiddemo2.weex.WeexActivity;
 import net.sxkeji.shixinandroiddemo2.weex.WeexYmcActivity;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import top.shixinzhang.sxframework.utils.DateUtils;
 import top.shixinzhang.sxframework.utils.FileUtils;
 import top.shixinzhang.sxframework.utils.LogUtils;
 import top.shixinzhang.sxframework.utils.SettingUtils;
@@ -70,7 +71,10 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         loadData();
+
         initViews();
+
+//        testLongTime();
 //        testSerializable();
 
         if (!SettingUtils.checkAccessibilityOpen(this, AssistantService.class)) {
@@ -87,6 +91,16 @@ public class MainActivity extends BaseActivity {
                     .setNegativeButton("否", null)
                     .show();
         }
+    }
+
+    private void testLongTime() {
+        Calendar currentCalendar = DateUtils.getCurrentCalendar();
+        currentCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        currentCalendar.set(Calendar.MINUTE, 0);
+        currentCalendar.set(Calendar.SECOND, 0);
+        currentCalendar.set(Calendar.MILLISECOND, 0);
+        long time = currentCalendar.getTime().getTime();
+        LogUtils.d(TAG, "long time: " + time);
     }
 
     private void testSerializable() {
