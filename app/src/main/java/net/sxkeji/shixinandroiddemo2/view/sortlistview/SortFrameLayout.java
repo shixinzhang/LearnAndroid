@@ -15,11 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.sxkeji.shixinandroiddemo2.R;
-import net.sxkeji.shixinandroiddemo2.adapter.lvbaseadapter.BaseAdapterHelper;
-import net.sxkeji.shixinandroiddemo2.adapter.lvbaseadapter.QuickAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import top.shixinzhang.sxframework.views.adapter.lvbaseadapter.BaseAdapterHelper;
+import top.shixinzhang.sxframework.views.adapter.lvbaseadapter.QuickAdapter;
 
 /**
  * 按首字母排序的车品牌列表
@@ -114,7 +115,7 @@ public class SortFrameLayout extends FrameLayout {
                     tvLetter.setVisibility(View.GONE);
                 }
                 if (!TextUtils.isEmpty(item.logoUrl)) {
-                    helper.setImageUrl(R.id.iv_sort, item.logoUrl);
+//                    helper.setImageUrl(R.id.iv_sort, item.logoUrl);
                 } else {
                     //// TODO: 7/11/2016 修改默认图片
                     ((ImageView) helper.getView(R.id.iv_sort)).setImageResource(R.mipmap.ic_launcher);

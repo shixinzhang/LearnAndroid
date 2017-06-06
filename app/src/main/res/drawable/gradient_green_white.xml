@@ -26,15 +26,15 @@
 
             <gradient
                 android:angle="180"
-                android:endColor="#eee"
-                android:startColor="#000000"/>
+                android:endColor="#ffeeee"
+                android:startColor="#023320"/>
         </shape>
     </item>
 
 
-    <item>
-        <shape>
-            <solid android:color="#eeeeee"/>
-        </shape>
-    </item>
+    <!--<item>-->
+        <!--<shape>-->
+            <!--<solid android:color="#eeeeee"/>-->
+        <!--</shape>-->
+    <!--</item>-->
 </layer-list>

@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import net.sxkeji.shixinandroiddemo2.BaseActivity;
-import net.sxkeji.shixinandroiddemo2.MainActivity;
+import net.sxkeji.shixinandroiddemo2.TestMainActivity;
 import net.sxkeji.shixinandroiddemo2.test.ipc.GroupBean;
 
 /**
@@ -32,7 +32,7 @@ public class IPCTestActivity extends BaseActivity{
         super.onCreate(savedInstanceState);
 
         GroupBean groupBean = new GroupBean();
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, TestMainActivity.class);
         intent.putExtra("key", groupBean);
     }
 
@@ -46,7 +46,6 @@ public class IPCTestActivity extends BaseActivity{
 
     }
 
-    @Override
     public void addListeners() {
 
     }

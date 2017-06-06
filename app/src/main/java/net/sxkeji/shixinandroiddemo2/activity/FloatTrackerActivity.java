@@ -56,7 +56,6 @@ public class FloatTrackerActivity extends BaseActivity {
 
     }
 
-    @Override
     public void addListeners() {
 
     }

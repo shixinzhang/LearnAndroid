@@ -477,7 +477,6 @@ public class RxJavaTestActivity extends BaseActivity {
         };
     }
 
-    @Override
     public void addListeners() {
 
     }

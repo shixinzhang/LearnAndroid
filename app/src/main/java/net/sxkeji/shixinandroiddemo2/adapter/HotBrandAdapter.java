@@ -3,10 +3,11 @@ package net.sxkeji.shixinandroiddemo2.adapter;
 import android.content.Context;
 
 import net.sxkeji.shixinandroiddemo2.R;
-import net.sxkeji.shixinandroiddemo2.adapter.rvbaseadapter.BaseQuickAdapter;
-import net.sxkeji.shixinandroiddemo2.adapter.rvbaseadapter.BaseViewHolder;
 
 import java.util.List;
+
+import top.shixinzhang.sxframework.views.adapter.rvbaseadapter.BaseQuickAdapter;
+import top.shixinzhang.sxframework.views.adapter.rvbaseadapter.BaseViewHolder;
 
 /**
  * 热门品牌的 adapter

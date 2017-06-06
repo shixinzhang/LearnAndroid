@@ -99,7 +99,6 @@ public class OaLoginActivity extends BaseActivity {
         getStatus();
     }
 
-    @Override
     public void addListeners() {
         mIvEz.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

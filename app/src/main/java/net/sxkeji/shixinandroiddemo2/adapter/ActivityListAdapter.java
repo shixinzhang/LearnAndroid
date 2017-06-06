@@ -2,12 +2,13 @@ package net.sxkeji.shixinandroiddemo2.adapter;
 
 import android.content.Context;
 
-import net.sxkeji.shixinandroiddemo2.adapter.rvbaseadapter.BaseQuickAdapter;
-import net.sxkeji.shixinandroiddemo2.adapter.rvbaseadapter.BaseViewHolder;
 import net.sxkeji.shixinandroiddemo2.bean.ActivityBean;
 import net.sxkeji.shixinandroiddemo2.R;
 
 import java.util.List;
+
+import top.shixinzhang.sxframework.views.adapter.rvbaseadapter.BaseQuickAdapter;
+import top.shixinzhang.sxframework.views.adapter.rvbaseadapter.BaseViewHolder;
 
 /**
  * 首页 Activity 列表的 Adapter

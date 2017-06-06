@@ -150,7 +150,6 @@ public class WeexActivity extends BaseActivity {
 
     }
 
-    @Override
     public void addListeners() {
 
     }

@@ -51,11 +51,6 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     public abstract void loadData();
 
-    /**
-     * 子类统一，添加监听
-     */
-    public abstract void addListeners();
-
     public SharedPreferences getMySharedPreferences() {
         return mSharedPreferences;
     }

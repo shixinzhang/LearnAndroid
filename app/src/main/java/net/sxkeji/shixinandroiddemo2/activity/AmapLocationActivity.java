@@ -65,7 +65,6 @@ public class AmapLocationActivity extends BaseActivity {
 //        getSupportFragmentManager().beginTransaction().replace()
     }
 
-    @Override
     public void addListeners() {
         mBtnLocationSwitch.setOnClickListener(new View.OnClickListener() {
             @Override

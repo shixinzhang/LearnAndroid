@@ -25,7 +25,6 @@ public class PhoneInfoActivity extends BaseActivity {
 
     }
 
-    @Override
     public void addListeners() {
 
     }

@@ -11,9 +11,6 @@ import com.squareup.picasso.Picasso;
 
 import net.sxkeji.shixinandroiddemo2.R;
 
-/**
- * Created by snowbean on 16-11-4.
- */
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedHolder> {
     private static final String TAG = "FeedAdapter";
 

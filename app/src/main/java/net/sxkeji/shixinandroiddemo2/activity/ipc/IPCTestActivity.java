@@ -378,7 +378,6 @@ public class IPCTestActivity extends BaseActivity {
 
     }
 
-    @Override
     public void addListeners() {
 
     }

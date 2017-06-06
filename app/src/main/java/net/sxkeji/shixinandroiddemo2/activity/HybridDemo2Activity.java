@@ -30,7 +30,6 @@ public class HybridDemo2Activity extends BaseActivity {
 
     }
 
-    @Override
     public void addListeners() {
 
     }

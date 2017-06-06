@@ -165,7 +165,6 @@ public class OkHttp3TestActivity extends BaseActivity {
 
     }
 
-    @Override
     public void addListeners() {
 
     }

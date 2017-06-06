@@ -91,7 +91,6 @@ public class ServiceTestActivity extends BaseActivity {
         selectStopTime();
     }
 
-    @Override
     public void addListeners() {
         mBtnStartService.setOnClickListener(new View.OnClickListener() {
             @Override

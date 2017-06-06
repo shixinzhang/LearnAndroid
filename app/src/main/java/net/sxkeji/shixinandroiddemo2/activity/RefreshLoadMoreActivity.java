@@ -65,7 +65,6 @@ public class RefreshLoadMoreActivity extends BaseActivity {
         }
     }
 
-    @Override
     public void addListeners() {
 
     }

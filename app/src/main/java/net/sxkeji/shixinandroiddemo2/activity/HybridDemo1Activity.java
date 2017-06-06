@@ -52,7 +52,6 @@ public class HybridDemo1Activity extends BaseActivity {
         mWebView.loadUrl("file:///android_asset/demo.html");
     }
 
-    @Override
     public void addListeners() {
         mBtnCallJs.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -126,7 +126,6 @@ public class DIYView1Activity extends BaseActivity {
 
     }
 
-    @Override
     public void addListeners() {
 
     }

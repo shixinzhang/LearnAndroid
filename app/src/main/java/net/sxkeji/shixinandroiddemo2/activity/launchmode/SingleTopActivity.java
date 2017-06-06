@@ -70,7 +70,6 @@ public class SingleTopActivity extends BaseActivity {
 
     }
 
-    @Override
     public void addListeners() {
 
     }

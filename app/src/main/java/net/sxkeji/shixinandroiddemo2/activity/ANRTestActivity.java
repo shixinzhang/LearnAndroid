@@ -53,7 +53,6 @@ public class ANRTestActivity extends BaseActivity {
 
     }
 
-    @Override
     public void addListeners() {
 
     }

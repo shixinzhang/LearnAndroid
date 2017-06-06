@@ -133,7 +133,6 @@ public class SuspensionHeaderActivity extends BaseActivity {
 
     }
 
-    @Override
     public void addListeners() {
 
     }

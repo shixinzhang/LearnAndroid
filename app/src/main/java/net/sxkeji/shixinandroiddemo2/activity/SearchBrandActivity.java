@@ -23,7 +23,6 @@ import com.ismaeltoe.FlowLayout;
 
 import net.sxkeji.shixinandroiddemo2.R;
 import net.sxkeji.shixinandroiddemo2.adapter.SearchResultAdapter;
-import net.sxkeji.shixinandroiddemo2.adapter.rvbaseadapter.BaseQuickAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +30,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import top.shixinzhang.sxframework.views.adapter.rvbaseadapter.BaseQuickAdapter;
 
 /**
  * 搜索品牌或车型

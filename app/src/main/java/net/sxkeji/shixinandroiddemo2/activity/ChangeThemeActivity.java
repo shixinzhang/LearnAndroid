@@ -86,7 +86,6 @@ public class ChangeThemeActivity extends BaseActivity {
 
     }
 
-    @Override
     public void addListeners() {
 
     }

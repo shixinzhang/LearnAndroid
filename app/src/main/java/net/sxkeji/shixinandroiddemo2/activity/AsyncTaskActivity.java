@@ -49,7 +49,6 @@ public class AsyncTaskActivity extends BaseActivity {
 
     }
 
-    @Override
     public void addListeners() {
 
     }

@@ -127,7 +127,6 @@ public class DownloadTestActivity extends BaseActivity {
         mApkDownloader = DefaultDownloader.getInstance(DownloadTestActivity.this);
     }
 
-    @Override
     public void addListeners() {
 
     }

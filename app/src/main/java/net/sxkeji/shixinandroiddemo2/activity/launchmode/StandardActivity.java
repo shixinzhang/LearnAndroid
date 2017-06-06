@@ -99,7 +99,6 @@ public class StandardActivity extends BaseActivity {
 
     }
 
-    @Override
     public void addListeners() {
 
     }

@@ -32,7 +32,6 @@ public class AnnotationTestActivity extends BaseActivity {
 
     }
 
-    @Override
     public void addListeners() {
 
     }

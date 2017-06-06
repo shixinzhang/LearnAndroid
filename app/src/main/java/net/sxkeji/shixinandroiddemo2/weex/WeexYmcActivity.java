@@ -44,7 +44,6 @@ public class WeexYmcActivity extends BaseActivity {
 
     }
 
-    @Override
     public void addListeners() {
 
     }
