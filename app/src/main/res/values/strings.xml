@@ -44,4 +44,5 @@
     <string name="okhttp_test">OkHttp3 test</string>
     <string name="socket_test">socket test</string>
     <string name="android_evolution">安卓进阶</string>
+    <string name="handler_test">HandlerThread 示例</string>
 </resources>

@@ -117,7 +117,7 @@
             android:name=".hybrid.SxWebViewActivity"
             android:label="@string/hybrid"/>
         <activity
-            android:name=".activity.AsyncTaskActivity"
+            android:name=".activity.async.AsyncTaskActivity"
             android:label="@string/async_task"/>
 
         <activity
@@ -196,6 +196,11 @@
         <activity
             android:name=".activity.http.OkHttp3TestActivity"
             android:label="@string/okhttp_test"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:name=".activity.async.HandlerThreadActivity"
+            android:label="@string/handler_test"
             android:launchMode="singleTop"/>
 
         <meta-data
