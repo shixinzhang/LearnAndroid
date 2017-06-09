@@ -203,6 +203,11 @@
             android:label="@string/handler_test"
             android:launchMode="singleTop"/>
 
+        <activity
+            android:name=".activity.async.IntentServiceActivity"
+            android:label="@string/intent_service_test"
+            android:launchMode="singleTop"/>
+
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="012a484e2b4f84412fbea6736ec3658f">
@@ -253,6 +258,9 @@
             android:name=".service.TCPServerService"
             android:exported="true"
             android:process=":socket"/>
+
+        <service
+            android:name=".activity.async.DownloadService"/>
 
         <provider
             android:name=".provider.IPCPersonProvider"

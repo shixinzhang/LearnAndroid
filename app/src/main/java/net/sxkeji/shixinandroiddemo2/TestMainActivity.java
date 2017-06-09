@@ -26,6 +26,7 @@ import net.sxkeji.shixinandroiddemo2.activity.SearchActivity;
 import net.sxkeji.shixinandroiddemo2.activity.ServiceTestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.SuspensionHeaderActivity;
 import net.sxkeji.shixinandroiddemo2.activity.async.HandlerThreadActivity;
+import net.sxkeji.shixinandroiddemo2.activity.async.IntentServiceActivity;
 import net.sxkeji.shixinandroiddemo2.activity.http.OkHttp3TestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.ipc.IPCTestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.launchmode.StandardActivity;
@@ -136,7 +137,7 @@ public class TestMainActivity extends BaseActivity {
 
     @Override
     public void loadData() {
-        registerActivityList(
+        mActivityNameList = Arrays.asList(
                 new ActivityBean("搜索", SearchActivity.class),
                 new ActivityBean(getString(R.string.repeat_service), ServiceTestActivity.class),
                 new ActivityBean("夜间模式", ChangeThemeActivity.class),
@@ -157,15 +158,10 @@ public class TestMainActivity extends BaseActivity {
                 new ActivityBean(getString(R.string.anr_test), ANRTestActivity.class),
                 new ActivityBean(getString(R.string.download_test), DownloadTestActivity.class),
                 new ActivityBean(getString(R.string.float_tracker), FloatTrackerActivity.class),
-                new ActivityBean(getString(R.string.ipc_test), IPCTestActivity.class),
                 new ActivityBean(getString(R.string.handler_test), HandlerThreadActivity.class),
+                new ActivityBean(getString(R.string.intent_service_test), IntentServiceActivity.class),
+                new ActivityBean(getString(R.string.ipc_test), IPCTestActivity.class),
                 new ActivityBean(getString(R.string.okhttp_test), OkHttp3TestActivity.class));
-    }
-
-    public static void registerActivityList(ActivityBean... activityBeans) {
-        if (activityBeans != null) {
-            Collections.addAll(mActivityNameList, activityBeans);
-        }
     }
 
     @Override

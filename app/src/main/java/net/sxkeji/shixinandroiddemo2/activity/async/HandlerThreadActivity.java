@@ -88,4 +88,10 @@ public class HandlerThreadActivity extends AppCompatActivity implements Handler.
         }
         return true;
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mDownloadThread.quitSafely();
+    }
 }

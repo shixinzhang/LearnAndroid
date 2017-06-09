@@ -30,7 +30,7 @@ import top.shixinzhang.sxframework.utils.DateUtils;
 
 /**
  * Description:
- * <br>
+ * <br> 使用 HandlerThread 实现下载
  * <p>
  * <br> Created by shixinzhang on 17/6/7.
  * <p>

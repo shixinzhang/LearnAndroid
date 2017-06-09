@@ -45,4 +45,5 @@
     <string name="socket_test">socket test</string>
     <string name="android_evolution">安卓进阶</string>
     <string name="handler_test">HandlerThread 示例</string>
+    <string name="intent_service_test">IntentService 示例</string>
 </resources>
