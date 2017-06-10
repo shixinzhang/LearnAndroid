@@ -208,6 +208,18 @@
             android:label="@string/intent_service_test"
             android:launchMode="singleTop"/>
 
+        <activity android:name=".activity.eventbus.EventBusRegisterActivity"
+                  android:label="@string/eventbus_sample"
+                  android:launchMode="singleTop"/>
+
+        <activity android:name=".activity.eventbus.EventBusStickyActivity"
+                  android:label="@string/eventbus_sample"
+                  android:launchMode="singleTop"/>
+
+        <activity android:name=".activity.eventbus.EventBusPosterActivity"
+                  android:label="@string/eventbus_sample"
+                  android:launchMode="singleTop"/>
+
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="012a484e2b4f84412fbea6736ec3658f">

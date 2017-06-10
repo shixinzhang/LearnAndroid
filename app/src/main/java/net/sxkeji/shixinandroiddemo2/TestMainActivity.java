@@ -12,7 +12,6 @@ import android.view.View;
 import net.sxkeji.shixinandroiddemo2.activity.ANRTestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.AmapLocationActivity;
 import net.sxkeji.shixinandroiddemo2.activity.AnnotationTestActivity;
-import net.sxkeji.shixinandroiddemo2.activity.async.AsyncTaskActivity;
 import net.sxkeji.shixinandroiddemo2.activity.ChangeThemeActivity;
 import net.sxkeji.shixinandroiddemo2.activity.DIYView1Activity;
 import net.sxkeji.shixinandroiddemo2.activity.DownloadTestActivity;
@@ -25,8 +24,10 @@ import net.sxkeji.shixinandroiddemo2.activity.RefreshLoadMoreActivity;
 import net.sxkeji.shixinandroiddemo2.activity.SearchActivity;
 import net.sxkeji.shixinandroiddemo2.activity.ServiceTestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.SuspensionHeaderActivity;
+import net.sxkeji.shixinandroiddemo2.activity.async.AsyncTaskActivity;
 import net.sxkeji.shixinandroiddemo2.activity.async.HandlerThreadActivity;
 import net.sxkeji.shixinandroiddemo2.activity.async.IntentServiceActivity;
+import net.sxkeji.shixinandroiddemo2.activity.eventbus.EventBusRegisterActivity;
 import net.sxkeji.shixinandroiddemo2.activity.http.OkHttp3TestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.ipc.IPCTestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.launchmode.StandardActivity;
@@ -41,7 +42,6 @@ import net.sxkeji.shixinandroiddemo2.weex.WeexYmcActivity;
 
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -161,6 +161,7 @@ public class TestMainActivity extends BaseActivity {
                 new ActivityBean(getString(R.string.handler_test), HandlerThreadActivity.class),
                 new ActivityBean(getString(R.string.intent_service_test), IntentServiceActivity.class),
                 new ActivityBean(getString(R.string.ipc_test), IPCTestActivity.class),
+                new ActivityBean(getString(R.string.eventbus_sample), EventBusRegisterActivity.class),
                 new ActivityBean(getString(R.string.okhttp_test), OkHttp3TestActivity.class));
     }
 
