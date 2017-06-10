@@ -213,11 +213,11 @@
                   android:launchMode="singleTop"/>
 
         <activity android:name=".activity.eventbus.EventBusStickyActivity"
-                  android:label="@string/eventbus_sample"
+                  android:label="@string/eventbus_sticky"
                   android:launchMode="singleTop"/>
 
         <activity android:name=".activity.eventbus.EventBusPosterActivity"
-                  android:label="@string/eventbus_sample"
+                  android:label="@string/eventbus_post"
                   android:launchMode="singleTop"/>
 
         <meta-data

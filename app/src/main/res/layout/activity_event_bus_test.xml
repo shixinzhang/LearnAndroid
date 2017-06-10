@@ -4,13 +4,27 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
                 android:gravity="center" >
+    <TextView
+        android:id="@+id/tv_event_info_priority"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="【优先级为 5】的订阅方法"
+        android:layout_marginBottom="8dp"/>
 
     <TextView
         android:id="@+id/tv_event_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="这里将显示通知信息"
+        android:text="【优先级为 1】的订阅方法"
         android:layout_marginBottom="40dp"/>
+
+    <Button
+        android:id="@+id/btn_cancel_delivery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="点击后优先级为5的拦截消息"
+        android:layout_marginBottom="10dp"/>
+
     <Button
         android:id="@+id/btn_jump_next"
         android:layout_width="wrap_content"

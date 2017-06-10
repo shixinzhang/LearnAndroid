@@ -41,23 +41,13 @@ public class EventBusPosterActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_post_normal)
     public void postNormalEvent(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                EventBus.getDefault().post(new MessageEvent("另外界面的子线程，普通消息", DateUtils.getCurrentTime()));
-                finish();
-            }
-        }).start();
+        EventBus.getDefault().post(new MessageEvent("另外界面的主线程，普通消息", DateUtils.getCurrentTime()));
+        finish();
     }
 
     @OnClick(R.id.btn_post_sticky_event)
     public void postStickyEvent(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                EventBus.getDefault().postSticky(new MessageEvent("另外界面的子线程，粘性消息", DateUtils.getCurrentTime()));
-                finish();
-            }
-        }).start();
+        EventBus.getDefault().postSticky(new MessageEvent("另外界面的主线程，粘性消息", DateUtils.getCurrentTime()));
+        finish();
     }
 }
