@@ -38,6 +38,7 @@ public class EventBusRegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_bus_test);
         ButterKnife.bind(this);
+        EventBusManager.getInstance().register(this);
     }
 
     /**
