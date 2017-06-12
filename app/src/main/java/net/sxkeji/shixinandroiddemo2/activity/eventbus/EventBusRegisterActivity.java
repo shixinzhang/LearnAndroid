@@ -9,13 +9,12 @@ import android.widget.TextView;
 
 import net.sxkeji.shixinandroiddemo2.R;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import top.shixinzhang.sxframework.eventsubscribe.third.eventbus.EventBus;
+import top.shixinzhang.sxframework.eventsubscribe.third.eventbus.Subscribe;
+import top.shixinzhang.sxframework.eventsubscribe.third.eventbus.ThreadMode;
 
 /**
  * <header>

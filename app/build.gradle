@@ -133,6 +133,12 @@ repositories {
 //    scanref=true//默认为 false，开启这个选项会将与补丁 class 相引用的 class 都打入包中来解决 ART 虚拟机崩溃问题，功能 Beta 中
 //}
 
+apt {
+    arguments {
+        eventBusIndex "top.shixinzhang.MyEventBusIndex"
+    }
+}
+
 final COMPAT_VERSION = "24.2.0"
 dependencies {
     compile ('com.android.support:appcompat-v7:24.2.0') {
@@ -164,7 +170,8 @@ dependencies {
     //        exclude group: 'com.android.support', module: 'support-annotations'
     //    }
 //    compile 'com.qiniu:qiniu-android-sdk:7.2.+'
-    compile 'org.greenrobot:eventbus:3.0.0'
+//    compile 'org.greenrobot:eventbus:3.0.0'
+    apt 'org.greenrobot:eventbus-annotation-processor:3.0.1'
     compile project(path: ':WeexSDK')
     compile project(':sxframework')
     compile project(':sxdebugkit')
