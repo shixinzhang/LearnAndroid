@@ -17,6 +17,7 @@
 package net.sxkeji.shixinandroiddemo2.activity.async;
 
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.widget.ProgressBar;
 
@@ -51,6 +52,16 @@ public class AsyncTaskActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_async_task);
         ButterKnife.bind(this);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Looper.prepare();
+
+                Looper.loop();
+            }
+        }).start();
+
 
         new DownloadTask().execute("www.baidu.com", "www.sougou.com");
     }

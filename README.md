@@ -7,6 +7,8 @@
 - sxframework 从 0 搭建自己的快速开发框架
 - hybrid 提示模块
 - IPC 通信 demo
+- IOC demo
+ - 模仿 butterKnife 的编译时注解
 - 数据结构练习 demo
 - 其他学习内容
 
