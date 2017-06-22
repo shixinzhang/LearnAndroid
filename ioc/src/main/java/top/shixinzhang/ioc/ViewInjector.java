@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 
-apply plugin: 'java'
+package top.shixinzhang.ioc;
 
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.google.auto.service:auto-service:1.0-rc3'
-    compile project(path: ':ioc-annotation')
+/**
+ * Description:
+ * <br>
+ * <p>
+ * <br> Created by shixinzhang on 17/6/22.
+ * <p>
+ * <br> Email: shixinzhang2016@gmail.com
+ * <p>
+ * <br> https://about.me/shixinzhang
+ */
+
+public interface ViewInjector<T> {
+    void inject(T t, Object source);
 }
-
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"

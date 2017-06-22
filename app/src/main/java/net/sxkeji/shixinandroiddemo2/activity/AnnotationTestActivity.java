@@ -1,12 +1,17 @@
 package net.sxkeji.shixinandroiddemo2.activity;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import net.sxkeji.shixinandroiddemo2.BaseActivity;
 import net.sxkeji.shixinandroiddemo2.R;
 import net.sxkeji.shixinandroiddemo2.annotation.Author;
-import net.sxkeji.shixinandroiddemo2.annotation.ContentView;
+
+import top.shixinzhang.BindView;
+import top.shixinzhang.ioc.ViewBinder;
 
 /**
  * <br/> Description:
@@ -19,8 +24,21 @@ import net.sxkeji.shixinandroiddemo2.annotation.ContentView;
  */
 
 @Author(name = "shixinzhang", date = "2016.12.13", habit = {"lol", "code"})
-@ContentView(R.layout.activity_annotation)
+//@ContentView(R.layout.activity_annotation)
 public class AnnotationTestActivity extends BaseActivity {
+
+    @BindView(R.id.tv_content)
+    public TextView mTextView;
+
+    @Override
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_annotation);
+        ViewBinder.bind(this);
+
+        mTextView.setText("Haha I'm found by annotation !");
+    }
+
     @Override
     public void initViews() {
 

@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-apply plugin: 'java'
+package top.shixinzhang.ioc;
 
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.google.auto.service:auto-service:1.0-rc3'
-    compile project(path: ':ioc-annotation')
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+/**
+ * Example local unit test, which will execute on the development machine (host).
+ *
+ * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ */
+public class ExampleUnitTest {
+    @Test
+    public void addition_isCorrect() throws Exception {
+        assertEquals(4, 2 + 2);
+    }
 }
-
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"

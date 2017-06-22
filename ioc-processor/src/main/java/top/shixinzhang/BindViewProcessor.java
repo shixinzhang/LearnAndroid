@@ -21,6 +21,7 @@ import com.google.auto.service.AutoService;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,19 +31,20 @@ import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
-import javax.annotation.processing.SupportedAnnotationTypes;
-import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.Elements;
+import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
 @AutoService(Processor.class)
-@SupportedAnnotationTypes("top.shixinzhang.BindView")
-@SupportedSourceVersion(SourceVersion.RELEASE_7)    //支持的源码版本
-public class BindViewProcessor extends AbstractProcessor{
+//@SupportedAnnotationTypes("top.shixinzhang.BindView")
+//@SupportedSourceVersion(SourceVersion.RELEASE_7)    //支持的源码版本
+public class BindViewProcessor extends AbstractProcessor {
     private Elements mElementUtils; //操作元素的工具方法
     private Filer mFileCreator;     //代码创建者
     private Messager mMessager;     //日志，提示者，提示错误、警告
@@ -59,12 +61,14 @@ public class BindViewProcessor extends AbstractProcessor{
 
     /**
      * 1.收集信息   2.生成代理类
+     *
      * @param annotations
      * @param roundEnv
      * @return
      */
     @Override
     public boolean process(final Set<? extends TypeElement> annotations, final RoundEnvironment roundEnv) {
+        mMessager.printMessage(Diagnostic.Kind.NOTE, "process...");
         //避免生成重复的代理类
         mProxyMap.clear();
 
@@ -72,8 +76,8 @@ public class BindViewProcessor extends AbstractProcessor{
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(BindView.class);
         //1.收集信息
         for (Element element : elements) {
-            if (!checkAnnotationValid(element)){
-                return false;
+            if (!checkAnnotationValid(element, BindView.class)) {
+                continue;
             }
 
             //类中的成员变量
@@ -84,16 +88,17 @@ public class BindViewProcessor extends AbstractProcessor{
             String qualifiedName = typeElement.getQualifiedName().toString();
 
             ProxyInfo proxyInfo = mProxyMap.get(qualifiedName);
-            if (proxyInfo == null){
+            if (proxyInfo == null) {
                 //将该类中被注解修饰的变量加入到 ProxyInfo 中
                 proxyInfo = new ProxyInfo(mElementUtils, typeElement);
                 mProxyMap.put(qualifiedName, proxyInfo);
             }
 
             BindView annotation = variableElement.getAnnotation(BindView.class);
-            int id = annotation.value();
-            proxyInfo.mInjectElements.put(id, variableElement);
-
+            if (annotation != null) {
+                int id = annotation.value();
+                proxyInfo.mInjectElements.put(id, variableElement);
+            }
         }
 
 
@@ -101,43 +106,65 @@ public class BindViewProcessor extends AbstractProcessor{
         for (String key : mProxyMap.keySet()) {
             ProxyInfo proxyInfo = mProxyMap.get(key);
             try {
-                JavaFileObject sourceFile = mFileCreator.createSourceFile(proxyInfo.getProxyClassFullName(), proxyInfo.getTypeElement());   //创建文件对象
+                //创建文件对象
+                JavaFileObject sourceFile = mFileCreator.createSourceFile(
+                        proxyInfo.getProxyClassFullName(), proxyInfo.getTypeElement());
                 Writer writer = sourceFile.openWriter();
                 writer.write(proxyInfo.generateJavaCode());     //写入文件
                 writer.flush();
                 writer.close();
             } catch (IOException e) {
                 e.printStackTrace();
+                error(proxyInfo.getTypeElement(), "Unable to write injector for type %s: %s", proxyInfo.getTypeElement(), e.getMessage());
             }
         }
 
-        return false;
+        return true;
     }
 
     /**
-     * 检查 element 类型
+     * 检查 element 类型是否规范
+     *
      * @param element
+     * @param clazz
      * @return
      */
-    private boolean checkAnnotationValid(final Element element) {
-        return false;
+    private boolean checkAnnotationValid(final Element element, final Class<?> clazz) {
+        if (element == null || element.getKind() != ElementKind.FIELD) {
+            error(element, "%s must be declared on field!", clazz.getSimpleName());
+            return false;
+        }
+        if (element.getModifiers().contains(Modifier.PRIVATE)) {
+            error(element, "%s() must be public!", element.getSimpleName());
+            return false;
+        }
+        return true;
     }
 
-//    @Override
-//    public Set<String> getSupportedAnnotationTypes() {
-//        Set<String> annotationTypes = new LinkedHashSet<>();
-//        annotationTypes.add(BindView.class.getCanonicalName());
-//        return annotationTypes;
-//    }
+
+    private void error(final Element element, String msg, final Object... args) {
+        if (args != null && args.length > 0) {
+            msg = String.format(msg, args);
+            mMessager.printMessage(Diagnostic.Kind.ERROR, msg, element);
+        }
+    }
+
+//    有注解就不用重写这两个方法了
+    @Override
+    public Set<String> getSupportedAnnotationTypes() {
+        Set<String> annotationTypes = new LinkedHashSet<>();
+        annotationTypes.add(BindView.class.getCanonicalName());
+        return annotationTypes;
+    }
 
 
-//    /**
-//     * 支持的源码版本
-//     * @return
-//     */
-//    @Override
-//    public SourceVersion getSupportedSourceVersion() {
-//        return SourceVersion.latestSupported();
-//    }
+    /**
+     * 支持的源码版本
+     * @return
+     */
+    @Override
+    public SourceVersion getSupportedSourceVersion() {
+        return SourceVersion.latestSupported();
+    }
 
 }

@@ -4,6 +4,7 @@ apply plugin: 'realm-android'
 apply plugin: 'android-apt'
 
 def commandValue = "default value ~"
+
 def assembleTime() {
     return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("GMT+8"))
 }
@@ -87,7 +88,7 @@ android {
         wandoujia {}
 
         productFlavors.all { flavor ->
-            flavor.manifestPlaceholders = [UMENG_CHANNEL_NAME : name]
+            flavor.manifestPlaceholders = [UMENG_CHANNEL_NAME: name]
         }
     }
 
@@ -141,7 +142,7 @@ apt {
 
 final COMPAT_VERSION = "24.2.0"
 dependencies {
-    compile ('com.android.support:appcompat-v7:24.2.0') {
+    compile('com.android.support:appcompat-v7:24.2.0') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
     compile "com.android.support:recyclerview-v7:$COMPAT_VERSION"
@@ -169,12 +170,15 @@ dependencies {
     //    compile 'com.android.support.test.espresso:espresso-core:2.2.2', {
     //        exclude group: 'com.android.support', module: 'support-annotations'
     //    }
-//    compile 'com.qiniu:qiniu-android-sdk:7.2.+'
-//    compile 'org.greenrobot:eventbus:3.0.0'
+    //    compile 'com.qiniu:qiniu-android-sdk:7.2.+'
+    //    compile 'org.greenrobot:eventbus:3.0.0'
     apt 'org.greenrobot:eventbus-annotation-processor:3.0.1'
-
     compile project(path: ':WeexSDK')
     compile project(':sxframework')
     compile project(':sxdebugkit')
-//    compile project(path: ':service')
+    compile project(':ioc')
+    compile project(':ioc-annotation')
+    apt project(':ioc-processor')
+    //    compile project(path: ':service')
+//    compile files('libs/ioc-processor.jar')
 }
