@@ -20,7 +20,7 @@ import android.app.Activity;
 
 /**
  * Description:
- * <br>
+ * <br> 从生成类中为当前 Activity/View 中的 View findViewById
  * <p>
  * <br> Created by shixinzhang on 17/6/22.
  * <p>

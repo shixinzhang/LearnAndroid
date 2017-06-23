@@ -21,7 +21,6 @@ import com.google.auto.service.AutoService;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,6 +30,8 @@ import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.SupportedAnnotationTypes;
+import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
@@ -42,8 +43,8 @@ import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
 @AutoService(Processor.class)
-//@SupportedAnnotationTypes("top.shixinzhang.BindView")
-//@SupportedSourceVersion(SourceVersion.RELEASE_7)    //支持的源码版本
+@SupportedAnnotationTypes("top.shixinzhang.BindView")
+@SupportedSourceVersion(SourceVersion.RELEASE_7)    //支持的源码版本
 public class BindViewProcessor extends AbstractProcessor {
     private Elements mElementUtils; //操作元素的工具方法
     private Filer mFileCreator;     //代码创建者
@@ -131,11 +132,11 @@ public class BindViewProcessor extends AbstractProcessor {
      */
     private boolean checkAnnotationValid(final Element element, final Class<?> clazz) {
         if (element == null || element.getKind() != ElementKind.FIELD) {
-            error(element, "%s must be declared on field!", clazz.getSimpleName());
+            error(element, "%s must be declared on field !", clazz.getSimpleName());
             return false;
         }
-        if (element.getModifiers().contains(Modifier.PRIVATE)) {
-            error(element, "%s() must be public!", element.getSimpleName());
+        if (!element.getModifiers().contains(Modifier.PUBLIC)) {
+            error(element, "%s must be public !", element.getSimpleName());
             return false;
         }
         return true;
@@ -150,21 +151,21 @@ public class BindViewProcessor extends AbstractProcessor {
     }
 
 //    有注解就不用重写这两个方法了
-    @Override
-    public Set<String> getSupportedAnnotationTypes() {
-        Set<String> annotationTypes = new LinkedHashSet<>();
-        annotationTypes.add(BindView.class.getCanonicalName());
-        return annotationTypes;
-    }
-
-
-    /**
-     * 支持的源码版本
-     * @return
-     */
-    @Override
-    public SourceVersion getSupportedSourceVersion() {
-        return SourceVersion.latestSupported();
-    }
+//    @Override
+//    public Set<String> getSupportedAnnotationTypes() {
+//        Set<String> annotationTypes = new LinkedHashSet<>();
+//        annotationTypes.add(BindView.class.getCanonicalName());
+//        return annotationTypes;
+//    }
+//
+//
+//    /**
+//     * 支持的源码版本
+//     * @return
+//     */
+//    @Override
+//    public SourceVersion getSupportedSourceVersion() {
+//        return SourceVersion.latestSupported();
+//    }
 
 }

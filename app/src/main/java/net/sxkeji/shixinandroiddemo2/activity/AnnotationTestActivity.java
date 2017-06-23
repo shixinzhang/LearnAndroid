@@ -15,6 +15,7 @@ import top.shixinzhang.ioc.ViewBinder;
 
 /**
  * <br/> Description:
+ * 测试自定义注解、编译时注解
  * <p>
  * <br/> Created by shixinzhang on 16/12/13.
  * <p>
@@ -29,6 +30,9 @@ public class AnnotationTestActivity extends BaseActivity {
 
     @BindView(R.id.tv_content)
     public TextView mTextView;
+    @BindView(R.id.tv_bottom_content)
+    public TextView mBottomTextView;
+
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
