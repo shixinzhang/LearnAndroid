@@ -1,5 +1,7 @@
 package net.sxkeji.shixinandroiddemo2.test.rx;
 
+import android.os.SystemClock;
+
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
@@ -19,15 +21,7 @@ import rx.schedulers.Schedulers;
 public class RxJavaTest0 {
     public static void main(String[] args) {
         String[] name = {"zhang", "shi", "xin", "haha"};
-        Observable
-                .create(new Observable.OnSubscribe<String>() {
-                    @Override
-                    public void call(Subscriber<? super String> subscriber) {
-                        System.out.println("创建数据所在线程：" + Thread.currentThread().getName());
-                        subscriber.onNext("Response from a slow network request");
-                        subscriber.onCompleted();   //必须得调用 completed
-                    }
-                })
+        Observable.create(new MySubscribe())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(Schedulers.io())
                 .subscribe(new Observer<String>() {
@@ -47,5 +41,18 @@ public class RxJavaTest0 {
                         System.out.println("next " + s);
                     }
                 });
+    }
+
+    private static class MySubscribe implements Observable.OnSubscribe<String>{
+
+        @Override
+        public void call(final Subscriber<? super String> subscriber) {
+            System.out.println("创建数据所在线程：" + Thread.currentThread().getName());
+            SystemClock.sleep(10_000);
+            for (int i = 0; i < 3; i++) {
+                subscriber.onNext("Response from a slow network request: " + i);
+            }
+            subscriber.onCompleted();   //必须得调用 completed
+        }
     }
 }
