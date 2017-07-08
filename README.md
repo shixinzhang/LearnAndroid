@@ -4,7 +4,7 @@
 # 目前主要包括以下内容
 
 - Weex 使用
-- sxframework 从 0 搭建自己的快速开发框架
+- 从 0 搭建自己的快速开发框架，[sxframework 项目地址](https://github.com/shixinzhang/sxframework)
 - hybrid 提示模块
 - IPC 通信 demo
 - IOC demo

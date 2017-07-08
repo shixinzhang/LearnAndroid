@@ -18,7 +18,7 @@ android {
             storePassword 'zsx250'
         }
     }
-    compileSdkVersion 24
+    compileSdkVersion 25
     buildToolsVersion '25.0.2'
 
     defaultConfig {
@@ -140,7 +140,7 @@ apt {
     }
 }
 
-final COMPAT_VERSION = "24.2.0"
+final COMPAT_VERSION = "25.0.0"
 dependencies {
     compile('com.android.support:appcompat-v7:24.2.0') {
         exclude group: 'com.android.support', module: 'support-annotations'

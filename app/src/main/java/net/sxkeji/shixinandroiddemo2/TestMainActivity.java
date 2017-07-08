@@ -13,17 +13,18 @@ import net.sxkeji.shixinandroiddemo2.activity.ANRTestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.AmapLocationActivity;
 import net.sxkeji.shixinandroiddemo2.activity.AnnotationTestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.ChangeThemeActivity;
-import net.sxkeji.shixinandroiddemo2.activity.DIYView1Activity;
+import net.sxkeji.shixinandroiddemo2.activity.view.DIYView1Activity;
 import net.sxkeji.shixinandroiddemo2.activity.DownloadTestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.FloatTrackerActivity;
-import net.sxkeji.shixinandroiddemo2.activity.FocusInTouchModeActivity;
+import net.sxkeji.shixinandroiddemo2.activity.view.FocusInTouchModeActivity;
 import net.sxkeji.shixinandroiddemo2.activity.HybridDemo1Activity;
-import net.sxkeji.shixinandroiddemo2.activity.OaLoginActivity;
+import net.sxkeji.shixinandroiddemo2.activity.view.OaLoginActivity;
 import net.sxkeji.shixinandroiddemo2.activity.RealmTestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.RefreshLoadMoreActivity;
 import net.sxkeji.shixinandroiddemo2.activity.SearchActivity;
 import net.sxkeji.shixinandroiddemo2.activity.ServiceTestActivity;
-import net.sxkeji.shixinandroiddemo2.activity.SuspensionHeaderActivity;
+import net.sxkeji.shixinandroiddemo2.activity.view.SmoothlyTestActivity;
+import net.sxkeji.shixinandroiddemo2.activity.view.SuspensionHeaderActivity;
 import net.sxkeji.shixinandroiddemo2.activity.async.AsyncTaskActivity;
 import net.sxkeji.shixinandroiddemo2.activity.async.HandlerThreadActivity;
 import net.sxkeji.shixinandroiddemo2.activity.async.IntentServiceActivity;
@@ -144,6 +145,7 @@ public class TestMainActivity extends BaseActivity {
                 new ActivityBean("启动模式", StandardActivity.class),
                 new ActivityBean("Hybrid 练习1", HybridDemo1Activity.class),
                 new ActivityBean(getString(R.string.diy_demo1), DIYView1Activity.class),
+                new ActivityBean(getString(R.string.recycler_test), SmoothlyTestActivity.class),
                 new ActivityBean(getString(R.string.focusable_in_touch), FocusInTouchModeActivity.class),
                 new ActivityBean(getString(R.string.alpha_header_recyclerview), SuspensionHeaderActivity.class),
                 new ActivityBean(getString(R.string.refresh_load_more), RefreshLoadMoreActivity.class),

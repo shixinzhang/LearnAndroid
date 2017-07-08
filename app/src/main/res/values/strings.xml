@@ -49,4 +49,5 @@
     <string name="eventbus_sample">EventBus 3.0 示例</string>
     <string name="eventbus_sticky">EventBus 粘性事件</string>
     <string name="eventbus_post">EventBus 消息发送页面</string>
+    <string name="recycler_test">测试 RecyclerView 滑动</string>
 </resources>

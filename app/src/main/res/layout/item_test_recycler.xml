@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center"
+              android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv_car"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="10dp"
+        android:src="@mipmap/ic_launcher"/>
+
+    <TextView
+        android:id="@+id/tv_car_model_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lineSpacingExtra="3sp"
+        android:maxLines="2"
+        android:maxWidth="150dp"
+        android:text="宝马1系 2015款 118i 领先型 欧V(符合国V标准"
+        android:textColor="@color/black"
+        android:textSize="13sp"
+        />
+
+    <TextView
+        android:id="@+id/tv_ymc_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:maxLines="1"
+        android:text="23.11万元"
+        android:textColor="@color/red"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/tv_decrease_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:maxLines="1"
+        android:text="直降：1.7万元"
+        android:textColor="@color/black"
+        android:textSize="10sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dip"
+        android:layout_marginTop="15dp"
+        android:background="@color/div_line"/>
+
+</LinearLayout>

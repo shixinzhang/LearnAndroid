@@ -46,7 +46,7 @@ public class SxApplication extends MultiDexApplication {
 
         registerHybridHandler();
 
-//        CrashHandler.init(this);
+        CrashHandler.init(this);
 
 //        initANRWatch();
 

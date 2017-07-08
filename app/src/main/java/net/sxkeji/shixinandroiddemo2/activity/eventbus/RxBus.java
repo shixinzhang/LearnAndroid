@@ -16,7 +16,8 @@
 
 package net.sxkeji.shixinandroiddemo2.activity.eventbus;
 
-import com.hwangjr.rxbus.Bus;
+
+import top.shixinzhang.sxframework.eventsubscribe.third.rxbus.Bus;
 
 /**
  * Description:

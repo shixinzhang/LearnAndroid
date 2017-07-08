@@ -80,7 +80,7 @@
             android:launchMode="standard"/>
 
         <activity
-            android:name=".activity.DIYView1Activity"
+            android:name=".activity.view.DIYView1Activity"
             android:label="@string/diy_demo1"
             android:launchMode="singleTop"/>
 
@@ -92,16 +92,16 @@
             android:name=".activity.HybridDemo2Activity"
             android:label="@string/hybrid_demo2"/>
         <activity
-            android:name=".activity.FocusInTouchModeActivity"
+            android:name=".activity.view.FocusInTouchModeActivity"
             android:label="@string/focusable_in_touch"/>
         <activity
-            android:name=".activity.SuspensionHeaderActivity"
+            android:name=".activity.view.SuspensionHeaderActivity"
             android:label="@string/alpha_header_recyclerview"/>
         <activity
             android:name=".activity.RefreshLoadMoreActivity"
             android:label="@string/refresh_load_more"/>
         <activity
-            android:name=".activity.OaLoginActivity"
+            android:name=".activity.view.OaLoginActivity"
             android:label="@string/login"/>
         <activity
             android:name=".activity.AnnotationTestActivity"
@@ -191,6 +191,10 @@
             android:label="@string/ipc_test"
             android:launchMode="singleTop"/>
 
+        <activity
+            android:name=".activity.view.SmoothlyTestActivity"
+            android:label="@string/recycler_test"
+            android:launchMode="singleTop"/>
 
         <activity
             android:name=".activity.http.OkHttp3TestActivity"
@@ -207,17 +211,20 @@
             android:label="@string/intent_service_test"
             android:launchMode="singleTop"/>
 
-        <activity android:name=".activity.eventbus.EventBusRegisterActivity"
-                  android:label="@string/eventbus_sample"
-                  android:launchMode="singleTop"/>
+        <activity
+            android:name=".activity.eventbus.EventBusRegisterActivity"
+            android:label="@string/eventbus_sample"
+            android:launchMode="singleTop"/>
 
-        <activity android:name=".activity.eventbus.EventBusStickyActivity"
-                  android:label="@string/eventbus_sticky"
-                  android:launchMode="singleTop"/>
+        <activity
+            android:name=".activity.eventbus.EventBusStickyActivity"
+            android:label="@string/eventbus_sticky"
+            android:launchMode="singleTop"/>
 
-        <activity android:name=".activity.eventbus.EventBusPosterActivity"
-                  android:label="@string/eventbus_post"
-                  android:launchMode="singleTop"/>
+        <activity
+            android:name=".activity.eventbus.EventBusPosterActivity"
+            android:label="@string/eventbus_post"
+            android:launchMode="singleTop"/>
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
