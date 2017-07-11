@@ -2,7 +2,9 @@ package top.shixinzhang.rxjavademo;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
@@ -10,7 +12,7 @@ import rx.Subscriber;
 import rx.functions.Func1;
 
 public class MainActivity extends AppCompatActivity {
-
+    private final String TAG = this.getClass().getSimpleName();
     private Observable mObservable;
 
     @Override
@@ -23,19 +25,64 @@ public class MainActivity extends AppCompatActivity {
 //        createObservableWithJust();
 //        createObservableWithRange();
         createObservableWithRepeat();
+
+        errorHandlerWithRetry();
     }
+
+    /**
+     * 错误重试
+     * 在遇到需要重复时，抛出一个自定义的异常，在紧接着的链上使用retryWhen上判断是否是这个异常
+     * http://www.jianshu.com/p/023a5f60e6d0
+     */
+    private void errorHandlerWithRetry() {
+        Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(final Subscriber<? super String> subscriber) {
+
+            }
+        }).retryWhen(new Func1<Observable<? extends Throwable>, Observable<?>>() {
+            @Override
+            public Observable<?> call(Observable<? extends Throwable> observable) {
+                return observable.flatMap(new Func1<Throwable, Observable<?>>() {
+                    @Override
+                    public Observable<?> call(Throwable throwable) {
+                        if (throwable instanceof IOException) { //是否是指定的异常
+                            return Observable.just(1);
+                        } else {
+                            return Observable.error(throwable);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private int repeatCount;
 
     private void createObservableWithRepeat() {
         String[] words = {"shixin", "is", "cute"};
         Observable<String> from = Observable.from(words);
-        from.repeat(2)
-                .repeatWhen(new Func1<Observable<String>, Observable<?>>() {
-                    @Override
-                    public Observable<?> call(Observable<String> s) {
-                        return "shixin".equals(s);
+//        from.repeat(2)
+
+        Observable.unsafeCreate(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(final Subscriber<? super String> subscriber) {
+                for (int i = 0; i < 5; i++) {
+                    if(i == 2){
+                        subscriber.onError(new Throwable("error")); //发射 onError 后会停止重复
+                    }else {
+                        subscriber.onNext("item " + i);
                     }
-                })
-                .subscribe(getPrintSubscriber());
+                }
+                subscriber.onCompleted();
+            }
+        }).repeatWhen(new Func1<Observable<? extends Void>, Observable<?>>() {
+            @Override
+            public Observable<?> call(final Observable<? extends Void> completed) {
+                //每次调用 onCompleted，都会进入这里，需要在这里决定是否需要重订阅
+                return completed.delay(5, TimeUnit.SECONDS);
+            }
+        }).subscribe(getPrintSubscriber());
     }
 
     private void createObservableWithRange() {
@@ -66,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 用于打印结果的订阅者
+     *
      * @param <T>
      * @return
      */

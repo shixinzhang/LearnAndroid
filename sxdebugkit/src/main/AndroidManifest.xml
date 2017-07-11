@@ -5,6 +5,11 @@
         android:label="@string/app_name"
         >
 
+        <activity
+            android:name=".nlog.LogDetailActivity"
+            android:label="@string/log_detail"
+            android:launchMode="singleTop"/>
+
     </application>
 
 </manifest>
