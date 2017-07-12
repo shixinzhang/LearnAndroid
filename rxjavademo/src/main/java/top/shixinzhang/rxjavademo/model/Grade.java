@@ -14,29 +14,45 @@
  * limitations under the License.
  */
 
-package net.sxkeji.shixinandroiddemo2.activity.rx;
+package top.shixinzhang.rxjavademo.model;
 
-import net.sxkeji.shixinandroiddemo2.BaseActivity;
+import java.util.List;
 
 /**
  * Description:
- * <br> RxJava2 练习
+ * <br> 年级
  * <p>
- * <br> Created by shixinzhang on 17/7/4.
+ * <br> Created by shixinzhang on 17/7/12.
  * <p>
  * <br> Email: shixinzhang2016@gmail.com
  * <p>
  * <br> https://about.me/shixinzhang
  */
 
-public class RxJava2Activity extends BaseActivity{
-    @Override
-    public void initViews() {
+public class Grade {
+    private String name;
+    private List<Clazz> classList;
 
+    public Grade(final String name, final List<Clazz> classList) {
+        this.name = name;
+        this.classList = classList;
     }
 
-    @Override
-    public void loadData() {
+    public String getName() {
+        return name;
+    }
 
+    public Grade setName(final String name) {
+        this.name = name;
+        return this;
+    }
+
+    public List<Clazz> getClassList() {
+        return classList;
+    }
+
+    public Grade setClassList(final List<Clazz> classList) {
+        this.classList = classList;
+        return this;
     }
 }

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package top.shixinzhang.rxjavademo;
+package top.shixinzhang.rxjavademo.creator;
 
 import rx.Subscriber;
 
 /**
  * Description:
- * <br>
+ * <br> 创建测试用的订阅者
  * <p>
  * <br> Created by shixinzhang on 17/7/11.
  * <p>

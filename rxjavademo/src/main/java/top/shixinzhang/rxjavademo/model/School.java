@@ -14,45 +14,45 @@
  * limitations under the License.
  */
 
-package net.sxkeji.shixinandroiddemo2.activity.rx;
+package top.shixinzhang.rxjavademo.model;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-
-import net.sxkeji.shixinandroiddemo2.BaseActivity;
-
-import rx.Observable;
+import java.util.List;
 
 /**
  * Description:
- * <br> RxJava 1 常见操作符的使用
+ * <br> 学校
  * <p>
- * <br> Created by shixinzhang on 17/7/4.
+ * <br> Created by shixinzhang on 17/7/12.
  * <p>
  * <br> Email: shixinzhang2016@gmail.com
  * <p>
  * <br> https://about.me/shixinzhang
  */
 
-public class RxJava1Activity extends BaseActivity {
-    private Observable mObservable;
+public class School {
+    private String name;
+    private List<Grade> gradeList;
 
-    @Override
-    protected void onCreate(@Nullable final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public School(final String name, final List<Grade> gradeList) {
+        this.name = name;
+        this.gradeList = gradeList;
     }
 
-    void test(){
-//        mObservable.
+    public String getName() {
+        return name;
     }
 
-    @Override
-    public void initViews() {
-
+    public School setName(final String name) {
+        this.name = name;
+        return this;
     }
 
-    @Override
-    public void loadData() {
+    public List<Grade> getGradeList() {
+        return gradeList;
+    }
 
+    public School setGradeList(final List<Grade> gradeList) {
+        this.gradeList = gradeList;
+        return this;
     }
 }
