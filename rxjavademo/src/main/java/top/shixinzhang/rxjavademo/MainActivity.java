@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import rx.Observable;
+import top.shixinzhang.rxjavademo.operator.FilteringOperators;
 import top.shixinzhang.rxjavademo.operator.TransformingOperators;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,7 +17,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //        CreatingOperators.test();
-        TransformingOperators.test();
+//        TransformingOperators.test();
+        FilteringOperators.test();
     }
 
 }

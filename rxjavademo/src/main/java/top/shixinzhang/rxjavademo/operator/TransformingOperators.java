@@ -23,14 +23,12 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
-import rx.Subscriber;
 import rx.functions.Action1;
 import rx.functions.Func0;
 import rx.functions.Func1;
 import rx.functions.Func2;
 import rx.observables.GroupedObservable;
 import top.shixinzhang.rxjavademo.creator.DataCreator;
-import top.shixinzhang.rxjavademo.creator.SubscriberCreator;
 import top.shixinzhang.rxjavademo.model.Clazz;
 import top.shixinzhang.rxjavademo.model.Grade;
 import top.shixinzhang.rxjavademo.model.People;
@@ -46,7 +44,7 @@ import top.shixinzhang.rxjavademo.model.People;
  * <br> https://about.me/shixinzhang
  */
 
-public class TransformingOperators {
+public class TransformingOperators extends BaseOperators {
     private final String TAG = this.getClass().getSimpleName();
 
     private TransformingOperators() {
@@ -82,16 +80,40 @@ public class TransformingOperators {
 //        transformingWithMap();
 //        transformingWithCast();
 
-        transformingWithScan();
+//        transformingWithScan();
+//        transformingWithScan2();
+
+        transformingWithWindow();
+    }
+
+    private void transformingWithWindow() {
+        Observable.range(1, 10)
+                .window(3)
+                .subscribe(new Action1<Observable<Integer>>() {
+                    @Override
+                    public void call(final Observable<Integer> integerObservable) {
+                        integerObservable.subscribe(getPrintSubscriber());
+                    }
+                });
+    }
+
+    private void transformingWithScan2() {
+        Observable.from(Arrays.asList(6, 4, 1, 5, 7))
+                .scan(1, new Func2<Integer, Integer, Integer>() {
+                    @Override
+                    public Integer call(final Integer lastResult, final Integer newItem) {
+                        return lastResult + newItem;
+                    }
+                })
+                .subscribe(this.<Integer>getPrintSubscriber());
     }
 
     private void transformingWithScan() {
-
         Observable.from(Arrays.asList(6, 4, 1, 5, 7))
                 .scan(new Func2<Integer, Integer, Integer>() {
                     @Override
-                    public Integer call(final Integer first, final Integer second) {
-                        return first + second;
+                    public Integer call(final Integer lastResult, final Integer newItem) {
+                        return lastResult + newItem;
                     }
                 })
                 .subscribe(this.<Integer>getPrintSubscriber());
@@ -211,8 +233,4 @@ public class TransformingOperators {
                 .subscribe(getPrintSubscriber());
     }
 
-
-    private <T> Subscriber<T> getPrintSubscriber() {
-        return SubscriberCreator.getPrintSubscriber();
-    }
 }

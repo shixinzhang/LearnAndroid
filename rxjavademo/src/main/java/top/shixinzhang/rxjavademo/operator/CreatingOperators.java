@@ -36,7 +36,7 @@ import top.shixinzhang.rxjavademo.creator.SubscriberCreator;
  * <br> https://about.me/shixinzhang
  */
 
-public class CreatingOperators {
+public class CreatingOperators extends BaseOperators {
 
 
     private CreatingOperators() {
@@ -159,10 +159,5 @@ public class CreatingOperators {
         String[] words = {"shixin", "is", "cute"};
         Observable<String> from = Observable.from(words);
         from.subscribe(getPrintSubscriber());
-    }
-
-
-    private <T> Subscriber<T> getPrintSubscriber() {
-        return SubscriberCreator.getPrintSubscriber();
     }
 }
