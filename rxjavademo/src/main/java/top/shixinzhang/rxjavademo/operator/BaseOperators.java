@@ -32,7 +32,7 @@ import top.shixinzhang.rxjavademo.creator.SubscriberCreator;
 
 public class BaseOperators {
 
-    protected  <T> Subscriber<T> getPrintSubscriber() {
+    <T> Subscriber<T> getPrintSubscriber() {
         return SubscriberCreator.getPrintSubscriber();
     }
 }

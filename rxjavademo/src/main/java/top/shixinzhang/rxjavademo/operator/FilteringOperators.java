@@ -16,9 +16,13 @@
 
 package top.shixinzhang.rxjavademo.operator;
 
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
+import top.shixinzhang.rxjavademo.creator.DataCreator;
 
 /**
  * Description:
@@ -32,7 +36,7 @@ import rx.Observable;
  * <br> https://about.me/shixinzhang
  */
 
-public class FilteringOperators extends BaseOperators{
+public class FilteringOperators extends BaseOperators {
 
     private FilteringOperators() {
         //do some init work
@@ -49,8 +53,26 @@ public class FilteringOperators extends BaseOperators{
     }
 
     private void testFilteringOperators() {
-        filteringWithDebounce();
+//        filteringWithDebounce();
+//        filteringWithDistinct();
+
+        filteringWithDistinctUntilChanged();
 //        filteringWithThrottle();
+    }
+
+    private void filteringWithDistinctUntilChanged() {
+
+    }
+
+    private void filteringWithDistinct() {
+        Observable.from(Arrays.asList(1,2,3,4,1,2,3))
+                .distinct(new Func1<Integer, Integer>() {
+                    @Override
+                    public Integer call(final Integer integer) {
+                        return integer % 2;
+                    }
+                })
+                .subscribe(this.<Integer>getPrintSubscriber());
     }
 
     private void filteringWithThrottle() {
@@ -59,9 +81,10 @@ public class FilteringOperators extends BaseOperators{
     }
 
     private void filteringWithDebounce() {
-        Observable.interval(1, TimeUnit.SECONDS)
+        Observable
+                .unsafeCreate(DataCreator.getSleepIntegers())
                 .debounce(2, TimeUnit.SECONDS)
-                .subscribe(this.<Long>getPrintSubscriber());
-
+                .subscribeOn(Schedulers.computation())
+                .subscribe(this.<Integer>getPrintSubscriber());
     }
 }

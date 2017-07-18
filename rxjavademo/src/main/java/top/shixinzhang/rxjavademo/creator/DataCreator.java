@@ -16,9 +16,13 @@
 
 package top.shixinzhang.rxjavademo.creator;
 
+import android.os.SystemClock;
+
 import java.util.Arrays;
 import java.util.List;
 
+import rx.Observable;
+import rx.Subscriber;
 import top.shixinzhang.rxjavademo.model.Clazz;
 import top.shixinzhang.rxjavademo.model.Grade;
 import top.shixinzhang.rxjavademo.model.People;
@@ -45,5 +49,21 @@ public class DataCreator {
 
     public static List<People> getPeopleData() {
         return Arrays.asList(new People(15, "大熊"), new People(13, "静安"), new People(15, "胖虎"), new People(14, "多来A梦"), new People(13, "拭心"));
+    }
+
+    public static Observable.OnSubscribe<Integer> getSleepIntegers() {
+        return new Observable.OnSubscribe<Integer>() {
+            @Override
+            public void call(final Subscriber<? super Integer> subscriber) {
+                if (subscriber.isUnsubscribed()) {
+                    return;
+                }
+                for (int i = 0; i < 10; i++) {
+                    subscriber.onNext(i);
+                    SystemClock.sleep((i % 5) * 1000);  //延迟（i % 5）秒发射，小于 2 秒的会被过滤
+                }
+                subscriber.onCompleted();
+            }
+        };
     }
 }
