@@ -35,4 +35,8 @@ public class BaseOperators {
     <T> Subscriber<T> getPrintSubscriber() {
         return SubscriberCreator.getPrintSubscriber();
     }
+
+    <T> Subscriber<T> getBackpressureSubscriber(){
+        return SubscriberCreator.getBackpressureSubscriber();
+    }
 }

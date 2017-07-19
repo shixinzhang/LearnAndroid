@@ -40,18 +40,65 @@ public class SubscriberCreator {
         return new Subscriber<T>() {
             @Override
             public void onCompleted() {
-                System.out.println("onCompleted");
+                printCompleteMsg();
             }
 
             @Override
             public void onError(Throwable e) {
-                System.out.println("onError: " + e.getMessage());
+                printErrorMsg(e);
             }
 
             @Override
             public void onNext(T t) {
-                System.out.println("onNext: " + t);
+                printNextMsg(t);
             }
         };
+    }
+
+    /**
+     * 获得背压订阅者
+     * @param <T>
+     * @return
+     */
+    public static <T> Subscriber<T> getBackpressureSubscriber() {
+        return new Subscriber<T>() {
+            @Override
+            public void onStart() {
+                //一定要在 onStart 中通知被观察者发送第一个数据
+                request(1);
+            }
+
+            @Override
+            public void onCompleted() {
+                printCompleteMsg();
+            }
+
+            @Override
+            public void onError(final Throwable e) {
+                printErrorMsg(e);
+            }
+
+            @Override
+            public void onNext(final T t) {
+                printNextMsg(t);
+                //处理完，请求发送下一个数据
+                request(1);
+
+//                request(Long.MAX_VALUE);  调用它取消背压
+            }
+        };
+    }
+
+
+    public static <T> void printNextMsg(final T t) {
+        System.out.println("onNext: " + t);
+    }
+
+    public static void printCompleteMsg() {
+        System.out.println("onCompleted");
+    }
+
+    public static void printErrorMsg(final Throwable e) {
+        System.out.println("onError: " + e.getMessage());
     }
 }
