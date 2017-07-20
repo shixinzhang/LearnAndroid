@@ -16,7 +16,11 @@
 
 package top.shixinzhang.rxjavademo.operator;
 
+import android.os.SystemClock;
+
 import rx.Subscriber;
+import rx.functions.Action;
+import rx.functions.Action1;
 import top.shixinzhang.rxjavademo.creator.SubscriberCreator;
 
 /**
@@ -36,7 +40,11 @@ public class BaseOperators {
         return SubscriberCreator.getPrintSubscriber();
     }
 
-    <T> Subscriber<T> getBackpressureSubscriber(){
+    <T> Subscriber<T> getBackpressureSubscriber() {
         return SubscriberCreator.getBackpressureSubscriber();
+    }
+
+    <T> Action1<T> getSleepAction1(long sleepTime) {
+        return SubscriberCreator.getSleepAction1(sleepTime);
     }
 }

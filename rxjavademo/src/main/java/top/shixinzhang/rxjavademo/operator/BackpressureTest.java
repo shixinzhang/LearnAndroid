@@ -22,12 +22,12 @@ import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.Subscriber;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import top.shixinzhang.rxjavademo.creator.SubscriberCreator;
 
 /**
  * Description: 背压，控制被观察者发射速率，从 push 改为 pull
+ * 适用于：被观察者和观察者在不同线程、生产速率和处理速率不匹配的情况
  * <br>
  * http://reactivex.io/documentation/operators/backpressure.html
  * https://juejin.im/post/582d413c8ac24700619cceed
@@ -61,7 +61,40 @@ public class BackpressureTest extends BaseOperators {
 
     private void testBackPressure() {
 //        codeWithoutBackpressure();
-        backpressureFirstTry();
+//        backpressureFirstTry();
+
+//        onBackpressureBuffer();
+//        onBackpressureBufferCapacity();
+        onBackpressureDrop();
+    }
+
+    private void onBackpressureDrop() {
+        Observable.interval(1, TimeUnit.MILLISECONDS)
+                .onBackpressureDrop()
+                .observeOn(Schedulers.newThread())
+                .subscribe(getSleepAction1(100));
+    }
+
+
+    /**
+     * onBackpressureBuffer 收集源 Observable 发射的数据到一个缓存里，在下游观察者请求时发射出去
+     * 帮助那些不支持背压的操作符可以使用背压
+     */
+    private void onBackpressureBuffer() {
+        Observable.interval(1, TimeUnit.MILLISECONDS)
+                .onBackpressureBuffer()         //要在线程切换前使用
+                .observeOn(Schedulers.newThread())
+                .subscribe(getSleepAction1(1_000));
+    }
+
+    /**
+     * 指定缓冲的数量，生产速率是消费速率的 100 倍，使用 一万个缓存，当消费者取第 100 个数据时，缓存满了，就抛出异常
+     */
+    private void onBackpressureBufferCapacity() {
+        Observable.interval(1, TimeUnit.MILLISECONDS)
+                .onBackpressureBuffer(10_000)
+                .observeOn(Schedulers.newThread())
+                .subscribe(getSleepAction1(1_00));
     }
 
     /**
@@ -70,15 +103,12 @@ public class BackpressureTest extends BaseOperators {
     private void codeWithoutBackpressure() {
         Observable.interval(1, TimeUnit.MILLISECONDS)
                 .observeOn(Schedulers.newThread())
-                .subscribe(new Action1<Long>() {
-                    @Override
-                    public void call(final Long item) {
-                        SystemClock.sleep(1_000);
-                        System.out.println("onNext: " + item);
-                    }
-                });
+                .subscribe(getSleepAction1(1_000));
     }
 
+    /**
+     * onStart() 和 onNext() 中调用 request(1) 拉数据
+     */
     private void backpressureFirstTry() {
         //interval 操作符本身并不支持背压策略，它并不响应 request(n)，也就是说，它发送事件的速度是不受控制的
 //        Observable.interval(1, TimeUnit.MILLISECONDS)

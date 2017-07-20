@@ -16,7 +16,11 @@
 
 package top.shixinzhang.rxjavademo.creator;
 
+import android.os.SystemClock;
+import android.util.Log;
+
 import rx.Subscriber;
+import rx.functions.Action1;
 
 /**
  * Description:
@@ -30,6 +34,23 @@ import rx.Subscriber;
  */
 
 public class SubscriberCreator {
+    private static final String TAG = "top.shixinzhang.rxjavademo";
+
+
+    public static <T> void printNextMsg(final T t) {
+        Log.d(TAG, "onNext: " + t);
+    }
+
+    public static void printCompleteMsg() {
+        Log.d(TAG, "onCompleted");
+    }
+
+    public static void printErrorMsg(final Throwable e) {
+        Log.d(TAG, "onError: " + e.getMessage());
+    }
+
+
+
     /**
      * 用于打印结果的订阅者
      *
@@ -57,6 +78,7 @@ public class SubscriberCreator {
 
     /**
      * 获得背压订阅者
+     *
      * @param <T>
      * @return
      */
@@ -80,6 +102,7 @@ public class SubscriberCreator {
 
             @Override
             public void onNext(final T t) {
+                SystemClock.sleep(1_000);
                 printNextMsg(t);
                 //处理完，请求发送下一个数据
                 request(1);
@@ -89,16 +112,13 @@ public class SubscriberCreator {
         };
     }
 
-
-    public static <T> void printNextMsg(final T t) {
-        System.out.println("onNext: " + t);
-    }
-
-    public static void printCompleteMsg() {
-        System.out.println("onCompleted");
-    }
-
-    public static void printErrorMsg(final Throwable e) {
-        System.out.println("onError: " + e.getMessage());
+    public static <T> Action1<T> getSleepAction1(final long sleepTime) {
+        return new Action1<T>() {
+            @Override
+            public void call(final T item) {
+                SystemClock.sleep(sleepTime);
+                System.out.println("onNext: " + item);
+            }
+        };
     }
 }
