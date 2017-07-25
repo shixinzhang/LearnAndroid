@@ -65,9 +65,20 @@ public class BackpressureTest extends BaseOperators {
 
 //        onBackpressureBuffer();
 //        onBackpressureBufferCapacity();
-        onBackpressureDrop();
+//        onBackpressureDrop();
+        onBackpressureLatest();
     }
 
+    private void onBackpressureLatest() {
+        Observable.interval(1, TimeUnit.MILLISECONDS)
+                .onBackpressureLatest()
+                .observeOn(Schedulers.newThread())
+                .subscribe(getSleepAction1(100));
+    }
+
+    /**
+     * 我生产那么多，既然你消费不了，我就抛弃了它们！
+     */
     private void onBackpressureDrop() {
         Observable.interval(1, TimeUnit.MILLISECONDS)
                 .onBackpressureDrop()

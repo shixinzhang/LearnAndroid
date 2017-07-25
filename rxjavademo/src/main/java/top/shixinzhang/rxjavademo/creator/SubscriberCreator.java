@@ -34,7 +34,7 @@ import rx.functions.Action1;
  */
 
 public class SubscriberCreator {
-    private static final String TAG = "top.shixinzhang.rxjavademo";
+    private static final String TAG = "SubscriberCreator";
 
 
     public static <T> void printNextMsg(final T t) {

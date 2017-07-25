@@ -16,7 +16,10 @@
 
 package top.shixinzhang.rxjavademo.operator;
 
+import java.util.concurrent.TimeUnit;
+
 import rx.Observable;
+import rx.functions.Func1;
 import rx.functions.Func2;
 
 /**
@@ -53,7 +56,84 @@ public class CombiningOperators extends BaseOperators {
 
     private void testCombiningOperators() {
 //        zip();
-        zipWith();
+//        zipWith();
+
+//        combineLatest();
+//        withLatestFrom();
+
+        join();
+    }
+
+    private void join() {
+        //产生 0 2 4 6 8
+        Observable<Long> observableA = Observable.interval(1, TimeUnit.SECONDS)
+                .map(new Func1<Long, Long>() {
+                    @Override
+                    public Long call(final Long aLong) {
+                        return aLong * 2;
+                    }
+                })
+                .take(5);
+
+        //产生 0 3 6 9 12
+        Observable<Long> observableB = Observable.interval(2, TimeUnit.SECONDS)
+                .map(new Func1<Long, Long>() {
+                    @Override
+                    public Long call(final Long aLong) {
+                        return aLong * 3;
+                    }
+                })
+                .take(5);
+
+        observableA.join(observableB,
+                new Func1<Long, Observable<Long>>() {       //定义源 Observable 发射数据的时间窗口
+                    @Override
+                    public Observable<Long> call(final Long aLong) {
+                        System.out.println("A:" + aLong);
+                        return Observable.just(aLong).delay(2000 , TimeUnit.MILLISECONDS);   //延迟 500 毫秒后发射，即声明周期为 1000毫秒
+                    }
+                }, new Func1<Long, Observable<Long>>() {    //定义第二个 Observable 发射数据的时间窗口
+                    @Override
+                    public Observable<Long> call(final Long aLong) {
+                        System.out.println("B:" + aLong);
+                        return Observable.just(aLong).delay(1000, TimeUnit.MILLISECONDS);
+                    }
+                }, new Func2<Long, Long, String>() {    //组合两个 Observable 发射的数据的函数
+                    @Override
+                    public String call(final Long aLong, final Long aLong2) {
+                        return "join result:" + aLong + "/" + aLong2;
+                    }
+                })
+                .subscribe(this.<String>getPrintSubscriber());
+    }
+
+    /***
+     * 将 A 发射的数据与 B 之前发射最新的数据结合，进行函数操作
+     */
+    private void combineLatest() {
+        Observable<Long> observableA = Observable.interval(3, TimeUnit.SECONDS);
+        Observable<Long> observableB = Observable.interval(2, TimeUnit.SECONDS);
+
+        Observable
+                .combineLatest(observableA, observableB, new Func2<Long, Long, String>() {
+                    @Override
+                    public String call(final Long itemA, final Long itemB) {
+                        return "combine result: " + itemA + "/" + itemB;
+                    }
+                })
+                .subscribe(this.<String>getPrintSubscriber());
+    }
+
+    private void withLatestFrom() {
+        Observable<Long> observableA = Observable.interval(3, TimeUnit.SECONDS);
+        Observable<Long> observableB = Observable.interval(2, TimeUnit.SECONDS);
+
+        observableB.withLatestFrom(observableA, new Func2<Long, Long, String>() {
+            @Override
+            public String call(final Long itemA, final Long itemB) {
+                return "withLatestFrom: " + itemA + "/" + itemB;
+            }
+        }).subscribe(this.<String>getPrintSubscriber());
     }
 
     /**

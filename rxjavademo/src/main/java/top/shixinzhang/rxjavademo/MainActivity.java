@@ -22,10 +22,10 @@ public class MainActivity extends AppCompatActivity {
 //        CreatingOperators.test();
 //        TransformingOperators.test();
 //        FilteringOperators.test();
-//        CombiningOperators.test();
+        CombiningOperators.test();
 
         //背压
-        BackpressureTest.test();
+//        BackpressureTest.test();
     }
 
 }
