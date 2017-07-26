@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -18,6 +19,9 @@ import top.shixinzhang.datacrawler.utils.DateUtils;
 import top.shixinzhang.datacrawler.utils.ServiceUtil;
 import top.shixinzhang.datacrawler.utils.ShellUtil;
 
+/**
+ * 爬虫程序，目前爬的是 车镇车源 V4.0.1
+ */
 public class MainActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
 
@@ -72,10 +76,7 @@ public class MainActivity extends AppCompatActivity {
     public void wxAutoMakeFriends() {
         if (!mWxAutoClickState) {
             startWxAutoMakeFriends();
-        } else {
-
         }
-
     }
 
     private void startWxAutoMakeFriends() {
@@ -118,10 +119,16 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(DataCrawlerService.MODE_KEY, DataCrawlerService.MODE_SELECT_BRAND);
         startService(intent);
 
-        ApplicationUtil.startApplication(this, Config.CT_PACKAGE_NAME);
     }
 
     private boolean hasEnv() {
         return ServiceUtil.isAccessibilitySettingsOn(MainActivity.this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        Log.d(TAG, "onDestroy");
     }
 }

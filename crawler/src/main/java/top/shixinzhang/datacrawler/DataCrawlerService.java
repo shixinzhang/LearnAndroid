@@ -13,6 +13,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,9 +26,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import top.shixinzhang.datacrawler.accessibility.WxAutoClick;
 import top.shixinzhang.datacrawler.utils.AlertUtil;
+import top.shixinzhang.datacrawler.utils.ApplicationUtil;
 import top.shixinzhang.datacrawler.utils.DateUtils;
 import top.shixinzhang.datacrawler.utils.FileUtils;
 import top.shixinzhang.datacrawler.utils.NodeUtil;
+import top.shixinzhang.datacrawler.utils.PageUtil;
 import top.shixinzhang.datacrawler.utils.ShellUtil;
 import top.shixinzhang.datacrawler.utils.StringUtil;
 
@@ -46,6 +49,7 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
     private String mCurrentCarName;
     private int mScreenHeight;
     private String mSwipeCmd;
+    private String mSwipeCmdUp; //上滑
 
     private String mCurrentActivityName;
     private String mCurrentBrandName;
@@ -53,11 +57,21 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
     private String mFileTimeStamp = DateUtils.getMMddhhmmss(System.currentTimeMillis());
 
     private int mMode;
+    public static final int MODE_STOP = -1; //停止
     public static final int MODE_SELECT_BRAND = 1;    //首页，选择品牌
     private final int MODE_SELECT_CAR_SERIES = 2;   //选择车系
     private final int MODE_SELECT_CAR_MODEL = 3;    //选择车款
     private final int MODE_CLICK_PHONE_NODE = 4;
     private final int MODE_GET_NUMBER = 5;
+    private boolean mFirstOpen = true;
+
+    private static List<String> mWhiteClassNameList;    //白名单
+
+    static {
+        mWhiteClassNameList = Arrays.asList(Config.CT_MAIN_TAB, Config.CT_SELECT_CAR_SERIES,
+                Config.CT_SELECT_CAR_TYPE, Config.CT_SELECT_CAR_BRAND, Config.CT_SELECT_CAR_BRAND,
+                Config.CT_SELECT_CAR_DETAIL, Config.CT_RECYCLER_VIEW, Config.CT_CALL_DIALOG);
+    }
 
 
     private CarTownMonitorThread mMonitorHandlerThread;
@@ -65,7 +79,6 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
     @Override
     protected void onServiceConnected() {
         super.onServiceConnected();
-
         showToast("自动点击服务已开启");
     }
 
@@ -74,6 +87,8 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
         super.onCreate();
         mScreenHeight = getApplicationContext().getResources().getDisplayMetrics().heightPixels;
         mSwipeCmd = String.format("input swipe %d %d %d %d", 10, mScreenHeight - 250, 10, 100);
+        mSwipeCmdUp = String.format("input swipe %d %d %d %d", 10, 100, 10, mScreenHeight - 100);
+
     }
 
     @Override
@@ -82,6 +97,10 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
         if (null != intent) {
             mMode = intent.getIntExtra(MODE_KEY, MODE_SELECT_BRAND);
             Log.i(TAG, "onStartCommand mode:" + mMode);
+            if (mMode == MODE_SELECT_BRAND) {
+                ApplicationUtil.startApplication(this, Config.CT_PACKAGE_NAME);
+                mFirstOpen = true;
+            }
         }
         return super.onStartCommand(intent, flags, startId);
     }
@@ -100,20 +119,15 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN || event == null) {
-            return;
-        }
-
         String packageName = event.getPackageName().toString();
         int eventType = event.getEventType();
-        AccessibilityNodeInfo rootNode = getRootInActiveWindow();
         switch (eventType) {
             case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:  //监听进入界面
             case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
                 if (Config.WX_PACKAGE_NAME.equals(packageName)) {
-                    WxAutoClick.getInstance(this).receiveEvent(rootNode, event);
+                    WxAutoClick.getInstance(this).receiveEvent(getRootInActiveWindow(), event);
                 } else if (Config.CT_PACKAGE_NAME.equals(packageName)) {
-                    dealWithCarTown(rootNode, event);
+                    dealWithCarTown(getRootInActiveWindow(), event);
                 }
                 break;
         }
@@ -130,8 +144,18 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
 //        if (mMonitorHandlerThread == null) {
 //            initMonitorHandler();
 //        }
+        if (mFirstOpen) {
+            ShellUtil.execShellCmd(mSwipeCmdUp);
+            mFirstOpen = false;
+        }
 
         String className = event.getClassName().toString();
+        if (!mWhiteClassNameList.contains(className)) {
+            return;
+        }
+
+        Log.d(TAG, "当前 mode: " + mMode + "\nclassName: " + className);
+
         if (className.contains("cn.kooki.app.chezhen.activity")) {
             mCurrentActivityName = className;
         }
@@ -139,47 +163,63 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
         //还是通过 mode 分辨靠谱
 
         if (mMode == MODE_SELECT_BRAND) {
-            doMainTabWork();
+            doMainTabWork(className);
         } else if (mMode == MODE_SELECT_CAR_SERIES) {
             doCarSeriesWork(rootNode, className);
         } else if (mMode == MODE_SELECT_CAR_MODEL) {
-            doCarModelWork(rootNode, event);
+            doCarModelWork(rootNode, className);
         } else if (mMode == MODE_CLICK_PHONE_NODE) {
-            clickPhoneNode();
+            clickPhoneNode(className);
         } else if (mMode == MODE_GET_NUMBER) {
             getPhoneNumber();
-        } else {
-            clickBack();
         }
     }
 
     /**
      * 点击 "电话" 按钮
+     *
+     * @param className
      */
-    private void clickPhoneNode() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    private void clickPhoneNode(final String className) {
+
+        if (PageUtil.isMainTab(className)) {
+            return;
+        } else if (PageUtil.isSeriesTab(className)) {
+            return;
+        } else if (PageUtil.isModelTab(className)) {
+            return;
         }
-        AccessibilityNodeInfo carNameNode = findNodeInfosById("cn.kooki.app.chezhen:id/tv_carlist_name");
-        if (carNameNode == null || TextUtils.isEmpty(carNameNode.getText().toString())) {
-            AlertUtil.toastShort("没找到车源名称");
+
+        SystemClock.sleep(500);
+        String order = "", carName = "", shopName = "", company = "";
+
+        order = getTextByNodeId("cn.kooki.app.chezhen:id/tv_order_number");
+        carName = getTextByNodeId("cn.kooki.app.chezhen:id/tv_carlist_name");
+        shopName = getTextByNodeId("cn.kooki.app.chezhen:id/tv_shop_name");
+        company = getTextByNodeId("cn.kooki.app.chezhen:id/tv_personName_or_company");
+
+        if (!TextUtils.isEmpty(order)) {
+            order = order.replace("车源编号", "");
+        }
+
+        if (TextUtils.isEmpty(order) && TextUtils.isEmpty(carName) && TextUtils.isEmpty(shopName)) {
+            Log.e(TAG, "车源编号和车源名称都没找到！");
             return;
         }
         try {
-            AccessibilityNodeInfo parentNode = carNameNode.getParent();
-//            String carName = carNameNode.getText().toString() + parentNode.getChild(0).getText().toString();
-            String carName = carNameNode.getText().toString();
+            // TODO: 17/7/25 还要拿到公司？
+
+            carName = order + "_" + carName + "_" + shopName + "_" + company;
             mCurrentCarName = carName;
-            if (mCarPhoneMap.containsKey(carName)) {     //已经点击过了，返回
-//                Log.i(TAG, "alread clicked : " + carName);
+            if (mCarPhoneMap.containsKey(carName) && !"1".equals(mCarPhoneMap.get(carName))) {     //已经点击过了，返回
+                mMode = MODE_SELECT_CAR_MODEL;
                 clickBack();
                 return;
             }
             mCarPhoneMap.put(carName, "1");
         } catch (Exception e) {
             e.printStackTrace();
+            mMode = MODE_SELECT_CAR_MODEL;
             clickBack();
         }
 
@@ -188,36 +228,60 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
             phoneNode = findNodeInfosById("cn.kooki.app.chezhen:id/phone_btn");//电话
         }
         if (phoneNode != null) {
+            mMode = MODE_GET_NUMBER;
             clickNode(phoneNode);
         } else {
-            AlertUtil.toastShort("没找到电话节点");
+            mMode = MODE_SELECT_CAR_MODEL;
+            Log.d(TAG, "没找到电话节点");
         }
+    }
+
+    private String getTextByNodeId(final String nodeId) {
+        AccessibilityNodeInfo node = findNodeInfosById(nodeId);
+        if (node != null && node.getText() != null) {
+            return node.getText().toString();
+        }
+        return null;
     }
 
     /**
      * 选择车款
      *
      * @param rootNode
-     * @param event
+     * @param className
      */
-    private void doCarModelWork(AccessibilityNodeInfo rootNode, AccessibilityEvent event) {
-        if (event == null ||
-                !(Config.CT_SELECT_CAR_BRAND.equals(event.getClassName().toString()) || Config.CT_SELECT_CAR_BRAND.equals(mCurrentActivityName))) {
+    private void doCarModelWork(AccessibilityNodeInfo rootNode, String className) {
+
+        if (PageUtil.isMainTab(className)) {
+            return;
+        } else if (PageUtil.isSeriesTab(className)) {
+            return;
+        } else if (PageUtil.isDetailTab(className)) {
+//            clickBack();
             return;
         }
+
+
+//        if (event == null ||
+//                !(Config.CT_SELECT_CAR_BRAND.equals(event.getClassName().toString()) || Config.CT_SELECT_CAR_BRAND.equals(mCurrentActivityName))) {
+//            return;
+//        }
         if (rootNode == null || NodeUtil.hasText(rootNode, "车源详情") || NodeUtil.hasText(rootNode, "发起定金担保")) {
             return;
         }
-        if (NodeUtil.hasText(rootNode, "没有更多数据了")) {
+        if (NodeUtil.hasText(rootNode, "没有更多数据了") || NodeUtil.hasText(rootNode, "无相关车源")) {
+            Log.d(TAG, "没有数据了");
+            mMode = MODE_SELECT_CAR_SERIES;
             clickBack();
+            return;
         }
-        SystemClock.sleep(500);
+        SystemClock.sleep(200);
 
         AccessibilityNodeInfo parentNode = findNodeInfosById("cn.kooki.app.chezhen:id/recyclerview"); //recycleView 的父亲节点
         if (parentNode != null) {
             int childCount = parentNode.getChildCount();
             if (childCount < 1) {
-                AlertUtil.toastShort("RecyclerView 不在索引 1 上");
+                Log.e(TAG, "车款列表的 RecyclerView 不在索引 1 上");
                 return;
             }
             AccessibilityNodeInfo listNode = parentNode.getChild(1);   //RecyclerView
@@ -235,21 +299,25 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
                             AccessibilityNodeInfo colorNode = modelParentNode.getChild(2);  //车款颜色
                             AccessibilityNodeInfo priceNode = modelParentNode.getChild(4);  //价格
                             AccessibilityNodeInfo authorNameNode = modelParentNode.getChild(5);     //发布者所属公司
+
                             carName = nameNode.getText().toString();
-                            identityStr = new StringBuilder(carName)
-                                    .append(colorNode.getText().toString())
-                                    .append(priceNode.getText().toString())
-                                    .append(authorNameNode.getText().toString());
+
+                            identityStr = new StringBuilder(carName);
+                            safetyAppendString(identityStr, colorNode);
+                            safetyAppendString(identityStr, priceNode);
+                            safetyAppendString(identityStr, authorNameNode);
                             Log.d("service", "当前车款名称：" + identityStr.toString());
                             if (notClickedCarModel(identityStr.toString())) {
                                 mClickCarModelSet.add(identityStr.toString());
+                                mMode = MODE_CLICK_PHONE_NODE;
                                 clickNode(modelParentNode);
-                                break;
+                                return;
                             }
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        AlertUtil.toastShort(e.getMessage());
+                        mMode = MODE_SELECT_CAR_MODEL;
+                        Log.e(TAG, e.getMessage());
                     }
                 }
 
@@ -258,11 +326,18 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
                     saveNumber();
                 }
             } else {
-                AlertUtil.toastShort("没找到 RecyclerView ");
+                Log.d(TAG, "没找到车款列表 RecyclerView ");
             }
         } else {
-            AlertUtil.toastShort("没找到 RecyclerView 父节点");
+            Log.d(TAG, "没找到车款列表的 RecyclerView 父节点");
         }
+    }
+
+    private void safetyAppendString(final StringBuilder identityStr, final AccessibilityNodeInfo colorNode) {
+        if (identityStr == null || colorNode == null || colorNode.getText() == null) {
+            return;
+        }
+        identityStr.append(colorNode.getText().toString());
     }
 
     private int mLastPhoneNumber;
@@ -301,6 +376,7 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
      * @return
      */
     private boolean notClickedCarBrand(String name) {
+        Log.d(TAG, "当前品牌名称：" + name + "\n" + mClickCarBrandSet.toString());
         return !TextUtils.isEmpty(name) && !mClickCarBrandSet.contains(name);
     }
 
@@ -311,6 +387,7 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
      * @return
      */
     private boolean notClickedCarSeries(String name) {
+        Log.d(TAG, "当前车系名称：" + name + "\n" + mClickCarSeriesSet.toString());
         return !TextUtils.isEmpty(name) && !mClickCarSeriesSet.contains(name);
     }
 
@@ -321,6 +398,7 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
      * @return
      */
     private boolean notClickedCarModel(String name) {
+//        Log.d(TAG, "当前车款名称：" + name + "\n" + mClickCarModelSet.toString());
         return !TextUtils.isEmpty(name) && !mClickCarModelSet.contains(name);
     }
 
@@ -332,15 +410,19 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
         if (msgNode != null) {
             String message = msgNode.getText().toString();
             String phoneNumber = StringUtil.getNumberFromString(message);
+
             if ("1".equals(mCarPhoneMap.get(mCurrentCarName))) {
                 mCarPhoneMap.put(mCurrentCarName, phoneNumber);
             }
+            Log.i(TAG, mCurrentCarName);
             Log.i(TAG, "current number : " + phoneNumber);
             Log.i(TAG, "phone size : " + mCarPhoneMap.size());
             AccessibilityNodeInfo cancelNode = findNodeInfosByText("取消");
             if (cancelNode != null) {
+                mMode = MODE_CLICK_PHONE_NODE;
                 clickNode(cancelNode);
-                clickBack();
+            } else {
+                AlertUtil.toastShort("找不到取消按钮");
             }
         }
     }
@@ -352,20 +434,34 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
      * @param className
      */
     private void doCarSeriesWork(AccessibilityNodeInfo rootNode, String className) {
-        if (className == null ||
-                !(Config.CT_SELECT_CAR_SERIES.equals(className) || Config.CT_SELECT_CAR_SERIES.equals(mCurrentActivityName))) {
+
+        if (PageUtil.isMainTab(className)) {
+            return;
+        } else if (PageUtil.isModelTab(className)) {
+            return;
+        } else if (PageUtil.isDetailTab(className)) {
             return;
         }
 
-        AccessibilityNodeInfo listNode = findNodeInfosById("cn.kooki.app.chezhen:id/rv_sticky_example");    //RecyclerView
-
-//        if (Config.CT_RECYCLER_VIEW.equals(className)){ //滚动完，检查是否到底
-//            if (checkNoMoreSeriesData(listNode)) {
-//                clickBack();
-//            }
+//        if (className == null ||
+//                !(Config.CT_SELECT_CAR_SERIES.equals(className)
+//                        || Config.CT_SELECT_CAR_SERIES.equals(mCurrentActivityName)
+//                        || Config.CT_RECYCLER_VIEW.equals(className))) {
+//            return;
 //        }
 
+        AccessibilityNodeInfo listNode = findNodeInfosById("cn.kooki.app.chezhen:id/rv_sticky_example");    //RecyclerView
+
         if (listNode != null) {
+            // TODO: 17/7/25 什么时候返回上一级
+            if (Config.CT_RECYCLER_VIEW.equals(className)) { //滚动完，检查是否到底
+                if (checkNoMoreSeriesData(listNode)) {
+                    mMode = MODE_SELECT_BRAND;
+                    clickBack();
+                    return;
+                }
+            }
+
             int recyclerViewCount = listNode.getChildCount();
             int checkIndex = 0;
             AccessibilityNodeInfo child;
@@ -374,7 +470,7 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
             for (; checkIndex < recyclerViewCount; checkIndex++) {
                 child = listNode.getChild(checkIndex);
                 if (child == null) {
-                    AlertUtil.toastShort("没找到第 " + checkIndex + " 个节点");
+                    Log.d(TAG, "车系列表，没找到第 " + checkIndex + " 个节点");
                     continue;
                 }
 
@@ -382,25 +478,26 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
                 try {
                     carSeriesName = child.getChild(clickSeriesIndex).getChild(0).getText().toString();
                     if (notClickedCarSeries(carSeriesName)) {
-                        AlertUtil.toastShort("选了车系：" + carSeriesName);
+                        Log.d(TAG, "选了车系：" + carSeriesName);
                         mClickCarSeriesSet.add(carSeriesName);
                         mCurrentSeriesName = carSeriesName;
+                        mMode = MODE_SELECT_CAR_MODEL;
                         clickNode(child);
-                        break;
+                        return;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    AlertUtil.toastShort(e.getMessage());
+                    Log.e(TAG, e.getMessage());
                 }
             }
             if (checkIndex >= recyclerViewCount) {
                 ShellUtil.execShellCmd(mSwipeCmd);
+                mMode = MODE_SELECT_CAR_SERIES;
 //                saveNumber();
             }
 
-            // TODO: 17/5/8 什么时候返回上一级
         } else {
-            AlertUtil.toastShort("没找到 RecyclerView");
+            Log.d(TAG, "没找到车系列表的 RecyclerView");
         }
     }
 
@@ -413,10 +510,10 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
      * @return true if no more data
      */
     private boolean checkNoMoreSeriesData(AccessibilityNodeInfo listNode) {
-        AccessibilityNodeInfo lastChildNode = listNode.getChild(listNode.getChildCount() - 1).getChild(0);
-        if (lastChildNode == null || TextUtils.isEmpty(lastChildNode.getText())) {
-            return false;
-        }
+//        AccessibilityNodeInfo lastChildNode = listNode.getChild(listNode.getChildCount() - 1).getChild(0);  //最后一个元素
+//        if (lastChildNode == null || TextUtils.isEmpty(lastChildNode.getText())) {
+//            return false;
+//        }
         if (!TextUtils.isEmpty(mCurrentSeriesName)) {   //只要滚动后的列表中包含上次最后的数据，就算没有更多数据
             for (int i = 0; i < listNode.getChildCount(); i++) {
                 AccessibilityNodeInfo child = listNode.getChild(i).getChild(0);
@@ -430,9 +527,29 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
 
     /**
      * 在车镇首页，点击各个品牌
+     *
+     * @param className
      */
 
-    private void doMainTabWork() {
+    private void doMainTabWork(final String className) {
+        if (PageUtil.isSeriesTab(className)) {
+            clickBack();
+            return;
+        } else if (PageUtil.isModelTab(className)) {
+            clickBack();
+            SystemClock.sleep(100);
+            clickBack();
+            return;
+        } else if (PageUtil.isDetailTab(className)) {
+            clickBack();
+            SystemClock.sleep(100);
+            clickBack();
+            SystemClock.sleep(100);
+            clickBack();
+            return;
+        }
+
+
         AccessibilityNodeInfo listNode = findNodeInfosById("cn.kooki.app.chezhen:id/country_lvcountry");
 
 
@@ -446,7 +563,7 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
             for (; checkIndex < recyclerViewCount; checkIndex++) {
                 child = listNode.getChild(checkIndex);
                 if (child == null || child.getChildCount() == 0 || child.getChild(0).getText() == null) {
-                    AlertUtil.toastShort("没找到第 " + checkIndex + " 个品牌");
+                    Log.d(TAG, "没找到第 " + checkIndex + " 个品牌");
                     continue;
                 }
                 int childCount = child.getChildCount();
@@ -456,23 +573,31 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
                 try {
                     brandNode = child.getChild(brandNameIndex).getChild(1);
                     carBrandName = brandNode.getText().toString();
+                    if ("众泰".equals(carBrandName)) {//停止
+                        mMode = MODE_STOP;
+                        saveNumber();
+                        clickBack();
+                        return;
+                    }
                     if (notClickedCarBrand(carBrandName)) {
-                        AlertUtil.toastShort("进入 " + carBrandName);
+                        Log.d(TAG, "进入品牌 " + carBrandName);
                         mClickCarBrandSet.add(carBrandName);
                         mCurrentBrandName = carBrandName;
                         mMode = MODE_SELECT_CAR_SERIES;
                         clickNode(child);
-                        break;
+                        return;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    AlertUtil.toastShort(e.getMessage());
+                    Log.e(TAG, e.getMessage());
                 }
             }
             if (checkIndex >= recyclerViewCount) {
                 ShellUtil.execShellCmd(mSwipeCmd);
 //                saveNumber();
             }
+        } else {
+            Log.d(TAG, "没找到品牌 ListView 节点");
         }
 
     }
@@ -598,12 +723,10 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
         if (currentRootNode == null) {
             return null;
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            List<AccessibilityNodeInfo> list = currentRootNode.findAccessibilityNodeInfosByViewId(resId);
-            currentRootNode.recycle();
-            if (list != null && !list.isEmpty()) {
-                return list.get(0);
-            }
+        List<AccessibilityNodeInfo> list = currentRootNode.findAccessibilityNodeInfosByViewId(resId);
+        currentRootNode.recycle();
+        if (list != null && !list.isEmpty()) {
+            return list.get(0);
         }
         return null;
     }

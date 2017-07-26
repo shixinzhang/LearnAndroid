@@ -16,11 +16,14 @@
 
 package top.shixinzhang.rxjavademo.operator;
 
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.functions.Func2;
+import rx.schedulers.Schedulers;
 
 /**
  * Description:
@@ -61,9 +64,86 @@ public class CombiningOperators extends BaseOperators {
 //        combineLatest();
 //        withLatestFrom();
 
-        join();
+//        join();
+//        groupJoin();
+
+        merge();
     }
 
+    /**
+     * 组合两个 Observable 发出的数据，不保证顺序
+     */
+    private void merge() {
+        Observable<Integer> observableA = Observable.range(0 , 5)   //在另外一个线程处理
+                .subscribeOn(Schedulers.io());
+        Observable<Integer> observableB = Observable.range(10, 5);
+
+        Observable.merge(observableA, observableB)
+                .subscribe(this.<Integer>getPrintSubscriber());
+    }
+
+    private void groupJoin() {
+
+        //产生 0 2 4 6 8
+        Observable<Long> observableA = Observable.interval(1, TimeUnit.SECONDS)
+                .map(new Func1<Long, Long>() {
+                    @Override
+                    public Long call(final Long aLong) {
+                        return aLong * 2;
+                    }
+                })
+                .take(5);
+
+        //产生 0 3 6 9 12
+        Observable<Long> observableB = Observable.interval(2, TimeUnit.SECONDS)
+                .map(new Func1<Long, Long>() {
+                    @Override
+                    public Long call(final Long aLong) {
+                        return aLong * 3;
+                    }
+                })
+                .take(5);
+
+        observableA.groupJoin(observableB,
+                new Func1<Long, Observable<Long>>() {       //定义源 Observable 发射数据的时间窗口
+                    @Override
+                    public Observable<Long> call(final Long aLong) {
+                        System.out.println("A:" + aLong);
+                        return Observable.just(aLong).delay(2000, TimeUnit.MILLISECONDS);   //延迟 500 毫秒后发射，即声明周期为 1000毫秒
+                    }
+                }, new Func1<Long, Observable<Long>>() {    //定义第二个 Observable 发射数据的时间窗口
+                    @Override
+                    public Observable<Long> call(final Long aLong) {
+                        System.out.println("B:" + aLong);
+                        return Observable.just(aLong).delay(1000, TimeUnit.MILLISECONDS);
+                    }
+                }, new Func2<Long, Observable<Long>, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(final Long itemA, final Observable<Long> longObservable) {
+                        return longObservable.map(new Func1<Long, String>() {
+                            @Override
+                            public String call(final Long itemB) {
+                                return "groupJoin result:" + itemA + "/" + itemB;
+                            }
+                        });
+                    }
+                })
+                .subscribe(new Action1<Observable<String>>() {
+                    @Override
+                    public void call(final Observable<String> observable) {
+                        observable.subscribe(new Action1<String>() {
+                            @Override
+                            public void call(final String s) {
+                                System.out.println("onNext:" + s);
+                            }
+                        });
+                    }
+                });
+    }
+
+    /**
+     * 给两个 Observable 发射的元素各自定义一个时间窗口，在任意一方发射数据时，会和对方时间窗口内的数据进行结合，直到其中一方结束
+     */
     private void join() {
         //产生 0 2 4 6 8
         Observable<Long> observableA = Observable.interval(1, TimeUnit.SECONDS)
@@ -90,7 +170,7 @@ public class CombiningOperators extends BaseOperators {
                     @Override
                     public Observable<Long> call(final Long aLong) {
                         System.out.println("A:" + aLong);
-                        return Observable.just(aLong).delay(2000 , TimeUnit.MILLISECONDS);   //延迟 500 毫秒后发射，即声明周期为 1000毫秒
+                        return Observable.just(aLong).delay(2000, TimeUnit.MILLISECONDS);   //延迟 500 毫秒后发射，即声明周期为 1000毫秒
                     }
                 }, new Func1<Long, Observable<Long>>() {    //定义第二个 Observable 发射数据的时间窗口
                     @Override

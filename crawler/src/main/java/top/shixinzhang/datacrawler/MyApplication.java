@@ -2,7 +2,10 @@ package top.shixinzhang.datacrawler;
 
 import android.app.Application;
 
+import com.github.moduth.blockcanary.BlockCanary;
+
 import top.shixinzhang.datacrawler.utils.AlertUtil;
+import top.shixinzhang.datacrawler.utils.AppBlockCanaryContext;
 
 /**
  * Description:
@@ -21,5 +24,6 @@ public class MyApplication extends Application {
         super.onCreate();
         CrashHandler.init(this);
         AlertUtil.init(this);
+        BlockCanary.install(this, new AppBlockCanaryContext()).start();
     }
 }
