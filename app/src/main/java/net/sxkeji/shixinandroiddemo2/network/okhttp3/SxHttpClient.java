@@ -60,6 +60,7 @@ public class SxHttpClient {
     private static OkHttpClient initOkHttpClient() {
         return new OkHttpClient.Builder()
                 .addInterceptor(new SxHttpInterceptor())
+//                .addNetworkInterceptor(new StethoInterceptor())
 //                .cache(new Cache(new File(Config.APP_FOLDER), OKHTTP_CACHE_SIZE))
                 .hostnameVerifier(new SxHostnameVerifier())
 //                .cookieJar(new SxCookieJar())

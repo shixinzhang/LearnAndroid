@@ -179,6 +179,7 @@ dependencies {
     compile project(':ioc')
     compile project(':ioc-annotation')
     apt project(':ioc-processor')
-    //    compile project(path: ':service')
-//    compile files('libs/ioc-processor.jar')
+
+    compile 'com.facebook.stetho:stetho:1.5.0'  //okhttp chrome 调试
+    compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
 }

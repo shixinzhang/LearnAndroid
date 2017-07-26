@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
+import rx.Subscriber;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.functions.Func2;
@@ -67,7 +68,54 @@ public class CombiningOperators extends BaseOperators {
 //        join();
 //        groupJoin();
 
-        merge();
+//        merge();
+//
+//        startWith();
+//
+//        concat();
+
+        switchOnNext();
+    }
+
+    /**
+     * 喜新厌旧，一发射新的 Observable，就取消订阅之前的
+     */
+    private void switchOnNext() {
+        Observable<Observable<Integer>> observableObservable = Observable.unsafeCreate(new Observable.OnSubscribe<Observable<Integer>>() {
+            @Override
+            public void call(final Subscriber<? super Observable<Integer>> subscriber) {
+                for (int i = 0; i < 5; i++) {
+                    subscriber.onNext(Observable.range(1, 10).delay(i, TimeUnit.SECONDS));
+                }
+                subscriber.onCompleted();
+            }
+        });
+
+        Observable.switchOnNext(observableObservable)
+                .subscribe(this.<Integer>getPrintSubscriber());
+    }
+
+    /**
+     * 按顺序拼接
+     */
+    private void concat() {
+
+        Observable<Integer> observableA = Observable.range(0 , 5);
+        Observable<Integer> observableB = Observable.range(10, 5);
+
+        Observable.concat(observableB, observableA)
+                .subscribe(this.<Integer>getPrintSubscriber());
+    }
+
+    /**
+     * 先发射前面的
+     */
+    private void startWith() {
+        Observable<Integer> observableA = Observable.range(0 , 5);
+        Observable<Integer> observableB = Observable.range(10, 5);
+
+        observableB.startWith(observableA)
+                .subscribe(this.<Integer>getPrintSubscriber());
     }
 
     /**

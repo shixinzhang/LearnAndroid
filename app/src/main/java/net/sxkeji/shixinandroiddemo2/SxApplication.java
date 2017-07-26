@@ -40,6 +40,7 @@ public class SxApplication extends MultiDexApplication {
 
         if (BuildConfig.DEBUG) {
 //            enableStrictMode();
+            enableStetho();
         }
 
         addLifecycleListener();
@@ -55,6 +56,17 @@ public class SxApplication extends MultiDexApplication {
         initWeex();
     }
 
+    /**
+     * 使用 Stetho 进行 Chrome 调试
+     */
+    private void enableStetho() {
+//        https://github.com/facebook/stetho
+//        Stetho.initializeWithDefaults(this);
+    }
+
+    /**
+     * 开启严格模式
+     */
     private void enableStrictMode() {
         //ALL_THREAD_DETECT_BITS = DETECT_DISK_WRITE | DETECT_DISK_READ | DETECT_NETWORK | DETECT_CUSTOM | DETECT_RESOURCE_MISMATCH;
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
