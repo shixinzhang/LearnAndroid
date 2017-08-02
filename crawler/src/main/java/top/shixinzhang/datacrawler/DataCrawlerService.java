@@ -288,7 +288,7 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
             if (listNode != null) {
                 int recyclerViewCount = listNode.getChildCount();
                 AccessibilityNodeInfo modelParentNode;
-                String carName;
+                String carName = "";
                 StringBuilder identityStr;  //用来辨识是否点击过的唯一标识
                 int checkIndex = 1;
                 for (; checkIndex < recyclerViewCount; checkIndex++) {
@@ -299,8 +299,9 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
                             AccessibilityNodeInfo colorNode = modelParentNode.getChild(2);  //车款颜色
                             AccessibilityNodeInfo priceNode = modelParentNode.getChild(4);  //价格
                             AccessibilityNodeInfo authorNameNode = modelParentNode.getChild(5);     //发布者所属公司
-
-                            carName = nameNode.getText().toString();
+                            if (nameNode != null && nameNode.getText() != null) {
+                                carName = nameNode.getText().toString();
+                            }
 
                             identityStr = new StringBuilder(carName);
                             safetyAppendString(identityStr, colorNode);

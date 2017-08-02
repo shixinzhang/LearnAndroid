@@ -6,6 +6,7 @@ import android.os.Bundle;
 import rx.Observable;
 import top.shixinzhang.rxjavademo.operator.BackpressureTest;
 import top.shixinzhang.rxjavademo.operator.CombiningOperators;
+import top.shixinzhang.rxjavademo.operator.ErrorHandlingOperators;
 import top.shixinzhang.rxjavademo.operator.FilteringOperators;
 import top.shixinzhang.rxjavademo.operator.TransformingOperators;
 
@@ -22,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
 //        CreatingOperators.test();
 //        TransformingOperators.test();
 //        FilteringOperators.test();
-        CombiningOperators.test();
+//        CombiningOperators.test();
+        ErrorHandlingOperators.test();
 
         //背压
 //        BackpressureTest.test();

@@ -16,32 +16,43 @@
 
 package top.shixinzhang.rxjavademo.operator;
 
-import rx.Subscriber;
-import rx.functions.Action1;
-import top.shixinzhang.rxjavademo.creator.SubscriberCreator;
-
 /**
  * Description:
- * <br> 操作符测试基类，提供打印结果的订阅者
+ * <br> 错误处理操作符
+ * http://reactivex.io/documentation/operators/catch.html
  * <p>
- * <br> Created by shixinzhang on 17/7/12.
+ * <br> Created by shixinzhang on 17/7/27.
  * <p>
  * <br> Email: shixinzhang2016@gmail.com
  * <p>
  * <br> https://about.me/shixinzhang
  */
 
-public class BaseOperators {
+public class ErrorHandlingOperators extends BaseOperators {
 
-    <T> Subscriber<T> getPrintSubscriber() {
-        return SubscriberCreator.getPrintSubscriber();
+    private ErrorHandlingOperators() {
+        //do some init work
     }
 
-    <T> Subscriber<T> getBackpressureSubscriber() {
-        return SubscriberCreator.getBackpressureSubscriber();
+    private volatile static ErrorHandlingOperators mInstance = new ErrorHandlingOperators();
+
+    public static ErrorHandlingOperators getInstance() {
+        return mInstance;
     }
 
-    <T> Action1<T> getSleepAction1(long sleepTime) {
-        return SubscriberCreator.getSleepAction1(sleepTime);
+    public static void destroyInstance() {
+        mInstance = null;
+    }
+
+    public static void test() {
+        getInstance().testErrorHandingOperators();
+    }
+
+    private void testErrorHandingOperators() {
+        onErrorResumeNext();
+    }
+
+    private void onErrorResumeNext() {
+
     }
 }
