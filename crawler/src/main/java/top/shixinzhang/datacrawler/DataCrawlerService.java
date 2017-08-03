@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import top.shixinzhang.datacrawler.accessibility.WxAutoClick;
+import top.shixinzhang.datacrawler.model.SupplierInfoBean;
 import top.shixinzhang.datacrawler.utils.AlertUtil;
 import top.shixinzhang.datacrawler.utils.ApplicationUtil;
 import top.shixinzhang.datacrawler.utils.DateUtils;
@@ -43,9 +44,11 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
     private Set<String> mClickCarBrandSet = new HashSet<>();
     private Set<String> mClickCarSeriesSet = new HashSet<>();   //已点击的车系
     private Set<String> mClickCarModelSet = new HashSet<>();   //已点击的车款
+    private Set<SupplierInfoBean> mSupplierSet = new HashSet<>();  //收集的信息
     public static volatile Map<String, String> mCarPhoneMap = new HashMap<>(); //车款和电话映射表
     private AtomicBoolean mCanGoToNextCarModule = new AtomicBoolean(true);
-    private LinkedList<AccessibilityNodeInfo> mCarModuleNodeList = new LinkedList<>();
+
+    private SupplierInfoBean mCurrentSupplier;  //当前的供应商
     private String mCurrentCarName;
     private int mScreenHeight;
     private String mSwipeCmd;
@@ -211,6 +214,11 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
 
             carName = order + "_" + carName + "_" + shopName + "_" + company;
             mCurrentCarName = carName;
+            mCurrentSupplier = new SupplierInfoBean();
+            mCurrentSupplier.setCompany(company)
+                    .setName(shopName)
+                    .setPublishInfo(carName);
+
             if (mCarPhoneMap.containsKey(carName) && !"1".equals(mCarPhoneMap.get(carName))) {     //已经点击过了，返回
                 mMode = MODE_SELECT_CAR_MODEL;
                 clickBack();
@@ -352,15 +360,18 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
 
 
         if (mLastPhoneNumber != phoneSet.size()) {
-            Log.d(TAG, phoneSet.size() + " , " + values.toString());
+            Log.d(TAG, phoneSet.size() + " , " + phoneSet.toString());
             mLastPhoneNumber = phoneSet.size();
             final String path = String.format("%s%s_%s_%s.txt", Config.EXT_DIR, "车镇_去重", mFileTimeStamp, "number");
             final String duplicatePath = String.format("%s%s_%s_%s.txt", Config.EXT_DIR, "车镇_未去重", mFileTimeStamp, "number");
+            final String fullInfoPath = String.format("%s%s_%s_%s.txt", Config.EXT_DIR, "车镇_未去重", mFileTimeStamp, "完整信息");
             new Thread(new Runnable() {
                 @Override
                 public void run() {
+
                     FileUtils.writeFile(path, phoneSet.size() + "\n" + phoneSet.toString(), false);
-                    FileUtils.writeFile(duplicatePath, values.size() + "\n" + values.toString(), false);
+                    FileUtils.writeFile(duplicatePath, mCarPhoneMap.size() + "\n" + mCarPhoneMap.toString(), false);
+                    FileUtils.writeFile(fullInfoPath, mSupplierSet.size() + "\n" + mSupplierSet.toString(), false);
                 }
             }).start();
         }
@@ -414,6 +425,8 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
 
             if ("1".equals(mCarPhoneMap.get(mCurrentCarName))) {
                 mCarPhoneMap.put(mCurrentCarName, phoneNumber);
+                mCurrentSupplier.setPhone(phoneNumber);
+                mSupplierSet.add(mCurrentSupplier);
             }
             Log.i(TAG, mCurrentCarName);
             Log.i(TAG, "current number : " + phoneNumber);
