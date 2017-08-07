@@ -78,6 +78,8 @@ public interface CrawlerContract {
         Observable<SupplierInfoBean> updateCurrentSupplierInfo(SupplierInfoBean currentSupplier);   //更新当前供应商信息
 
         Set<SupplierInfoBean> addSupplier(SupplierInfoBean supplierInfoBean);   //添加供应商信息
+
+        void addClickedBrands(@NonNull String carBrandName); //添加点击的品牌名称
     }
 
     /**
@@ -90,11 +92,14 @@ public interface CrawlerContract {
 
         boolean isMainTab(String className);    //是否在首页
 
+        boolean isBrandListPage(String className);  //是否在品牌列表页面
+
         boolean enterBrandList(@NonNull final AccessibilityNodeInfo rootNode);   //打开有品牌列表的页面
 
         AccessibilityNodeInfo getBrandListNode(AccessibilityNodeInfo rootNode); //获取品牌列表 Node
 
         AccessibilityNodeInfo getBrandNodeFromItem(@NonNull AccessibilityNodeInfo itemNode) throws Exception; //获取 item 中的品牌节点
+
     }
 
     /**
@@ -107,7 +112,7 @@ public interface CrawlerContract {
 
         void openBrandList(final AccessibilityNodeInfo rootNode, final String className);   //打开车辆列表
 
-        void iterateBrands(final String className);   //遍历品牌
+        void iterateBrands(final AccessibilityNodeInfo rootNode, final String className);   //遍历品牌
 
         void iterateSeries(final String className);   //遍历车系
 

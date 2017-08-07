@@ -32,13 +32,8 @@ import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import top.shixinzhang.datacrawler.accessibility.WxAutoClick;
 import top.shixinzhang.datacrawler.model.SupplierInfoBean;
@@ -60,7 +55,7 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
     public final String TAG = DataCrawlerService.class.getSimpleName();
     private String mCurrentCarName;
     private int mScreenHeight;
-    private String mSwipeCmd;
+    public static String sSwipeCmd;
     private String mSwipeCmdUp; //上滑
 
     private String mCurrentSeriesName;  //当前查看的车系名称
@@ -99,7 +94,7 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
     public void onCreate() {
         super.onCreate();
         mScreenHeight = getApplicationContext().getResources().getDisplayMetrics().heightPixels;
-        mSwipeCmd = String.format("input swipe %d %d %d %d", 10, mScreenHeight - 250, 10, 100);
+        sSwipeCmd = String.format("input swipe %d %d %d %d", 10, mScreenHeight - 250, 10, 100);
         mSwipeCmdUp = String.format("input swipe %d %d %d %d", 10, 100, 10, mScreenHeight - 100);
 
     }
@@ -345,7 +340,7 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
                 }
 
                 if (checkIndex >= recyclerViewCount) {
-                    ShellUtil.execShellCmd(mSwipeCmd);
+                    ShellUtil.execShellCmd(sSwipeCmd);
                     saveNumber();
                 }
             } else {
@@ -519,7 +514,7 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
                 }
             }
             if (checkIndex >= recyclerViewCount) {
-                ShellUtil.execShellCmd(mSwipeCmd);
+                ShellUtil.execShellCmd(sSwipeCmd);
                 mMode = MODE_SELECT_CAR_SERIES;
 //                saveNumber();
             }
@@ -621,7 +616,7 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
                 }
             }
             if (checkIndex >= recyclerViewCount) {
-                ShellUtil.execShellCmd(mSwipeCmd);
+                ShellUtil.execShellCmd(sSwipeCmd);
 //                saveNumber();
             }
         } else {

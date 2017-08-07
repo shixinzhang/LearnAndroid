@@ -23,7 +23,10 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import top.shixinzhang.mvpcrawler.Config;
+import top.shixinzhang.mvpcrawler.DataCrawlerService;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
+import top.shixinzhang.mvpcrawler.utils.NodeUtil;
+import top.shixinzhang.mvpcrawler.utils.ShellUtil;
 
 /**
  * Description:
@@ -61,7 +64,7 @@ public class CommonPresenter extends BasePresenter implements CrawlerContract.Pr
                 openBrandList(rootNode, className);
                 break;
             case CrawlerContract.Model.MODE_SELECT_BRAND:   //选择品牌
-                iterateBrands(className);
+                iterateBrands(rootNode, className);
                 break;
             case CrawlerContract.Model.MODE_SELECT_CAR_SERIES:   //选择车系
                 iterateSeries(className);
@@ -104,20 +107,27 @@ public class CommonPresenter extends BasePresenter implements CrawlerContract.Pr
         if (!getView().isMainTab(className)) {
             return;
         }
-        if (!getView().enterBrandList(rootNode)) {
+        if (getView().enterBrandList(rootNode)) {
+            getModel().setMode(CrawlerContract.Model.MODE_SELECT_BRAND);
+        }
+    }
+
+    @Override
+    public void iterateBrands(final AccessibilityNodeInfo rootNode, final String className) {
+        if (!getView().isBrandListPage(className)) {
             return;
         }
+
         AccessibilityNodeInfo listNode = getView().getBrandListNode(rootNode);
-        if (listNode != null){
+        if (listNode != null) {
             int recyclerViewCount = listNode.getChildCount();
             int checkIndex = 1; //从第二个开始是品牌
             AccessibilityNodeInfo child;
             String carBrandName;
             AccessibilityNodeInfo brandNode;
-            int brandNameIndex; //名称所在位置的索引
             for (; checkIndex < recyclerViewCount; checkIndex++) {
                 child = listNode.getChild(checkIndex);
-                if (child == null || child.getChildCount() == 0){
+                if (child == null || child.getChildCount() == 0) {
                     Log.d(TAG, "没找到第 " + checkIndex + " 个品牌");
                     continue;
                 }
@@ -125,21 +135,26 @@ public class CommonPresenter extends BasePresenter implements CrawlerContract.Pr
                     brandNode = getView().getBrandNodeFromItem(child);
                     carBrandName = brandNode.getText().toString();
 
-                    if (!TextUtils.isEmpty(carBrandName) && !getModel().getClickedBrands().contains(carBrandName)){
-
+                    if (!TextUtils.isEmpty(carBrandName) && !getModel().getClickedBrands().contains(carBrandName)) {
+                        Log.d(TAG, "进入品牌 " + carBrandName);
+                        getModel().addClickedBrands(carBrandName);
+                        NodeUtil.clickNode(brandNode);
+                        return;
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Log.e(TAG, e.getMessage());
                 }
-
             }
+
+            if (checkIndex >= recyclerViewCount) {      //下滑
+                ShellUtil.execShellCmd(DataCrawlerService.sSwipeCmd);
+//                saveNumber();
+            }
+        } else {
+            Log.d(TAG, "没找到品牌 ListView 节点");
         }
-    }
-
-    @Override
-    public void iterateBrands(final String className) {
-
     }
 
     @Override

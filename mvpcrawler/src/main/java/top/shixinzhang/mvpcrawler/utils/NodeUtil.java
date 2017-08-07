@@ -29,6 +29,14 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class NodeUtil {
 
+    public static boolean clickNode(@NonNull AccessibilityNodeInfo node) {
+
+        AccessibilityNodeInfo nodeInfo = getClickableNode(node);
+        if (null != nodeInfo)
+            return nodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+        return false;
+    }
+
     public static boolean clickNode(@NonNull AccessibilityNodeInfo root, final String viewId) {
         AccessibilityNodeInfo nodeInfo = findClickableNode(root, viewId);
         if (null != nodeInfo)
@@ -57,7 +65,7 @@ public class NodeUtil {
         if (null != nodeInfo) {
             AccessibilityNodeInfo clickNode = getClickableNode(nodeInfo);
             if (null != clickNode)
-            return clickNode.performAction(action);
+                return clickNode.performAction(action);
         }
 
         return false;
@@ -115,7 +123,8 @@ public class NodeUtil {
     }
 
     /**
-     *  view 是否对用户可见
+     * view 是否对用户可见
+     *
      * @param root
      * @param viewId
      * @param viewText
@@ -125,7 +134,7 @@ public class NodeUtil {
         List<AccessibilityNodeInfo> list = root.findAccessibilityNodeInfosByViewId(viewId);
         if (null == list || list.isEmpty()) return false;
 
-        for( AccessibilityNodeInfo temp : list) {
+        for (AccessibilityNodeInfo temp : list) {
             if (TextUtils.equals(viewText, temp.getText()) && temp.isVisibleToUser())
                 return true;
         }
@@ -147,7 +156,6 @@ public class NodeUtil {
     }
 
     /**
-     *
      * @param root
      * @param text
      * @return
@@ -163,7 +171,6 @@ public class NodeUtil {
     }
 
     /**
-     *
      * @param node
      * @return
      */
@@ -187,7 +194,7 @@ public class NodeUtil {
 
     private static AccessibilityNodeInfo getClickableNode(@NonNull AccessibilityNodeInfo root, String text) {
 
-        if (root == null || TextUtils.isEmpty(text))  return null;
+        if (root == null || TextUtils.isEmpty(text)) return null;
 
         List<AccessibilityNodeInfo> list = root.findAccessibilityNodeInfosByText(text);
         if (null == list || list.isEmpty()) return null;
@@ -196,7 +203,6 @@ public class NodeUtil {
     }
 
     /**
-     *
      * @param context
      * @param nodeInfo
      * @param text

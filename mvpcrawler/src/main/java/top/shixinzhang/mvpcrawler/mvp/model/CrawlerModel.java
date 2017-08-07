@@ -19,6 +19,7 @@ package top.shixinzhang.mvpcrawler.mvp.model;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import io.reactivex.Observable;
@@ -39,6 +40,7 @@ import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
 public class CrawlerModel implements CrawlerContract.Model {
 
     private int mMode = MODE_START;
+    private Set<String> mClickedBrandsNameSet = new HashSet<>();
 
     public static CrawlerModel create() {
         return new CrawlerModel();
@@ -47,7 +49,7 @@ public class CrawlerModel implements CrawlerContract.Model {
     @NonNull
     @Override
     public Set<String> getClickedBrands() {
-        return null;
+        return mClickedBrandsNameSet;
     }
 
     @NonNull
@@ -87,6 +89,12 @@ public class CrawlerModel implements CrawlerContract.Model {
     @Override
     public Set<SupplierInfoBean> addSupplier(final SupplierInfoBean supplierInfoBean) {
         return null;
+    }
+
+    @Override
+    public void addClickedBrands(@NonNull final String carBrandName) {
+        getClickedBrands().add(carBrandName);
+        setMode(MODE_SELECT_CAR_SERIES);
     }
 
     @Override
