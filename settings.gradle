@@ -1,1 +1,1 @@
-include ':app', ':sxframework', ':WeexSDK', ':sxdebugkit', ':service', ':ioc-processor', ':ioc', ':ioc-annotation', ':rxjavademo', ':crawler'
+include ':app', ':sxframework', ':WeexSDK', ':sxdebugkit', ':service', ':ioc-processor', ':ioc', ':ioc-annotation', ':rxjavademo', ':crawler', ':mvpcrawler'

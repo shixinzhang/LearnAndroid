@@ -14,30 +14,21 @@
  * limitations under the License.
  */
 
-package net.sxkeji.shixinandroiddemo2.activity.eventbus;
+package top.shixinzhang.mvpcrawler.mvp.view;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-
-import top.shixinzhang.sxframework.eventsubscribe.third.rxbus.RxBus;
+import android.support.annotation.NonNull;
 
 /**
  * Description:
- * <br>
+ * <br> View 基类
  * <p>
- * <br> Created by shixinzhang on 17/6/23.
+ * <br> Created by shixinzhang on 17/6/19.
  * <p>
  * <br> Email: shixinzhang2016@gmail.com
  * <p>
  * <br> https://about.me/shixinzhang
  */
 
-public class RxBusActivity  extends AppCompatActivity{
-    @Override
-    protected void onCreate(@Nullable final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        RxBus.get().register(this);
-    }
+public interface BaseView<T> {
+    void setPresenter(@NonNull T presenter);
 }

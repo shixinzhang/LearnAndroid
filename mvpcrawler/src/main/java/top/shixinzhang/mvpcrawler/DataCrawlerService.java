@@ -1,4 +1,20 @@
-package top.shixinzhang.datacrawler;
+/*
+ * Copyright (c) 2017. shixinzhang (shixinzhang2016@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package top.shixinzhang.mvpcrawler;
 
 import android.accessibilityservice.AccessibilityService;
 import android.annotation.TargetApi;
@@ -7,6 +23,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
@@ -18,7 +35,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,28 +50,19 @@ import top.shixinzhang.datacrawler.utils.NodeUtil;
 import top.shixinzhang.datacrawler.utils.PageUtil;
 import top.shixinzhang.datacrawler.utils.ShellUtil;
 import top.shixinzhang.datacrawler.utils.StringUtil;
+import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
+import top.shixinzhang.mvpcrawler.mvp.presenter.CommonPresenter;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class DataCrawlerService extends AccessibilityService implements Handler.Callback {
 
     public static final String MODE_KEY = "MODE";
     public final String TAG = DataCrawlerService.class.getSimpleName();
-
-    private Set<String> mClickCarBrandSet = new HashSet<>();
-    private Set<String> mClickCarSeriesSet = new HashSet<>();   //已点击的车系
-    private Set<String> mClickCarModelSet = new HashSet<>();   //已点击的车款
-    private Set<SupplierInfoBean> mSupplierSet = new HashSet<>();  //收集的信息
-    public static volatile Map<String, String> mCarPhoneMap = new HashMap<>(); //车款和电话映射表
-    private AtomicBoolean mCanGoToNextCarModule = new AtomicBoolean(true);
-
-    private SupplierInfoBean mCurrentSupplier;  //当前的供应商
     private String mCurrentCarName;
     private int mScreenHeight;
     private String mSwipeCmd;
     private String mSwipeCmdUp; //上滑
 
-    private String mCurrentActivityName;
-    private String mCurrentBrandName;
     private String mCurrentSeriesName;  //当前查看的车系名称
     private String mFileTimeStamp = DateUtils.getMMddhhmmss(System.currentTimeMillis());
 
@@ -66,7 +73,10 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
     private final int MODE_SELECT_CAR_MODEL = 3;    //选择车款
     private final int MODE_CLICK_PHONE_NODE = 4;
     private final int MODE_GET_NUMBER = 5;
-    private boolean mFirstOpen = true;
+//    private boolean mFirstOpen = true;
+
+    public static CrawlerContract.Presenter mPresenter;
+
 
     private static List<String> mWhiteClassNameList;    //白名单
 
@@ -96,13 +106,11 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        mCanGoToNextCarModule.set(true);
         if (null != intent) {
             mMode = intent.getIntExtra(MODE_KEY, MODE_SELECT_BRAND);
             Log.i(TAG, "onStartCommand mode:" + mMode);
-            if (mMode == MODE_SELECT_BRAND) {
-                ApplicationUtil.startApplication(this, Config.CT_PACKAGE_NAME);
-                mFirstOpen = true;
+            if (mMode == MODE_SELECT_BRAND && mPresenter != null) {
+                getPresenter().startApp();
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -122,19 +130,24 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        String packageName = event.getPackageName().toString();
         int eventType = event.getEventType();
         switch (eventType) {
             case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:  //监听进入界面
             case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
-                if (Config.WX_PACKAGE_NAME.equals(packageName)) {
-                    WxAutoClick.getInstance(this).receiveEvent(getRootInActiveWindow(), event);
-                } else if (Config.CT_PACKAGE_NAME.equals(packageName)) {
-                    dealWithCarTown(getRootInActiveWindow(), event);
-                }
+                getPresenter().receiveEvent(getRootInActiveWindow(), event);
                 break;
         }
 
+    }
+
+
+    @NonNull
+    public static CrawlerContract.Presenter getPresenter() {
+        return mPresenter;
+    }
+
+    public static void setPresenter(@NonNull final CrawlerContract.View view, @NonNull final CrawlerContract.Model model) {
+        mPresenter = new CommonPresenter(view, model);
     }
 
     /**
@@ -158,10 +171,6 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
         }
 
         Log.d(TAG, "当前 mode: " + mMode + "\nclassName: " + className);
-
-        if (className.contains("cn.kooki.app.chezhen.activity")) {
-            mCurrentActivityName = className;
-        }
 
         //还是通过 mode 分辨靠谱
 
@@ -622,66 +631,6 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
     }
 
     /**
-     * 匹配安装或卸载的界面是否属于白名单里的应用
-     * 遍历白名单对比监听的界面，如果命中即返回
-     *
-     * @param nodeInfo
-     * @param whiteList
-     * @return
-     */
-    private String matchTrueAppName(AccessibilityNodeInfo nodeInfo, HashSet<String> whiteList) {
-        if (whiteList == null || whiteList.isEmpty() || nodeInfo == null) {
-            return null;
-        }
-        for (Iterator<String> ite = whiteList.iterator(); ite.hasNext(); ) {
-            String appName = ite.next();
-            Log.d(TAG, "待安装/卸载的应用：" + appName);
-
-            List<AccessibilityNodeInfo> nodes = nodeInfo.findAccessibilityNodeInfosByText(appName);
-            if (nodes != null && !nodes.isEmpty()) {
-                return appName;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * 处理安装事件
-     *
-     * @param nodeInfo
-     */
-    private void processInstalledEvent(AccessibilityNodeInfo nodeInfo) {
-
-        if (nodeInfo == null) {
-            return;
-        }
-
-        findAndPerformAction("安装", nodeInfo);
-        findAndPerformAction("下一步", nodeInfo);
-        findAndPerformAction("完成", nodeInfo);
-        String country = getResources().getConfiguration().locale.getCountry();
-        if (country != null && !"CN".equalsIgnoreCase(country)) {
-            findAndPerformAction("Install", nodeInfo);
-            findAndPerformAction("Next", nodeInfo);
-            findAndPerformAction("Complete", nodeInfo);
-        }
-    }
-
-    /**
-     * 处理卸载事件
-     *
-     * @param nodeInfo
-     */
-    private void processUnInstalledEvent(AccessibilityNodeInfo nodeInfo) {
-        if (nodeInfo == null) {
-            return;
-        }
-
-        findAndPerformAction("确定", nodeInfo);
-        findAndPerformAction("卸载", nodeInfo);//华为
-    }
-
-    /**
      * 模拟点击指定的按钮或文字
      *
      * @param text
@@ -834,7 +783,6 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
     @Override
     public void onInterrupt() {
         Log.e(TAG, "onInterrupt:  ");
-
         showToast("自动点击服务 onInterrupted ");
     }
 
@@ -867,7 +815,6 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
     public void onDestroy() {
         super.onDestroy();
         destroyMonitorHandler();
-        WxAutoClick.getInstance(this).onDestroy();
     }
 
 }

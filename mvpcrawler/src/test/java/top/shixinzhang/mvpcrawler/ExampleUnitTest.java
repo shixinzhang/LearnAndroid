@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2017. shixinzhang (shixinzhang2016@gmail.com)
- *                           
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *                            
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -14,31 +14,20 @@
  * limitations under the License.
  */
 
-package net.sxkeji.shixinandroiddemo2.activity.eventbus;
+package top.shixinzhang.mvpcrawler;
 
+import org.junit.Test;
 
-import top.shixinzhang.sxframework.eventsubscribe.third.rxbus.Bus;
+import static org.junit.Assert.*;
 
 /**
- * Description:
- * <br>
- * <p>
- * <br> Created by shixinzhang on 17/6/23.
- * <p>
- * <br> Email: shixinzhang2016@gmail.com
- * <p>
- * <br> https://about.me/shixinzhang
+ * Example local unit test, which will execute on the development machine (host).
+ *
+ * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-
-public class RxBus {
-
-    private RxBus() {
-        //do some init work
-    }
-
-    private volatile static Bus mInstance = new Bus();
-
-    public static Bus get() {
-        return mInstance;
+public class ExampleUnitTest {
+    @Test
+    public void addition_isCorrect() throws Exception {
+        assertEquals(4, 2 + 2);
     }
 }

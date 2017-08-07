@@ -14,30 +14,23 @@
  * limitations under the License.
  */
 
-package net.sxkeji.shixinandroiddemo2.activity.eventbus;
-
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-
-import top.shixinzhang.sxframework.eventsubscribe.third.rxbus.RxBus;
+package top.shixinzhang.mvpcrawler;
 
 /**
  * Description:
- * <br>
+ * <br> 配置信息
  * <p>
- * <br> Created by shixinzhang on 17/6/23.
+ * <br> Created by shixinzhang on 17/8/7.
  * <p>
  * <br> Email: shixinzhang2016@gmail.com
  * <p>
  * <br> https://about.me/shixinzhang
  */
 
-public class RxBusActivity  extends AppCompatActivity{
-    @Override
-    protected void onCreate(@Nullable final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+public class Config {
+    // app 名称
+    public final static String APP_NAME_SELL_NICE_CAR = "sell_nice_car";
 
-        RxBus.get().register(this);
-    }
+    //页面 className
+    public static final String CLASS_NAME_SNC_MAIN_TAB = "X";   //卖好车首页
 }

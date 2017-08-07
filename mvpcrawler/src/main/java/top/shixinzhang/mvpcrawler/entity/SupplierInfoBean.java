@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package top.shixinzhang.datacrawler.model;
+package top.shixinzhang.mvpcrawler.entity;
 
 import java.io.Serializable;
 
