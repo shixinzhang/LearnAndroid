@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
+import android.support.annotation.Keep;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
@@ -31,6 +33,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private SharedPreferences mSharedPreferences;
     private boolean mCurrentTheme;
 
+    @CallSuper
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +90,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * 处理注解
      */
+    @Keep
     private void annotationProcess() {
         Class c = this.getClass();
         //遍历所有子类

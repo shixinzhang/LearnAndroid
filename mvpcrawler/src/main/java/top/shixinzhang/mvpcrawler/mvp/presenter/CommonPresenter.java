@@ -16,6 +16,7 @@
 
 package top.shixinzhang.mvpcrawler.mvp.presenter;
 
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -23,10 +24,14 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import top.shixinzhang.mvpcrawler.Config;
-import top.shixinzhang.mvpcrawler.DataCrawlerService;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
-import top.shixinzhang.mvpcrawler.utils.NodeUtil;
-import top.shixinzhang.mvpcrawler.utils.ShellUtil;
+import top.shixinzhang.utils.NodeUtils;
+
+import static top.shixinzhang.mvpcrawler.mvp.CrawlerContract.Model.MODE_GET_INFO;
+import static top.shixinzhang.mvpcrawler.mvp.CrawlerContract.Model.MODE_SELECT_BRAND;
+import static top.shixinzhang.mvpcrawler.mvp.CrawlerContract.Model.MODE_SELECT_CAR_MODEL;
+import static top.shixinzhang.mvpcrawler.mvp.CrawlerContract.Model.MODE_SELECT_CAR_SERIES;
+import static top.shixinzhang.mvpcrawler.mvp.CrawlerContract.Model.MODE_SELECT_SOURCE_TYPE;
 
 /**
  * Description:
@@ -39,7 +44,7 @@ import top.shixinzhang.mvpcrawler.utils.ShellUtil;
  * <br> https://about.me/shixinzhang
  */
 
-public class CommonPresenter extends BasePresenter implements CrawlerContract.Presenter {
+public class CommonPresenter extends BasePresenter {
     private final String TAG = this.getClass().getSimpleName();
 
     public CommonPresenter(@NonNull final CrawlerContract.View view, @NonNull final CrawlerContract.Model model) {
@@ -66,14 +71,14 @@ public class CommonPresenter extends BasePresenter implements CrawlerContract.Pr
             case CrawlerContract.Model.MODE_SELECT_BRAND:   //选择品牌
                 iterateBrands(rootNode, className);
                 break;
-            case CrawlerContract.Model.MODE_SELECT_CAR_SERIES:   //选择车系
-                iterateSeries(className);
+            case MODE_SELECT_CAR_SERIES:   //选择车系
+                iterateSeries(rootNode, className);
                 break;
-            case CrawlerContract.Model.MODE_SELECT_SOURCE_TYPE:   //选择来源
-                selectSourceType(className);
+            case MODE_SELECT_SOURCE_TYPE:   //选择来源
+                selectSourceType(rootNode, className);
                 break;
-            case CrawlerContract.Model.MODE_SELECT_CAR_MODEL:   //选择车款
-                iterateModels(className);
+            case MODE_SELECT_CAR_MODEL:   //选择车款
+                iterateModels(rootNode, className);
                 break;
             case CrawlerContract.Model.MODE_GET_INFO:
                 getInfo(className);
@@ -138,7 +143,8 @@ public class CommonPresenter extends BasePresenter implements CrawlerContract.Pr
                     if (!TextUtils.isEmpty(carBrandName) && !getModel().getClickedBrands().contains(carBrandName)) {
                         Log.d(TAG, "进入品牌 " + carBrandName);
                         getModel().addClickedBrands(carBrandName);
-                        NodeUtil.clickNode(brandNode);
+                        getModel().setMode(MODE_SELECT_CAR_SERIES);
+                        NodeUtils.clickNode(brandNode);
                         return;
                     }
 
@@ -149,7 +155,7 @@ public class CommonPresenter extends BasePresenter implements CrawlerContract.Pr
             }
 
             if (checkIndex >= recyclerViewCount) {      //下滑
-                ShellUtil.execShellCmd(DataCrawlerService.sSwipeCmd);
+                swipeUp();
 //                saveNumber();
             }
         } else {
@@ -157,18 +163,118 @@ public class CommonPresenter extends BasePresenter implements CrawlerContract.Pr
         }
     }
 
+
     @Override
-    public void iterateSeries(final String className) {
+    public void iterateSeries(final AccessibilityNodeInfo rootNode, final String className) {
+        if (!getView().isSeriesPage(className)) {
+            return;
+        }
+
+        if (getView().needExitSeriesList(rootNode)) {
+            getModel().setMode(MODE_SELECT_BRAND);
+            clickBack();
+            return;
+        }
+
+        AccessibilityNodeInfo listNode = getView().getSeriesListNode(rootNode);
+        if (listNode != null) {
+            int recyclerViewCount = listNode.getChildCount();
+            int checkIndex = 0;
+            AccessibilityNodeInfo child;
+            String carSeriesName;
+            int clickSeriesIndex;   //点击哪个车系
+            AccessibilityNodeInfo seriesNode;
+            for (; checkIndex < recyclerViewCount; checkIndex++) {
+                child = listNode.getChild(checkIndex);
+                if (child == null) {
+                    Log.d(TAG, "车系列表，没找到第 " + checkIndex + " 个节点");
+                    continue;
+                }
+
+                try {
+                    seriesNode = getView().getSeriesNodeFromItem(child);
+                    carSeriesName = seriesNode.getText().toString();
+                    if (!TextUtils.isEmpty(carSeriesName) && !getModel().getClickedSeries().contains(carSeriesName)) {
+                        Log.d(TAG, "选了车系：" + carSeriesName);
+                        getModel().addClickedSeries(carSeriesName);
+//                        mCurrentSeriesName = carSeriesName;
+                        getModel().setMode(MODE_SELECT_SOURCE_TYPE);
+                        NodeUtils.clickNode(seriesNode);
+                        return;
+                    }
+                    // TODO: 17/8/8 如何判断遍历结束
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+            if (checkIndex >= recyclerViewCount) {
+                swipeUp();
+                getModel().setMode(MODE_SELECT_CAR_SERIES);
+//                saveNumber();
+            }
+
+        } else {
+            Log.d(TAG, "没找到车系 ListView 节点");
+        }
+    }
+
+    @Override
+    public void selectSourceType(final AccessibilityNodeInfo rootNode, final String className) {
+        if (getView().isModelsPage(className)) {
+            getModel().setMode(MODE_SELECT_CAR_MODEL);
+            return;
+        }
+        if (!getView().isSourceTypePage(className)) {
+            return;
+        }
+
 
     }
 
     @Override
-    public void selectSourceType(final String className) {
+    public void iterateModels(final AccessibilityNodeInfo rootNode, final String className) {
+        if (!getView().isModelsPage(className)) {
+            return;
+        }
 
-    }
+        if (getView().needExitModelList(rootNode)) {
+            getModel().setMode(MODE_SELECT_CAR_SERIES);
+            clickBack();
+            return;
+        }
 
-    @Override
-    public void iterateModels(final String className) {
+        SystemClock.sleep(100);
+
+        AccessibilityNodeInfo listNode = getView().getModelListNode(rootNode);
+        if (listNode != null){
+            int recyclerViewCount = listNode.getChildCount();
+            int checkIndex = 0;
+            AccessibilityNodeInfo child;
+            String modelIdentityStr;  //用来辨识是否点击过该车款的唯一标识
+
+            for (; checkIndex < recyclerViewCount; checkIndex++) {
+                try {
+                    modelIdentityStr = getView().getModelIdentity(listNode.getChild(checkIndex));
+
+                    if (!TextUtils.isEmpty(modelIdentityStr) && !getModel().getClickedModels().contains(modelIdentityStr)) {
+                        getModel().addClickedModel(modelIdentityStr);
+                        getModel().setMode(MODE_GET_INFO);
+                        return;
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+            if (checkIndex >= recyclerViewCount) {
+                swipeUp();
+                getModel().saveInfo();
+            }
+
+
+        }else {
+            Log.d(TAG, "没找到车款列表的 RecyclerView 节点");
+        }
 
     }
 
@@ -181,5 +287,6 @@ public class CommonPresenter extends BasePresenter implements CrawlerContract.Pr
     public void getInfo(final String className) {
 
     }
+
 
 }

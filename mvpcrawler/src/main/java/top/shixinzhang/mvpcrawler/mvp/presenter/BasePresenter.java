@@ -18,7 +18,9 @@ package top.shixinzhang.mvpcrawler.mvp.presenter;
 
 import android.support.annotation.NonNull;
 
+import top.shixinzhang.mvpcrawler.DataCrawlerService;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
+import top.shixinzhang.utils.ShellUtils;
 
 /**
  * Description:
@@ -31,7 +33,7 @@ import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
  * <br> https://about.me/shixinzhang
  */
 
-public class BasePresenter {
+public abstract class BasePresenter implements CrawlerContract.Presenter {
     private CrawlerContract.View mView;
     private CrawlerContract.Model mModel;
 
@@ -56,5 +58,24 @@ public class BasePresenter {
     public BasePresenter setModel(final CrawlerContract.Model model) {
         mModel = model;
         return this;
+    }
+
+    @Override
+    public void onDetachView() {
+        setView(null);
+    }
+
+    /**
+     * 上滑
+     */
+    protected void swipeUp() {
+        ShellUtils.execCmd(DataCrawlerService.sSwipeCmd);
+    }
+
+    /**
+     * 退出
+     */
+    protected void clickBack() {
+        ShellUtils.execCmd("input keyevent 4");
     }
 }

@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.dodola.rocoofix'
+//apply plugin: 'com.dodola.rocoofix'
 apply plugin: 'realm-android'
 apply plugin: 'android-apt'
 

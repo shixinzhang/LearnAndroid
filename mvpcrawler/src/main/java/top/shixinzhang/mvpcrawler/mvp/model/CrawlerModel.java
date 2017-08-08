@@ -18,13 +18,18 @@ package top.shixinzhang.mvpcrawler.mvp.model;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import io.reactivex.Observable;
 import top.shixinzhang.mvpcrawler.entity.SupplierInfoBean;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
+import top.shixinzhang.utils.DateUtils;
 
 /**
  * Description:
@@ -38,12 +43,30 @@ import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
  */
 
 public class CrawlerModel implements CrawlerContract.Model {
+    private final String TAG = this.getClass().getSimpleName();
 
+    @EventMode
     private int mMode = MODE_START;
+    private int mLastSavePhoneSize; //上次保存时的电话数量
+    private String mFileTimeStamp = DateUtils.getMMddhhmmss(System.currentTimeMillis());
+
     private Set<String> mClickedBrandsNameSet = new HashSet<>();
+    private Set<String> mClickedSeriesNameSet = new HashSet<>();
+    private Set<String> mClickedModelNameSet = new HashSet<>();
+    private Map<String, String> mPhoneMap = new HashMap<>();
 
     public static CrawlerModel create() {
         return new CrawlerModel();
+    }
+
+    @Override
+    public int getLastSavePhoneSize() {
+        return mLastSavePhoneSize;
+    }
+
+    @Override
+    public void setLastSavePhoneSize(final int lastSavePhoneSize) {
+        mLastSavePhoneSize = lastSavePhoneSize;
     }
 
     @NonNull
@@ -55,7 +78,7 @@ public class CrawlerModel implements CrawlerContract.Model {
     @NonNull
     @Override
     public Set<String> getClickedSeries() {
-        return null;
+        return mClickedSeriesNameSet;
     }
 
     @NonNull
@@ -67,7 +90,7 @@ public class CrawlerModel implements CrawlerContract.Model {
     @NonNull
     @Override
     public Set<String> getClickedModels() {
-        return null;
+        return mClickedModelNameSet;
     }
 
     @Nullable
@@ -94,16 +117,47 @@ public class CrawlerModel implements CrawlerContract.Model {
     @Override
     public void addClickedBrands(@NonNull final String carBrandName) {
         getClickedBrands().add(carBrandName);
-        setMode(MODE_SELECT_CAR_SERIES);
     }
 
+    @Override
+    public void addClickedSeries(@NonNull final String carSeriesName) {
+        getClickedSeries().add(carSeriesName);
+    }
+
+    @Override
+    public void addClickedModel(final String modelIdentityStr) {
+        getClickedModels().add(modelIdentityStr);
+    }
+
+    @EventMode
     @Override
     public int getMode() {
         return mMode;
     }
 
     @Override
-    public void setMode(final int mode) {
+    public void setMode(@EventMode final int mode) {
         mMode = mode;
+    }
+
+    @Override
+    public void saveInfo() {
+        Collection<String> values = getPhoneMap().values();
+        HashSet<String> phoneSet = new HashSet<>(values);
+
+        if (getLastSavePhoneSize() != phoneSet.size()){
+            Log.d(TAG, phoneSet.size() + " , " + phoneSet.toString());
+            setLastSavePhoneSize(phoneSet.size());
+
+
+
+        }
+
+    }
+
+    @NonNull
+    @Override
+    public Map<String, String> getPhoneMap() {
+        return mPhoneMap;
     }
 }

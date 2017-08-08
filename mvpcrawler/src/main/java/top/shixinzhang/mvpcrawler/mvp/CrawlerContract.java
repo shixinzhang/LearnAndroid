@@ -16,12 +16,16 @@
 
 package top.shixinzhang.mvpcrawler.mvp;
 
+import android.support.annotation.IntDef;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.util.Map;
 import java.util.Set;
 
 import io.reactivex.Observable;
@@ -45,18 +49,35 @@ public interface CrawlerContract {
      * 不参与业务，只负责数据的增删改查
      */
     interface Model {
+        @Retention(RetentionPolicy.SOURCE)
+        @IntDef(flag = false,
+                value = {MODE_STOP, MODE_START, MODE_GET_INFO, MODE_GET_NUMBER, MODE_SELECT_BRAND,
+                        MODE_SELECT_CAR_SERIES, MODE_SELECT_SOURCE_TYPE, MODE_SELECT_CAR_MODEL})
+        @interface EventMode {
+        }
+
+
         int MODE_STOP = -1; //停止
         int MODE_START = 0;
         public static final int MODE_SELECT_BRAND = 1;    //首页，选择品牌
         public final static int MODE_SELECT_CAR_SERIES = 2;   //选择车系
         public final static int MODE_SELECT_CAR_MODEL = 3;    //选择车款
-        public final static int MODE_GET_INFO = 4;
-        public final static int MODE_GET_NUMBER = 5;
+        int MODE_GET_INFO = 4;
+        int MODE_GET_NUMBER = 5;
         int MODE_SELECT_SOURCE_TYPE = 6;  //选择来源
 
         int getMode();
 
         void setMode(@IntRange(from = -1, to = 6) final int mode);
+
+        void saveInfo();    //保存信息到文件
+
+        int getLastSavePhoneSize();
+
+        void setLastSavePhoneSize(final int lastSavePhoneSize);
+
+        @NonNull
+        Map<String, String> getPhoneMap();
 
         @NonNull
         Set<String> getClickedBrands(); //点击过的品牌名
@@ -79,7 +100,11 @@ public interface CrawlerContract {
 
         Set<SupplierInfoBean> addSupplier(SupplierInfoBean supplierInfoBean);   //添加供应商信息
 
-        void addClickedBrands(@NonNull String carBrandName); //添加点击的品牌名称
+        void addClickedBrands(@NonNull String carBrandName);    //添加点击的品牌名称
+
+        void addClickedSeries(@NonNull String carSeriesName);    //添加点击的车系名称
+
+        void addClickedModel(String modelIdentityStr);      //添加点击的车款
     }
 
     /**
@@ -94,11 +119,31 @@ public interface CrawlerContract {
 
         boolean isBrandListPage(String className);  //是否在品牌列表页面
 
+        boolean isSeriesPage(String className); //是否在车系页面
+
+        boolean isModelsPage(String className); //是否在车款列表页面
+
+        boolean isSourceTypePage(String className); //是否在选择来源页面
+
         boolean enterBrandList(@NonNull final AccessibilityNodeInfo rootNode);   //打开有品牌列表的页面
 
-        AccessibilityNodeInfo getBrandListNode(AccessibilityNodeInfo rootNode); //获取品牌列表 Node
+        AccessibilityNodeInfo getBrandListNode(@NonNull AccessibilityNodeInfo rootNode); //获取品牌列表 Node
 
         AccessibilityNodeInfo getBrandNodeFromItem(@NonNull AccessibilityNodeInfo itemNode) throws Exception; //获取 item 中的品牌节点
+
+        AccessibilityNodeInfo getSeriesListNode(AccessibilityNodeInfo rootNode);    //获取车系列表 Node
+
+        AccessibilityNodeInfo getSeriesNodeFromItem(@NonNull AccessibilityNodeInfo itemNode) throws Exception;   //获取 item 中的系类节点
+
+        AccessibilityNodeInfo getModelListNode(@NonNull AccessibilityNodeInfo rootNode); //获取车款列表 Node
+
+        String getModelIdentity(@NonNull AccessibilityNodeInfo itemNode) throws Exception;    //获取车款标示信息
+
+        boolean needExitSeriesList(AccessibilityNodeInfo rootNode);  //需要退出车系列表页面
+
+        boolean needExitModelList(AccessibilityNodeInfo rootNode);  //需要退出车款列表页面
+
+        boolean needExitDetail(AccessibilityNodeInfo rootNode);  //需要退出车款详情页面
 
     }
 
@@ -106,6 +151,9 @@ public interface CrawlerContract {
      * 业务逻辑
      */
     interface Presenter {
+
+        void onDetachView();
+
         void prepare(final String className);
 
         void startApp();    //启动对应的 APP
@@ -114,11 +162,11 @@ public interface CrawlerContract {
 
         void iterateBrands(final AccessibilityNodeInfo rootNode, final String className);   //遍历品牌
 
-        void iterateSeries(final String className);   //遍历车系
+        void iterateSeries(final AccessibilityNodeInfo rootNode, final String className);   //遍历车系
 
-        void selectSourceType(final String className);  //选择车源类型：国产 or 进口
+        void selectSourceType(final AccessibilityNodeInfo rootNode, final String className);  //选择车源类型：国产 or 进口
 
-        void iterateModels(final String className);   //遍历车款
+        void iterateModels(final AccessibilityNodeInfo rootNode, final String className);   //遍历车款
 
         void enterDetail(); //进入详情
 

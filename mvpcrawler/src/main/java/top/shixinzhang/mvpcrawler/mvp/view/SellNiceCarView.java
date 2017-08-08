@@ -64,6 +64,26 @@ public class SellNiceCarView implements CrawlerContract.View {
         return className.equals(Config.CLASS_NAME_SNC_MAIN_TAB);
     }
 
+    @Override
+    public boolean isBrandListPage(final String className) {
+        return false;
+    }
+
+    @Override
+    public boolean isSeriesPage(final String className) {
+        return false;
+    }
+
+    @Override
+    public boolean isModelsPage(final String className) {
+        return false;
+    }
+
+    @Override
+    public boolean isSourceTypePage(final String className) {
+        return false;
+    }
+
     /**
      * 进入品牌列表页面
      *
@@ -78,12 +98,49 @@ public class SellNiceCarView implements CrawlerContract.View {
     }
 
     @Override
-    public AccessibilityNodeInfo getBrandListNode(final AccessibilityNodeInfo rootNode) {
+    public AccessibilityNodeInfo getBrandListNode(@NonNull final AccessibilityNodeInfo rootNode) {
         return NodeUtil.findNode(rootNode, "com.maihaoche.bentley:id/search_list_brand");
     }
 
     @Override
     public AccessibilityNodeInfo getBrandNodeFromItem(@NonNull final AccessibilityNodeInfo itemNode) throws Exception{
         return itemNode.getChild(0).getChild(1);
+    }
+
+    @Override
+    public AccessibilityNodeInfo getSeriesListNode(final AccessibilityNodeInfo rootNode) {
+        return NodeUtil.findNode(rootNode, "");
+    }
+
+    @Override
+    public AccessibilityNodeInfo getSeriesNodeFromItem(@NonNull final AccessibilityNodeInfo itemNode) throws Exception {
+        return null;
+    }
+
+    @Override
+    public AccessibilityNodeInfo getModelListNode(@NonNull final AccessibilityNodeInfo rootNode) {
+        return NodeUtil.findNode(rootNode, "");
+    }
+
+    @Override
+    public String getModelIdentity(@NonNull final AccessibilityNodeInfo itemNode) throws Exception {
+
+
+        return null;
+    }
+
+    @Override
+    public boolean needExitSeriesList(final AccessibilityNodeInfo rootNode) {
+        return false;
+    }
+
+    @Override
+    public boolean needExitModelList(final AccessibilityNodeInfo rootNode) {
+        return false;
+    }
+
+    @Override
+    public boolean needExitDetail(final AccessibilityNodeInfo rootNode) {
+        return false;
     }
 }

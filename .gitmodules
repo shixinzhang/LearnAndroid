@@ -1,3 +1,6 @@
 [submodule "sxframework"]
 	path = sxframework
 	url = https://github.com/shixinzhang/sxframework.git
+[submodule "android-utils"]
+	path = android-utils
+	url = https://github.com/shixinzhang/android-utils.git

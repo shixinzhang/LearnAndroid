@@ -35,18 +35,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import top.shixinzhang.datacrawler.accessibility.WxAutoClick;
-import top.shixinzhang.datacrawler.model.SupplierInfoBean;
-import top.shixinzhang.datacrawler.utils.AlertUtil;
-import top.shixinzhang.datacrawler.utils.ApplicationUtil;
-import top.shixinzhang.datacrawler.utils.DateUtils;
-import top.shixinzhang.datacrawler.utils.FileUtils;
-import top.shixinzhang.datacrawler.utils.NodeUtil;
-import top.shixinzhang.datacrawler.utils.PageUtil;
-import top.shixinzhang.datacrawler.utils.ShellUtil;
-import top.shixinzhang.datacrawler.utils.StringUtil;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
 import top.shixinzhang.mvpcrawler.mvp.presenter.CommonPresenter;
+import top.shixinzhang.utils.DateUtils;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class DataCrawlerService extends AccessibilityService implements Handler.Callback {
