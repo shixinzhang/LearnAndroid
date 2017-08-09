@@ -27,9 +27,11 @@ import java.util.Map;
 import java.util.Set;
 
 import io.reactivex.Observable;
+import top.shixinzhang.mvpcrawler.Config;
 import top.shixinzhang.mvpcrawler.entity.SupplierInfoBean;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
 import top.shixinzhang.utils.DateUtils;
+import top.shixinzhang.utils.FileUtils;
 
 /**
  * Description:
@@ -48,11 +50,13 @@ public class CrawlerModel implements CrawlerContract.Model {
     @EventMode
     private int mMode = MODE_START;
     private int mLastSavePhoneSize; //上次保存时的电话数量
+    private SupplierInfoBean mCurrentSupplier;
     private String mFileTimeStamp = DateUtils.getMMddhhmmss(System.currentTimeMillis());
 
     private Set<String> mClickedBrandsNameSet = new HashSet<>();
     private Set<String> mClickedSeriesNameSet = new HashSet<>();
     private Set<String> mClickedModelNameSet = new HashSet<>();
+    private Set<SupplierInfoBean> mSupplierInfoSet = new HashSet<>();
     private Map<String, String> mPhoneMap = new HashMap<>();
 
     public static CrawlerModel create() {
@@ -100,8 +104,13 @@ public class CrawlerModel implements CrawlerContract.Model {
     }
 
     @Override
-    public void setCurrentCarName() {
+    public void setCurrentSupplier(@NonNull final SupplierInfoBean supplier) {
+        mCurrentSupplier = supplier;
+    }
 
+    @Override
+    public SupplierInfoBean getCurrentSupplier() {
+        return mCurrentSupplier;
     }
 
     @Override
@@ -110,8 +119,19 @@ public class CrawlerModel implements CrawlerContract.Model {
     }
 
     @Override
-    public Set<SupplierInfoBean> addSupplier(final SupplierInfoBean supplierInfoBean) {
-        return null;
+    public void addSupplier(final SupplierInfoBean supplierInfoBean) {
+        getSupplierInfoSet().add(supplierInfoBean);
+    }
+
+    @NonNull
+    @Override
+    public Set<SupplierInfoBean> getSupplierInfoSet() {
+        return mSupplierInfoSet;
+    }
+
+    @Override
+    public void setSupplierInfoSet(@NonNull final Set<SupplierInfoBean> supplierInfoSet) {
+        mSupplierInfoSet = supplierInfoSet;
     }
 
     @Override
@@ -143,12 +163,23 @@ public class CrawlerModel implements CrawlerContract.Model {
     @Override
     public void saveInfo() {
         Collection<String> values = getPhoneMap().values();
-        HashSet<String> phoneSet = new HashSet<>(values);
+        final HashSet<String> phoneSet = new HashSet<>(values);
 
-        if (getLastSavePhoneSize() != phoneSet.size()){
+        if (getLastSavePhoneSize() != phoneSet.size()) {
             Log.d(TAG, phoneSet.size() + " , " + phoneSet.toString());
             setLastSavePhoneSize(phoneSet.size());
+            final String path = String.format("%s%s_%s_%s.txt", Config.EXT_DIR, "车镇_去重", mFileTimeStamp, "number");
+            final String duplicatePath = String.format("%s%s_%s_%s.txt", Config.EXT_DIR, "车镇_未去重", mFileTimeStamp, "number");
+            final String fullInfoPath = String.format("%s%s_%s_%s.txt", Config.EXT_DIR, "车镇_未去重", mFileTimeStamp, "完整信息");
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
 
+                    FileUtils.writeFile(path, phoneSet.size() + "\n" + phoneSet.toString(), false);
+                    FileUtils.writeFile(duplicatePath, getPhoneMap().size() + "\n" + getPhoneMap().toString(), false);
+                    FileUtils.writeFile(fullInfoPath, getSupplierInfoSet().size() + "\n" + getSupplierInfoSet().toString(), false);
+                }
+            }).start();
 
 
         }

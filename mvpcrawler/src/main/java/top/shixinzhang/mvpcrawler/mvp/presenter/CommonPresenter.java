@@ -23,15 +23,20 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import java.util.Map;
+
 import top.shixinzhang.mvpcrawler.Config;
+import top.shixinzhang.mvpcrawler.entity.SupplierInfoBean;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
 import top.shixinzhang.utils.NodeUtils;
 
 import static top.shixinzhang.mvpcrawler.mvp.CrawlerContract.Model.MODE_GET_INFO;
+import static top.shixinzhang.mvpcrawler.mvp.CrawlerContract.Model.MODE_GET_NUMBER;
 import static top.shixinzhang.mvpcrawler.mvp.CrawlerContract.Model.MODE_SELECT_BRAND;
 import static top.shixinzhang.mvpcrawler.mvp.CrawlerContract.Model.MODE_SELECT_CAR_MODEL;
 import static top.shixinzhang.mvpcrawler.mvp.CrawlerContract.Model.MODE_SELECT_CAR_SERIES;
 import static top.shixinzhang.mvpcrawler.mvp.CrawlerContract.Model.MODE_SELECT_SOURCE_TYPE;
+import static top.shixinzhang.mvpcrawler.mvp.CrawlerContract.Model.MODE_START;
 
 /**
  * Description:
@@ -64,11 +69,11 @@ public class CommonPresenter extends BasePresenter {
 
         int mode = getModel().getMode();
         switch (mode) {
-            case CrawlerContract.Model.MODE_START:
+            case MODE_START:
                 prepare(className);
                 openBrandList(rootNode, className);
                 break;
-            case CrawlerContract.Model.MODE_SELECT_BRAND:   //选择品牌
+            case MODE_SELECT_BRAND:   //选择品牌
                 iterateBrands(rootNode, className);
                 break;
             case MODE_SELECT_CAR_SERIES:   //选择车系
@@ -80,8 +85,11 @@ public class CommonPresenter extends BasePresenter {
             case MODE_SELECT_CAR_MODEL:   //选择车款
                 iterateModels(rootNode, className);
                 break;
-            case CrawlerContract.Model.MODE_GET_INFO:
-                getInfo(className);
+            case MODE_GET_INFO:   //详情页
+                getInfo(rootNode, className);
+                break;
+            case MODE_GET_NUMBER:   //电话
+                getNumber(rootNode, className);
                 break;
         }
 
@@ -112,14 +120,14 @@ public class CommonPresenter extends BasePresenter {
         if (!getView().isMainTab(className)) {
             return;
         }
-        if (getView().enterBrandList(rootNode)) {
+        if (getView().openBrandList(rootNode)) {
             getModel().setMode(CrawlerContract.Model.MODE_SELECT_BRAND);
         }
     }
 
     @Override
     public void iterateBrands(final AccessibilityNodeInfo rootNode, final String className) {
-        if (!getView().isBrandListPage(className)) {
+        if (!getView().isBrandListPage(rootNode, className)) {
             return;
         }
 
@@ -247,7 +255,7 @@ public class CommonPresenter extends BasePresenter {
         SystemClock.sleep(100);
 
         AccessibilityNodeInfo listNode = getView().getModelListNode(rootNode);
-        if (listNode != null){
+        if (listNode != null) {
             int recyclerViewCount = listNode.getChildCount();
             int checkIndex = 0;
             AccessibilityNodeInfo child;
@@ -262,7 +270,7 @@ public class CommonPresenter extends BasePresenter {
                         getModel().setMode(MODE_GET_INFO);
                         return;
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -272,19 +280,72 @@ public class CommonPresenter extends BasePresenter {
             }
 
 
-        }else {
+        } else {
             Log.d(TAG, "没找到车款列表的 RecyclerView 节点");
         }
 
     }
 
     @Override
-    public void enterDetail() {
+    public void getInfo(final AccessibilityNodeInfo rootNode, final String className) {
+        if (!getView().isDetailPage(className)) {
+            return;
+        }
+
+        SupplierInfoBean supplierInfoBean = null;
+        try {
+            supplierInfoBean = getView().getInfo(rootNode);
+            if (supplierInfoBean == null || TextUtils.isEmpty(supplierInfoBean.getPublishInfo())) {
+                return;
+            }
+
+            getModel().setCurrentSupplier(supplierInfoBean);        //保存当前的信息，为了下一步继续使用
+
+            Map<String, String> phoneMap = getModel().getPhoneMap();
+            if (phoneMap.containsKey(supplierInfoBean.getPublishInfo()) &&
+                    !"1".equals(phoneMap.get(supplierInfoBean.getPublishInfo()))) {  //点过了
+                getModel().setMode(MODE_SELECT_CAR_MODEL);
+                clickBack();
+                return;
+            }
+
+            phoneMap.put(supplierInfoBean.getPublishInfo(), "1");
+        } catch (Exception e) {
+            e.printStackTrace();
+            getModel().setMode(MODE_SELECT_CAR_MODEL);
+            clickBack();
+        }
+
+        if (supplierInfoBean != null){
+            if (TextUtils.isEmpty(supplierInfoBean.getPhone())){        //没拿到电话数据
+                if (getView().openNumberPage(rootNode)) {   //打开电话页面
+                    getModel().setMode(MODE_GET_NUMBER);
+                }
+            }
+        }
 
     }
 
     @Override
-    public void getInfo(final String className) {
+    public void getNumber(final AccessibilityNodeInfo rootNode, final String className) {
+        if (!getView().isNumberPage(className)){
+            return;
+        }
+
+        try {
+            SupplierInfoBean supplierInfoBean = getView().getNumberInfo(rootNode);
+            if (supplierInfoBean != null){
+                getModel().getCurrentSupplier().clone(supplierInfoBean);
+                getModel().addSupplier(getModel().getCurrentSupplier());
+                getModel().getPhoneMap().put(getModel().getCurrentSupplier().getPublishInfo(),
+                        getModel().getCurrentSupplier().getPhone());
+
+                clickBack();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "获取电话信息失败");
+        }
 
     }
 

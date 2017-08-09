@@ -16,6 +16,10 @@
 
 package top.shixinzhang.mvpcrawler;
 
+import android.os.Environment;
+
+import java.io.File;
+
 /**
  * Description:
  * <br> 配置信息
@@ -28,6 +32,9 @@ package top.shixinzhang.mvpcrawler;
  */
 
 public class Config {
+
+    public static final String FOLDER = "mvpcrawler" + File.separator;
+    public static final String EXT_DIR = Environment.getExternalStorageDirectory() + File.separator + FOLDER;
     // app 名称
     public final static String APP_NAME_SELL_NICE_CAR = "sell_nice_car";
 

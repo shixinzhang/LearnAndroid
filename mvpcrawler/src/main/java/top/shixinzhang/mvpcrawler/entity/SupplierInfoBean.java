@@ -16,6 +16,8 @@
 
 package top.shixinzhang.mvpcrawler.entity;
 
+import android.text.TextUtils;
+
 import java.io.Serializable;
 
 /**
@@ -29,12 +31,22 @@ import java.io.Serializable;
  * <br> https://about.me/shixinzhang
  */
 
-public class SupplierInfoBean implements Serializable{
+public class SupplierInfoBean implements Serializable {
 
     private String phone;
     private String name;
     private String company;
     private String publishInfo; //发布的信息
+
+    public SupplierInfoBean() {
+    }
+
+    public SupplierInfoBean(final String phone, final String name, final String company, final String publishInfo) {
+        this.phone = phone;
+        this.name = name;
+        this.company = company;
+        this.publishInfo = publishInfo;
+    }
 
     public String getPhone() {
         return phone;
@@ -80,5 +92,23 @@ public class SupplierInfoBean implements Serializable{
                 ", company='" + company + '\'' +
                 ", publishInfo='" + publishInfo + '\'' +
                 '}';
+    }
+
+    public void clone(SupplierInfoBean another) throws CloneNotSupportedException {
+        if (another == null) {
+            return;
+        }
+        if (TextUtils.isEmpty(another.getPhone())) {
+            setPhone(another.getPhone());
+        }
+        if (TextUtils.isEmpty(another.getCompany())) {
+            setCompany(another.getCompany());
+        }
+        if (TextUtils.isEmpty(another.getPublishInfo())) {
+            setPublishInfo(another.getPublishInfo());
+        }
+        if (TextUtils.isEmpty(another.getName())) {
+            setName(another.getName());
+        }
     }
 }

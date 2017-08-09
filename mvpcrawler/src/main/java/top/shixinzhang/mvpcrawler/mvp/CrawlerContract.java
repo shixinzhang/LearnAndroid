@@ -30,6 +30,7 @@ import java.util.Set;
 
 import io.reactivex.Observable;
 import top.shixinzhang.mvpcrawler.entity.SupplierInfoBean;
+import top.shixinzhang.mvpcrawler.mvp.model.CrawlerModel;
 import top.shixinzhang.mvpcrawler.mvp.view.BaseView;
 
 /**
@@ -49,6 +50,7 @@ public interface CrawlerContract {
      * 不参与业务，只负责数据的增删改查
      */
     interface Model {
+
         @Retention(RetentionPolicy.SOURCE)
         @IntDef(flag = false,
                 value = {MODE_STOP, MODE_START, MODE_GET_INFO, MODE_GET_NUMBER, MODE_SELECT_BRAND,
@@ -91,14 +93,24 @@ public interface CrawlerContract {
         @NonNull
         Set<String> getClickedModels(); //点击过的品牌名
 
+        @NonNull
+        Set<SupplierInfoBean> getSupplierInfoSet(); //供应商信息集合
+
+        void setSupplierInfoSet(@NonNull final Set<SupplierInfoBean> supplierInfoSet);
+
+//        @NonNull
+//        Map<String, String> getClickedDetails();
+
         @Nullable
         String getCurrentCarName(); //当前车名称
 
-        void setCurrentCarName();
+        SupplierInfoBean getCurrentSupplier();
+
+        void setCurrentSupplier(@NonNull SupplierInfoBean supplier);
 
         Observable<SupplierInfoBean> updateCurrentSupplierInfo(SupplierInfoBean currentSupplier);   //更新当前供应商信息
 
-        Set<SupplierInfoBean> addSupplier(SupplierInfoBean supplierInfoBean);   //添加供应商信息
+        void addSupplier(SupplierInfoBean supplierInfoBean);   //添加供应商信息
 
         void addClickedBrands(@NonNull String carBrandName);    //添加点击的品牌名称
 
@@ -117,7 +129,7 @@ public interface CrawlerContract {
 
         boolean isMainTab(String className);    //是否在首页
 
-        boolean isBrandListPage(String className);  //是否在品牌列表页面
+        boolean isBrandListPage(final AccessibilityNodeInfo rootNode, String className);  //是否在品牌列表页面
 
         boolean isSeriesPage(String className); //是否在车系页面
 
@@ -125,7 +137,13 @@ public interface CrawlerContract {
 
         boolean isSourceTypePage(String className); //是否在选择来源页面
 
-        boolean enterBrandList(@NonNull final AccessibilityNodeInfo rootNode);   //打开有品牌列表的页面
+        boolean isDetailPage(String className); //是否在详情页
+
+        boolean isNumberPage(String className); //是否在获取电话页面
+
+        boolean openBrandList(@NonNull final AccessibilityNodeInfo rootNode);   //打开有品牌列表的页面
+
+        boolean openNumberPage(@NonNull AccessibilityNodeInfo rootNode); //打开拨号页面
 
         AccessibilityNodeInfo getBrandListNode(@NonNull AccessibilityNodeInfo rootNode); //获取品牌列表 Node
 
@@ -138,6 +156,10 @@ public interface CrawlerContract {
         AccessibilityNodeInfo getModelListNode(@NonNull AccessibilityNodeInfo rootNode); //获取车款列表 Node
 
         String getModelIdentity(@NonNull AccessibilityNodeInfo itemNode) throws Exception;    //获取车款标示信息
+
+        SupplierInfoBean getInfo(@NonNull AccessibilityNodeInfo rootNode) throws Exception;   //获取基本信息，车款，公司，姓名，如果需要的话再获取电话
+
+        SupplierInfoBean getNumberInfo(@NonNull AccessibilityNodeInfo rootNode) throws Exception; //获取电话信息
 
         boolean needExitSeriesList(AccessibilityNodeInfo rootNode);  //需要退出车系列表页面
 
@@ -168,9 +190,9 @@ public interface CrawlerContract {
 
         void iterateModels(final AccessibilityNodeInfo rootNode, final String className);   //遍历车款
 
-        void enterDetail(); //进入详情
+        void getInfo(final AccessibilityNodeInfo rootNode, final String className); //获取信息
 
-        void getInfo(final String className); //获取信息
+        void getNumber(final AccessibilityNodeInfo rootNode, final String className); //获取电话
 
         void receiveEvent(AccessibilityNodeInfo rootNode, AccessibilityEvent event);
     }

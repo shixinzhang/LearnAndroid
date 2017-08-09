@@ -17,14 +17,16 @@
 package top.shixinzhang.mvpcrawler.mvp.view;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.util.Arrays;
 import java.util.List;
 
 import top.shixinzhang.mvpcrawler.Config;
+import top.shixinzhang.mvpcrawler.entity.SupplierInfoBean;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
-import top.shixinzhang.mvpcrawler.utils.NodeUtil;
+import top.shixinzhang.utils.NodeUtils;
 
 /**
  * Description:
@@ -38,6 +40,7 @@ import top.shixinzhang.mvpcrawler.utils.NodeUtil;
  */
 
 public class SellNiceCarView implements CrawlerContract.View {
+    private final String TAG = this.getClass().getSimpleName();
     private List<String> mCoreClassNameList = Arrays.asList("");
 
     public static SellNiceCarView create() {
@@ -65,8 +68,9 @@ public class SellNiceCarView implements CrawlerContract.View {
     }
 
     @Override
-    public boolean isBrandListPage(final String className) {
-        return false;
+    public boolean isBrandListPage(final AccessibilityNodeInfo rootNode, final String className) {
+        boolean result = NodeUtils.hasText(rootNode, "发布车源");
+        return result;
     }
 
     @Override
@@ -84,6 +88,16 @@ public class SellNiceCarView implements CrawlerContract.View {
         return false;
     }
 
+    @Override
+    public boolean isDetailPage(final String className) {
+        return false;
+    }
+
+    @Override
+    public boolean isNumberPage(final String className) {
+        return false;
+    }
+
     /**
      * 进入品牌列表页面
      *
@@ -91,42 +105,93 @@ public class SellNiceCarView implements CrawlerContract.View {
      * @return
      */
     @Override
-    public boolean enterBrandList(@NonNull final AccessibilityNodeInfo rootNode) {
-        boolean result = NodeUtil.actionText(rootNode, "车源/寻车");
+    public boolean openBrandList(@NonNull final AccessibilityNodeInfo rootNode) {
+        boolean result = NodeUtils.actionText(rootNode, "车源/寻车");
+//        com.maihaoche.bentley:id/main_bottom_source
+
         // TODO: 17/8/7 滑动一下 ?
         return result;
     }
 
+    /**
+     * 打开拨号页面
+     * @param rootNode
+     * @return
+     */
     @Override
-    public AccessibilityNodeInfo getBrandListNode(@NonNull final AccessibilityNodeInfo rootNode) {
-        return NodeUtil.findNode(rootNode, "com.maihaoche.bentley:id/search_list_brand");
+    public boolean openNumberPage(@NonNull final AccessibilityNodeInfo rootNode) {
+        boolean clickResult = NodeUtils.clickNode(rootNode, "电话咨询");
+        return clickResult;
     }
 
     @Override
-    public AccessibilityNodeInfo getBrandNodeFromItem(@NonNull final AccessibilityNodeInfo itemNode) throws Exception{
+    public AccessibilityNodeInfo getBrandListNode(@NonNull final AccessibilityNodeInfo rootNode) {
+        return NodeUtils.findNode(rootNode, "com.maihaoche.bentley:id/search_list_brand");
+    }
+
+    @Override
+    public AccessibilityNodeInfo getBrandNodeFromItem(@NonNull final AccessibilityNodeInfo itemNode) throws Exception {
         return itemNode.getChild(0).getChild(1);
     }
 
     @Override
     public AccessibilityNodeInfo getSeriesListNode(final AccessibilityNodeInfo rootNode) {
-        return NodeUtil.findNode(rootNode, "");
+        return NodeUtils.findNode(rootNode, "com.maihaoche.bentley:id/list");
     }
 
     @Override
     public AccessibilityNodeInfo getSeriesNodeFromItem(@NonNull final AccessibilityNodeInfo itemNode) throws Exception {
-        return null;
+        return itemNode.getChild(0);
     }
 
     @Override
     public AccessibilityNodeInfo getModelListNode(@NonNull final AccessibilityNodeInfo rootNode) {
-        return NodeUtil.findNode(rootNode, "");
+        return NodeUtils.findNode(rootNode, "android:id/list");
     }
 
     @Override
     public String getModelIdentity(@NonNull final AccessibilityNodeInfo itemNode) throws Exception {
+        if (NodeUtils.hasText(itemNode, "秒车库") || NodeUtils.hasText(itemNode, "推荐车源")) {
+            return null;
+        }
 
+        if (itemNode.getChildCount() < 3) {
+            return null;
+        }
 
-        return null;
+        AccessibilityNodeInfo modelNameNode = itemNode.getChild(1).getChild(0);
+        if (modelNameNode == null || modelNameNode.getText() == null) {
+            Log.e(TAG, "车源型号名称节点 没找到！");
+            return null;
+        }
+        StringBuilder identityStr = new StringBuilder(modelNameNode.getText().toString());
+        AccessibilityNodeInfo priceNode = itemNode.getChild(1).getChild(1);
+        AccessibilityNodeInfo colorNode = itemNode.getChild(3);
+        AccessibilityNodeInfo companyNode = itemNode.getChild(5).getChild(0);
+
+        NodeUtils.safetyAppendString(identityStr, priceNode);
+        NodeUtils.safetyAppendString(identityStr, colorNode);
+        NodeUtils.safetyAppendString(identityStr, companyNode);
+
+        return identityStr.toString();
+    }
+
+    @Override
+    public SupplierInfoBean getInfo(@NonNull final AccessibilityNodeInfo rootNode) throws Exception{
+        String carName = NodeUtils.getTextByNodeId(rootNode, "com.maihaoche.bentley:id/tv_name");//车辆名称
+        String value = NodeUtils.getTextByNodeId(rootNode, "com.maihaoche.bentley:id/value");
+        String company = NodeUtils.getTextByNodeId(rootNode, "com.maihaoche.bentley:id/sale_name");//公司
+
+        return new SupplierInfoBean(null, null, company, carName + value);
+    }
+
+    @Override
+    public SupplierInfoBean getNumberInfo(@NonNull final AccessibilityNodeInfo rootNode) throws Exception {
+
+        String name = NodeUtils.getTextByNodeId(rootNode, "com.maihaoche.bentley:id/tv_name");  //名称
+        String phone = NodeUtils.getTextByNodeId(rootNode, "com.maihaoche.bentley:id/tv_number");
+
+        return new SupplierInfoBean(phone, name, null, null);
     }
 
     @Override
@@ -143,4 +208,6 @@ public class SellNiceCarView implements CrawlerContract.View {
     public boolean needExitDetail(final AccessibilityNodeInfo rootNode) {
         return false;
     }
+
+
 }
