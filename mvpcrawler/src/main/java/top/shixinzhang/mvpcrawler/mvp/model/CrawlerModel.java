@@ -226,7 +226,6 @@ public class CrawlerModel implements CrawlerContract.Model {
                 jsonObject.put("company", supplierInfoBean.getCompany());
                 jsonObject.put("publishInfo", supplierInfoBean.getPublishInfo());
                 jsonArray.put(jsonObject);
-                jsonArray.put("\n");
             } catch (JSONException e) {
                 e.printStackTrace();
             }

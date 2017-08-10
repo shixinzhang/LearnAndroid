@@ -35,6 +35,7 @@ public class Config {
 
     public static final String FOLDER = "mvpcrawler" + File.separator;
     public static final String EXT_DIR = Environment.getExternalStorageDirectory() + File.separator + FOLDER;
+    public static final String CRASH_LOG_PATH = EXT_DIR + File.separator + "crash" + File.separator + "crashlog.txt";
     // app 名称
     public final static String APP_NAME_SELL_NICE_CAR = "卖好车";
 
