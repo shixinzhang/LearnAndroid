@@ -16,7 +16,9 @@
 
 package top.shixinzhang.mvpcrawler;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -26,8 +28,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
 import top.shixinzhang.mvpcrawler.mvp.model.CrawlerModel;
-import top.shixinzhang.mvpcrawler.mvp.presenter.CommonPresenter;
 import top.shixinzhang.mvpcrawler.mvp.view.SellNiceCarView;
+import top.shixinzhang.utils.ServiceUtils;
+import top.shixinzhang.utils.ShellUtils;
+
+import static top.shixinzhang.mvpcrawler.DataCrawlerService.MODE_KEY;
+import static top.shixinzhang.mvpcrawler.mvp.CrawlerContract.Model.MODE_START;
 
 /**
  * Description:
@@ -60,13 +66,35 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        ShellUtils.testRoot(this);
     }
 
 
     @OnClick(R.id.btn_sell_nice_car)
-    public void crawlerSellNiceCar(){
-        DataCrawlerService.setPresenter(SellNiceCarView.create(), CrawlerModel.create());
+    public void crawlerSellNiceCar() {
+        if (!hasEnv()) {
+            goToOpenAccessibility(0);
+        } else {
+            DataCrawlerService.setPresenter(SellNiceCarView.create(), CrawlerModel.create());
 
+            Intent intent = new Intent(this, DataCrawlerService.class);
+            intent.putExtra(MODE_KEY, MODE_START);
+            startService(intent);
+        }
+    }
 
+    @OnClick(R.id.btn_stop)
+    public void stop() {
+        stopService(new Intent(MainActivity.this, DataCrawlerService.class));
+    }
+
+    private boolean hasEnv() {
+        return ServiceUtils.isAccessibilitySettingsOn(MainActivity.this, "top.shixinzhang.mvpcrawler/top.shixinzhang.mvpcrawler.DataCrawlerService");
+    }
+
+    private void goToOpenAccessibility(int requestCode) {
+        Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivityForResult(intent, requestCode);  //在当前 Task 中，才能收到回调
     }
 }

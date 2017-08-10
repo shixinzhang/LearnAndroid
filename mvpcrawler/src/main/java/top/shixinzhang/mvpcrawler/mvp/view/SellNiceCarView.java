@@ -41,7 +41,9 @@ import top.shixinzhang.utils.NodeUtils;
 
 public class SellNiceCarView implements CrawlerContract.View {
     private final String TAG = this.getClass().getSimpleName();
-    private List<String> mCoreClassNameList = Arrays.asList("");
+    private List<String> mCoreClassNameList = Arrays.asList(Config.CLASS_NAME_SNC_MAIN_TAB,
+            Config.CLASS_NAME_SNC_SERIES, Config.CLASS_NAME_SNC_MODELS, Config.CLASS_NAME_SNC_DETAIL,
+            Config.DIALOG_NAME_CALL, Config.CLASS_NAME_RECYCLER_VIEW, Config.CLASS_NAME_CALL_DIALOG);
 
     public static SellNiceCarView create() {
         return new SellNiceCarView();
@@ -58,29 +60,37 @@ public class SellNiceCarView implements CrawlerContract.View {
     }
 
     @Override
+    public String getAppPackageName() {
+        return "com.maihaoche.bentley";
+    }
+
+    @Override
     public boolean isCorePage(@NonNull final String className) {
         return mCoreClassNameList.contains(className);
     }
 
     @Override
     public boolean isMainTab(@NonNull final String className) {
-        return className.equals(Config.CLASS_NAME_SNC_MAIN_TAB);
+        return Config.CLASS_NAME_SNC_MAIN_TAB.equals(className);
     }
 
     @Override
     public boolean isBrandListPage(final AccessibilityNodeInfo rootNode, final String className) {
-        boolean result = NodeUtils.hasText(rootNode, "发布车源");
-        return result;
+        return NodeUtils.hasText(rootNode, "发布车源");
     }
 
     @Override
     public boolean isSeriesPage(final String className) {
-        return false;
+        return Config.CLASS_NAME_SNC_SERIES.equals(className) || isRecyclerView(className);
     }
 
     @Override
     public boolean isModelsPage(final String className) {
-        return false;
+        return Config.CLASS_NAME_SNC_MODELS.equals(className) || isRecyclerView(className);
+    }
+
+    private boolean isRecyclerView(final String className) {
+        return Config.CLASS_NAME_RECYCLER_VIEW.equals(className);
     }
 
     @Override
@@ -90,12 +100,12 @@ public class SellNiceCarView implements CrawlerContract.View {
 
     @Override
     public boolean isDetailPage(final String className) {
-        return false;
+        return Config.CLASS_NAME_SNC_DETAIL.equals(className) || isRecyclerView(className);
     }
 
     @Override
     public boolean isNumberPage(final String className) {
-        return false;
+        return Config.DIALOG_NAME_CALL.equals(className);
     }
 
     /**
@@ -115,12 +125,16 @@ public class SellNiceCarView implements CrawlerContract.View {
 
     /**
      * 打开拨号页面
+     *
      * @param rootNode
      * @return
      */
     @Override
     public boolean openNumberPage(@NonNull final AccessibilityNodeInfo rootNode) {
         boolean clickResult = NodeUtils.clickNode(rootNode, "电话咨询");
+        if (!clickResult){
+            clickResult = NodeUtils.clickNode(rootNode, "com.maihaoche.bentley:id/contact");
+        }
         return clickResult;
     }
 
@@ -155,10 +169,10 @@ public class SellNiceCarView implements CrawlerContract.View {
             return null;
         }
 
-        if (itemNode.getChildCount() < 3) {
+        if (itemNode.getChildCount() < 3 || itemNode.getChild(1) == null) {
+            Log.e(TAG, "车源型号名称节点 没找到！");
             return null;
         }
-
         AccessibilityNodeInfo modelNameNode = itemNode.getChild(1).getChild(0);
         if (modelNameNode == null || modelNameNode.getText() == null) {
             Log.e(TAG, "车源型号名称节点 没找到！");
@@ -177,7 +191,7 @@ public class SellNiceCarView implements CrawlerContract.View {
     }
 
     @Override
-    public SupplierInfoBean getInfo(@NonNull final AccessibilityNodeInfo rootNode) throws Exception{
+    public SupplierInfoBean getInfo(@NonNull final AccessibilityNodeInfo rootNode) throws Exception {
         String carName = NodeUtils.getTextByNodeId(rootNode, "com.maihaoche.bentley:id/tv_name");//车辆名称
         String value = NodeUtils.getTextByNodeId(rootNode, "com.maihaoche.bentley:id/value");
         String company = NodeUtils.getTextByNodeId(rootNode, "com.maihaoche.bentley:id/sale_name");//公司
@@ -201,7 +215,7 @@ public class SellNiceCarView implements CrawlerContract.View {
 
     @Override
     public boolean needExitModelList(final AccessibilityNodeInfo rootNode) {
-        return false;
+        return rootNode != null && (NodeUtils.hasText(rootNode, "没有更多了") || NodeUtils.hasText(rootNode, "发布寻车")) ;
     }
 
     @Override

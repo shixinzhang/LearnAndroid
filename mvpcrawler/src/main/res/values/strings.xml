@@ -18,4 +18,7 @@
     <string name="app_name">mvpcrawler</string>
     <string name="sell_nice_car">卖好车</string>
     <string name="yi_jie_hao_che">易捷好车</string>
+    <string name="title">mvpcrawler-数据爬取</string>
+    <string name="description">开启辅助服务后即可模拟点击</string>
+    <string name="app_name_maihaoche">com.maihaoche.bentley</string>
 </resources>

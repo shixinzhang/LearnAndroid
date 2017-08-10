@@ -30,7 +30,6 @@ import java.util.Set;
 
 import io.reactivex.Observable;
 import top.shixinzhang.mvpcrawler.entity.SupplierInfoBean;
-import top.shixinzhang.mvpcrawler.mvp.model.CrawlerModel;
 import top.shixinzhang.mvpcrawler.mvp.view.BaseView;
 
 /**
@@ -50,6 +49,14 @@ public interface CrawlerContract {
      * 不参与业务，只负责数据的增删改查
      */
     interface Model {
+
+        void setLastModelName(String modelIdentityStr);
+
+        String getLastModelName();
+
+        String getLastSeriesName();
+
+        void setLastSeriesName(String carSeriesName);
 
         @Retention(RetentionPolicy.SOURCE)
         @IntDef(flag = false,
@@ -124,6 +131,8 @@ public interface CrawlerContract {
      */
     interface View extends BaseView<Presenter> {
         String getAppName();    //获取 app 名称
+
+        String getAppPackageName(); //获取应用包名
 
         boolean isCorePage(String className);   //是否是主要页面列表其中之一
 

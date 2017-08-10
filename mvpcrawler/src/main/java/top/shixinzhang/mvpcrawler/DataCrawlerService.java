@@ -18,6 +18,7 @@ package top.shixinzhang.mvpcrawler;
 
 import android.accessibilityservice.AccessibilityService;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
@@ -31,34 +32,23 @@ import java.util.List;
 
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
 import top.shixinzhang.mvpcrawler.mvp.presenter.CommonPresenter;
-import top.shixinzhang.utils.DateUtils;
+
+import static top.shixinzhang.mvpcrawler.mvp.CrawlerContract.Model.MODE_START;
+import static top.shixinzhang.mvpcrawler.mvp.CrawlerContract.Model.MODE_STOP;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class DataCrawlerService extends AccessibilityService implements Handler.Callback {
 
-    public static final String MODE_KEY = "MODE";
     public final String TAG = DataCrawlerService.class.getSimpleName();
-    private String mCurrentCarName;
-    private int mScreenHeight;
+
+    public static final String MODE_KEY = "MODE";
+    private static String mCurrentApp;
     public static String sSwipeCmd;
-    private String mSwipeCmdUp; //上滑
-
-    private String mCurrentSeriesName;  //当前查看的车系名称
-    private String mFileTimeStamp = DateUtils.getMMddhhmmss(System.currentTimeMillis());
-
     private int mMode;
-    public static final int MODE_STOP = -1; //停止
-    public static final int MODE_SELECT_BRAND = 1;    //首页，选择品牌
-    private final int MODE_SELECT_CAR_SERIES = 2;   //选择车系
-    private final int MODE_SELECT_CAR_MODEL = 3;    //选择车款
-    private final int MODE_CLICK_PHONE_NODE = 4;
-    private final int MODE_GET_NUMBER = 5;
-//    private boolean mFirstOpen = true;
 
     public static CrawlerContract.Presenter mPresenter;
+    public static Context mContext;
 
-
-    private static List<String> mWhiteClassNameList;    //白名单
 
     @Override
     protected void onServiceConnected() {
@@ -69,18 +59,17 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
     @Override
     public void onCreate() {
         super.onCreate();
-        mScreenHeight = getApplicationContext().getResources().getDisplayMetrics().heightPixels;
-        sSwipeCmd = String.format("input swipe %d %d %d %d", 10, mScreenHeight - 250, 10, 100);
-        mSwipeCmdUp = String.format("input swipe %d %d %d %d", 10, 100, 10, mScreenHeight - 100);
-
+        int screenHeight = getApplicationContext().getResources().getDisplayMetrics().heightPixels;
+        sSwipeCmd = String.format("input swipe %d %d %d %d", 10, screenHeight - 200, 10, 100);
+        mContext = this;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (null != intent) {
-            mMode = intent.getIntExtra(MODE_KEY, MODE_SELECT_BRAND);
+            mMode = intent.getIntExtra(MODE_KEY, MODE_STOP);
             Log.i(TAG, "onStartCommand mode:" + mMode);
-            if (mMode == MODE_SELECT_BRAND && mPresenter != null) {
+            if (mMode == MODE_START && mPresenter != null) {
                 getPresenter().startApp();
             }
         }
@@ -107,8 +96,16 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
 
     public static void setPresenter(@NonNull final CrawlerContract.View view, @NonNull final CrawlerContract.Model model) {
         mPresenter = new CommonPresenter(view, model);
+        mCurrentApp = view.getAppName();
     }
 
+    public static String getCurrentApp() {
+        return mCurrentApp;
+    }
+
+    public static void setCurrentApp(final String mCurrentApp) {
+        DataCrawlerService.mCurrentApp = mCurrentApp;
+    }
 
     @Override
     public void onInterrupt() {
@@ -136,6 +133,7 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
     @Override
     public boolean onUnbind(Intent intent) {
         showToast("自动点击服务被系统关闭了，请开启");
+        mContext = null;
         return super.onUnbind(intent);
 
     }

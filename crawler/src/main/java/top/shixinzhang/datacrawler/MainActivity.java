@@ -42,11 +42,9 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         ShellUtil.testRoot(this);
 
-        if (getIntent() != null) {
-            boolean resumeFromCrash = getIntent().getBooleanExtra(Config.RESUME_FROM_CRASH, false);
-            if (resumeFromCrash) {
-                openWx();
-            }
+        boolean resumeFromCrash = getIntent().getBooleanExtra(Config.RESUME_FROM_CRASH, false);
+        if (resumeFromCrash) {
+            openWx();
         }
 //        test();
     }

@@ -20,6 +20,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,6 +33,7 @@ import java.util.Set;
 
 import io.reactivex.Observable;
 import top.shixinzhang.mvpcrawler.Config;
+import top.shixinzhang.mvpcrawler.DataCrawlerService;
 import top.shixinzhang.mvpcrawler.entity.SupplierInfoBean;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
 import top.shixinzhang.utils.DateUtils;
@@ -58,6 +64,8 @@ public class CrawlerModel implements CrawlerContract.Model {
     private Set<String> mClickedModelNameSet = new HashSet<>();
     private Set<SupplierInfoBean> mSupplierInfoSet = new HashSet<>();
     private Map<String, String> mPhoneMap = new HashMap<>();
+    private String mLastIterateModelName;
+    private String mLastIterateSeriesName;
 
     public static CrawlerModel create() {
         return new CrawlerModel();
@@ -149,6 +157,26 @@ public class CrawlerModel implements CrawlerContract.Model {
         getClickedModels().add(modelIdentityStr);
     }
 
+    @Override
+    public void setLastModelName(final String modelIdentityStr) {
+        mLastIterateModelName = modelIdentityStr;
+    }
+
+    @Override
+    public String getLastModelName() {
+        return mLastIterateModelName;
+    }
+
+    @Override
+    public String getLastSeriesName() {
+        return mLastIterateSeriesName;
+    }
+
+    @Override
+    public void setLastSeriesName(final String carSeriesName) {
+        mLastIterateSeriesName = carSeriesName;
+    }
+
     @EventMode
     @Override
     public int getMode() {
@@ -168,16 +196,14 @@ public class CrawlerModel implements CrawlerContract.Model {
         if (getLastSavePhoneSize() != phoneSet.size()) {
             Log.d(TAG, phoneSet.size() + " , " + phoneSet.toString());
             setLastSavePhoneSize(phoneSet.size());
-            final String path = String.format("%s%s_%s_%s.txt", Config.EXT_DIR, "车镇_去重", mFileTimeStamp, "number");
-            final String duplicatePath = String.format("%s%s_%s_%s.txt", Config.EXT_DIR, "车镇_未去重", mFileTimeStamp, "number");
-            final String fullInfoPath = String.format("%s%s_%s_%s.txt", Config.EXT_DIR, "车镇_未去重", mFileTimeStamp, "完整信息");
+            final String path = String.format("%s%s_%s_%s.txt", getDirectoryPath(), "去重", mFileTimeStamp, "number");
+            final String fullInfoPath = String.format("%s%s_%s_%s.txt", getDirectoryPath(), "未去重", mFileTimeStamp, "完整信息");
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-
                     FileUtils.writeFile(path, phoneSet.size() + "\n" + phoneSet.toString(), false);
-                    FileUtils.writeFile(duplicatePath, getPhoneMap().size() + "\n" + getPhoneMap().toString(), false);
-                    FileUtils.writeFile(fullInfoPath, getSupplierInfoSet().size() + "\n" + getSupplierInfoSet().toString(), false);
+                    // TODO: 17/8/10 数据格式为 JSON
+                    FileUtils.writeFile(fullInfoPath, getSupplierInfoSet().size() + "\n" + getJsonResult(getSupplierInfoSet()), false);
                 }
             }).start();
 
@@ -186,9 +212,36 @@ public class CrawlerModel implements CrawlerContract.Model {
 
     }
 
+    private String getJsonResult(final Set<SupplierInfoBean> supplierInfoSet) {
+        if (supplierInfoSet == null) {
+            return "";
+        }
+        JSONObject jsonObject;
+        JSONArray jsonArray = new JSONArray();
+        for (SupplierInfoBean supplierInfoBean : supplierInfoSet) {
+            jsonObject = new JSONObject();
+            try {
+                jsonObject.put("phone", supplierInfoBean.getPhone());
+                jsonObject.put("name", supplierInfoBean.getName());
+                jsonObject.put("company", supplierInfoBean.getCompany());
+                jsonObject.put("publishInfo", supplierInfoBean.getPublishInfo());
+                jsonArray.put(jsonObject);
+                jsonArray.put("\n");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return jsonArray.toString();
+    }
+
     @NonNull
     @Override
     public Map<String, String> getPhoneMap() {
         return mPhoneMap;
+    }
+
+    public String getDirectoryPath() {
+        return Config.EXT_DIR + File.separator + DataCrawlerService.getCurrentApp() + File.separator;
     }
 }

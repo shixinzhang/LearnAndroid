@@ -98,17 +98,17 @@ public class SupplierInfoBean implements Serializable {
         if (another == null) {
             return;
         }
-        if (TextUtils.isEmpty(another.getPhone())) {
-            setPhone(another.getPhone());
+        if (!TextUtils.isEmpty(another.getPhone())) {
+            this.setPhone(another.getPhone());
         }
-        if (TextUtils.isEmpty(another.getCompany())) {
-            setCompany(another.getCompany());
+        if (!TextUtils.isEmpty(another.getCompany())) {
+            this.setCompany(another.getCompany());
         }
-        if (TextUtils.isEmpty(another.getPublishInfo())) {
-            setPublishInfo(another.getPublishInfo());
+        if (!TextUtils.isEmpty(another.getPublishInfo())) {
+            this.setPublishInfo(another.getPublishInfo());
         }
-        if (TextUtils.isEmpty(another.getName())) {
-            setName(another.getName());
+        if (!TextUtils.isEmpty(another.getName())) {
+            this.setName(another.getName());
         }
     }
 }

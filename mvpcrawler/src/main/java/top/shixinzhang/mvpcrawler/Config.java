@@ -36,8 +36,17 @@ public class Config {
     public static final String FOLDER = "mvpcrawler" + File.separator;
     public static final String EXT_DIR = Environment.getExternalStorageDirectory() + File.separator + FOLDER;
     // app 名称
-    public final static String APP_NAME_SELL_NICE_CAR = "sell_nice_car";
+    public final static String APP_NAME_SELL_NICE_CAR = "卖好车";
+
+    //包名
+    public static final String PKG_SELL_NICE_CAR = "com.maihaoche.bentley";
 
     //页面 className
-    public static final String CLASS_NAME_SNC_MAIN_TAB = "X";   //卖好车首页
+    public static final String CLASS_NAME_SNC_MAIN_TAB =  PKG_SELL_NICE_CAR + ".activity.MainActivity";   //卖好车首页
+    public static final String CLASS_NAME_SNC_SERIES = PKG_SELL_NICE_CAR + ".source.activity.SeriesActivity";   //车系列表
+    public static final String CLASS_NAME_SNC_MODELS = PKG_SELL_NICE_CAR + ".source.activity.SkuListActivity";  //SKU 列表
+    public static final String CLASS_NAME_SNC_DETAIL = PKG_SELL_NICE_CAR + ".source.activity.SkuDetailActivity";    //详情
+    public static final String DIALOG_NAME_CALL = PKG_SELL_NICE_CAR + ".source.c.c";    //拨号对话框
+    public final static String CLASS_NAME_RECYCLER_VIEW = "android.support.v7.widget.RecyclerView";   //List 改变
+    public final static String CLASS_NAME_CALL_DIALOG = "android.support.v7.app.AlertDialog";  //弹出的对话框
 }

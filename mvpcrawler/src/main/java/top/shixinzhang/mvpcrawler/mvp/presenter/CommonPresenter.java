@@ -25,9 +25,10 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.util.Map;
 
-import top.shixinzhang.mvpcrawler.Config;
+import top.shixinzhang.mvpcrawler.DataCrawlerService;
 import top.shixinzhang.mvpcrawler.entity.SupplierInfoBean;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
+import top.shixinzhang.utils.ApplicationUtils;
 import top.shixinzhang.utils.NodeUtils;
 
 import static top.shixinzhang.mvpcrawler.mvp.CrawlerContract.Model.MODE_GET_INFO;
@@ -68,6 +69,7 @@ public class CommonPresenter extends BasePresenter {
         }
 
         int mode = getModel().getMode();
+        Log.d(TAG, "mode: " + mode);
         switch (mode) {
             case MODE_START:
                 prepare(className);
@@ -102,11 +104,7 @@ public class CommonPresenter extends BasePresenter {
 
     @Override
     public void startApp() {
-        switch (getView().getAppName()) {
-            case Config.APP_NAME_SELL_NICE_CAR:
-
-                break;
-        }
+        ApplicationUtils.startApplication(DataCrawlerService.mContext, getView().getAppPackageName());
     }
 
     /**
@@ -122,12 +120,14 @@ public class CommonPresenter extends BasePresenter {
         }
         if (getView().openBrandList(rootNode)) {
             getModel().setMode(CrawlerContract.Model.MODE_SELECT_BRAND);
+            iterateBrands(rootNode, className);
         }
     }
 
     @Override
     public void iterateBrands(final AccessibilityNodeInfo rootNode, final String className) {
         if (!getView().isBrandListPage(rootNode, className)) {
+            Log.e(TAG, "不是品牌列表，" + className);
             return;
         }
 
@@ -175,6 +175,7 @@ public class CommonPresenter extends BasePresenter {
     @Override
     public void iterateSeries(final AccessibilityNodeInfo rootNode, final String className) {
         if (!getView().isSeriesPage(className)) {
+            Log.e(TAG, "不是车系列表，" + className);
             return;
         }
 
@@ -189,7 +190,7 @@ public class CommonPresenter extends BasePresenter {
             int recyclerViewCount = listNode.getChildCount();
             int checkIndex = 0;
             AccessibilityNodeInfo child;
-            String carSeriesName;
+            String carSeriesName = null;
             int clickSeriesIndex;   //点击哪个车系
             AccessibilityNodeInfo seriesNode;
             for (; checkIndex < recyclerViewCount; checkIndex++) {
@@ -217,8 +218,15 @@ public class CommonPresenter extends BasePresenter {
                 }
             }
             if (checkIndex >= recyclerViewCount) {
-                swipeUp();
-                getModel().setMode(MODE_SELECT_CAR_SERIES);
+                if (!TextUtils.isEmpty(carSeriesName) && carSeriesName.equals(getModel().getLastSeriesName())){
+                    getModel().setMode(MODE_SELECT_BRAND);
+                    clickBack();
+                }else {
+                    getModel().setLastSeriesName(carSeriesName);
+                    swipeUp();
+                }
+//                swipeUp();
+//                getModel().setMode(MODE_SELECT_CAR_SERIES);
 //                saveNumber();
             }
 
@@ -234,7 +242,8 @@ public class CommonPresenter extends BasePresenter {
             return;
         }
         if (!getView().isSourceTypePage(className)) {
-            return;
+            Log.e(TAG, "不是来源页，" + className);
+            getModel().setMode(MODE_SELECT_CAR_MODEL);
         }
 
 
@@ -243,6 +252,7 @@ public class CommonPresenter extends BasePresenter {
     @Override
     public void iterateModels(final AccessibilityNodeInfo rootNode, final String className) {
         if (!getView().isModelsPage(className)) {
+            Log.e(TAG, "不是SKU列表，" + className);
             return;
         }
 
@@ -259,15 +269,16 @@ public class CommonPresenter extends BasePresenter {
             int recyclerViewCount = listNode.getChildCount();
             int checkIndex = 0;
             AccessibilityNodeInfo child;
-            String modelIdentityStr;  //用来辨识是否点击过该车款的唯一标识
+            String modelIdentityStr = null;  //用来辨识是否点击过该车款的唯一标识
 
             for (; checkIndex < recyclerViewCount; checkIndex++) {
+                child = listNode.getChild(checkIndex);
                 try {
-                    modelIdentityStr = getView().getModelIdentity(listNode.getChild(checkIndex));
-
+                    modelIdentityStr = getView().getModelIdentity(child);
                     if (!TextUtils.isEmpty(modelIdentityStr) && !getModel().getClickedModels().contains(modelIdentityStr)) {
                         getModel().addClickedModel(modelIdentityStr);
                         getModel().setMode(MODE_GET_INFO);
+                        NodeUtils.clickNode(child);
                         return;
                     }
                 } catch (Exception e) {
@@ -275,8 +286,16 @@ public class CommonPresenter extends BasePresenter {
                 }
             }
             if (checkIndex >= recyclerViewCount) {
-                swipeUp();
                 getModel().saveInfo();
+
+                //这次遍历的最后一个和上次的最后一个一样，即到达最低端
+                if (!TextUtils.isEmpty(modelIdentityStr) && modelIdentityStr.equals(getModel().getLastModelName())){
+                    getModel().setMode(MODE_SELECT_CAR_SERIES);
+                    clickBack();
+                }else {
+                    getModel().setLastModelName(modelIdentityStr);
+                    swipeUp();
+                }
             }
 
 
@@ -289,18 +308,17 @@ public class CommonPresenter extends BasePresenter {
     @Override
     public void getInfo(final AccessibilityNodeInfo rootNode, final String className) {
         if (!getView().isDetailPage(className)) {
+            Log.e(TAG, "不是详情页，" + className);
             return;
         }
 
         SupplierInfoBean supplierInfoBean = null;
         try {
             supplierInfoBean = getView().getInfo(rootNode);
-            if (supplierInfoBean == null || TextUtils.isEmpty(supplierInfoBean.getPublishInfo())) {
+            if (supplierInfoBean == null || TextUtils.isEmpty(supplierInfoBean.getPublishInfo())
+                    || "nullnull".equals(supplierInfoBean.getPublishInfo())) {
                 return;
             }
-
-            getModel().setCurrentSupplier(supplierInfoBean);        //保存当前的信息，为了下一步继续使用
-
             Map<String, String> phoneMap = getModel().getPhoneMap();
             if (phoneMap.containsKey(supplierInfoBean.getPublishInfo()) &&
                     !"1".equals(phoneMap.get(supplierInfoBean.getPublishInfo()))) {  //点过了
@@ -309,6 +327,9 @@ public class CommonPresenter extends BasePresenter {
                 return;
             }
 
+            getModel().setCurrentSupplier(supplierInfoBean);        //保存当前的信息，为了下一步继续使用
+
+
             phoneMap.put(supplierInfoBean.getPublishInfo(), "1");
         } catch (Exception e) {
             e.printStackTrace();
@@ -316,8 +337,8 @@ public class CommonPresenter extends BasePresenter {
             clickBack();
         }
 
-        if (supplierInfoBean != null){
-            if (TextUtils.isEmpty(supplierInfoBean.getPhone())){        //没拿到电话数据
+        if (supplierInfoBean != null) {
+            if (TextUtils.isEmpty(supplierInfoBean.getPhone())) {        //没拿到电话数据
                 if (getView().openNumberPage(rootNode)) {   //打开电话页面
                     getModel().setMode(MODE_GET_NUMBER);
                 }
@@ -328,18 +349,19 @@ public class CommonPresenter extends BasePresenter {
 
     @Override
     public void getNumber(final AccessibilityNodeInfo rootNode, final String className) {
-        if (!getView().isNumberPage(className)){
+        if (!getView().isNumberPage(className)) {
+            Log.e(TAG, "不是电话弹出框，" + className);
             return;
         }
 
         try {
             SupplierInfoBean supplierInfoBean = getView().getNumberInfo(rootNode);
-            if (supplierInfoBean != null){
+            if (supplierInfoBean != null) {
                 getModel().getCurrentSupplier().clone(supplierInfoBean);
                 getModel().addSupplier(getModel().getCurrentSupplier());
                 getModel().getPhoneMap().put(getModel().getCurrentSupplier().getPublishInfo(),
                         getModel().getCurrentSupplier().getPhone());
-
+                getModel().setMode(MODE_GET_INFO);
                 clickBack();
             }
         } catch (Exception e) {
