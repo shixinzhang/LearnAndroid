@@ -18,6 +18,8 @@ package top.shixinzhang.mvpcrawler;
 
 import android.app.Application;
 
+import top.shixinzhang.mvpcrawler.helper.CrashHandler;
+
 /**
  * Description:
  * <br>

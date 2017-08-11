@@ -28,11 +28,12 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
 
-import java.util.List;
-
+import top.shixinzhang.mvpcrawler.helper.MonitorThread;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
+import top.shixinzhang.mvpcrawler.mvp.presenter.BasePresenter;
 import top.shixinzhang.mvpcrawler.mvp.presenter.CommonPresenter;
 
+import static top.shixinzhang.mvpcrawler.helper.MonitorThread.MSG_MONITOR;
 import static top.shixinzhang.mvpcrawler.mvp.CrawlerContract.Model.MODE_START;
 import static top.shixinzhang.mvpcrawler.mvp.CrawlerContract.Model.MODE_STOP;
 
@@ -46,7 +47,8 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
     public static String sSwipeCmd;
     private int mMode;
 
-    public static CrawlerContract.Presenter mPresenter;
+    private MonitorThread mMonitorThread;
+    private static BasePresenter mPresenter;
     public static Context mContext;
 
 
@@ -71,6 +73,7 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
             Log.i(TAG, "onStartCommand mode:" + mMode);
             if (mMode == MODE_START && mPresenter != null) {
                 getPresenter().startApp();
+                initMonitorThread();
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -85,12 +88,24 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
                 getPresenter().receiveEvent(getRootInActiveWindow(), event);
                 break;
         }
+    }
 
+    private void initMonitorThread() {
+        mMonitorThread = new MonitorThread("MVP监控");
+        mMonitorThread.setUIHandler(new Handler(this));
+        mMonitorThread.start();
+    }
+
+    private void destoryMonitor() {
+        if (mMonitorThread != null) {
+            mMonitorThread.quit();
+            mMonitorThread = null;
+        }
     }
 
 
     @NonNull
-    public static CrawlerContract.Presenter getPresenter() {
+    public static BasePresenter getPresenter() {
         return mPresenter;
     }
 
@@ -126,7 +141,16 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
      */
     @Override
     public boolean handleMessage(Message msg) {
-        Toast.makeText(getApplicationContext(), "你为什么又不动了？", Toast.LENGTH_SHORT).show();
+        Log.e(TAG, "!!!!!! not worked !!!!!");
+        CrawlerContract.Model model = getPresenter().getModel();
+        switch (msg.what) {
+            case MSG_MONITOR:
+                getPresenter().getView().resolveNotWorked(
+                        model.getRootNode(),
+                        model.getMode(),
+                        model.getCurrentClassName());
+                break;
+        }
         return true;
     }
 
@@ -141,6 +165,7 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
     @Override
     public void onDestroy() {
         super.onDestroy();
+        destoryMonitor();
     }
 
 }

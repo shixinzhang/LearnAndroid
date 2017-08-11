@@ -50,21 +50,12 @@ public interface CrawlerContract {
      */
     interface Model {
 
-        void setLastModelName(String modelIdentityStr);
-
-        String getLastModelName();
-
-        String getLastSeriesName();
-
-        void setLastSeriesName(String carSeriesName);
-
         @Retention(RetentionPolicy.SOURCE)
         @IntDef(flag = false,
                 value = {MODE_STOP, MODE_START, MODE_GET_INFO, MODE_GET_NUMBER, MODE_SELECT_BRAND,
                         MODE_SELECT_CAR_SERIES, MODE_SELECT_SOURCE_TYPE, MODE_SELECT_CAR_MODEL})
         @interface EventMode {
         }
-
 
         int MODE_STOP = -1; //停止
         int MODE_START = 0;
@@ -105,11 +96,10 @@ public interface CrawlerContract {
 
         void setSupplierInfoSet(@NonNull final Set<SupplierInfoBean> supplierInfoSet);
 
-//        @NonNull
-//        Map<String, String> getClickedDetails();
-
         @Nullable
-        String getCurrentCarName(); //当前车名称
+        String getCurrentClassName(); //当前页面名称
+
+        void setCurrentClassName(@NonNull String currentClassName); //设置当前页面
 
         SupplierInfoBean getCurrentSupplier();
 
@@ -124,6 +114,18 @@ public interface CrawlerContract {
         void addClickedSeries(@NonNull String carSeriesName);    //添加点击的车系名称
 
         void addClickedModel(String modelIdentityStr);      //添加点击的车款
+
+        void setLastModelName(String modelIdentityStr);
+
+        String getLastModelName();
+
+        String getLastSeriesName();
+
+        void setLastSeriesName(String carSeriesName);
+
+        AccessibilityNodeInfo getRootNode();
+
+        void setRootNode(final AccessibilityNodeInfo rootNode);
     }
 
     /**
@@ -176,6 +178,7 @@ public interface CrawlerContract {
 
         boolean needExitDetail(AccessibilityNodeInfo rootNode);  //需要退出车款详情页面
 
+        void resolveNotWorked(final AccessibilityNodeInfo rootNode, int mode, String currentClassName);   //解决停止工作的情况
     }
 
     /**

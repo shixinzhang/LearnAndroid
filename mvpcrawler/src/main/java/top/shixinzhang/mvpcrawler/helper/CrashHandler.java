@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package top.shixinzhang.mvpcrawler;
+package top.shixinzhang.mvpcrawler.helper;
 
 import android.content.Context;
 
@@ -24,6 +24,7 @@ import java.io.Writer;
 import java.util.LinkedList;
 import java.util.List;
 
+import top.shixinzhang.mvpcrawler.BuildConfig;
 import top.shixinzhang.utils.AlertUtils;
 
 

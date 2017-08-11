@@ -23,10 +23,12 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import java.util.Arrays;
 import java.util.List;
 
-import top.shixinzhang.mvpcrawler.Config;
+import top.shixinzhang.mvpcrawler.DataCrawlerService;
+import top.shixinzhang.mvpcrawler.helper.Config;
 import top.shixinzhang.mvpcrawler.entity.SupplierInfoBean;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
 import top.shixinzhang.utils.NodeUtils;
+import top.shixinzhang.utils.ShellUtils;
 
 /**
  * Description:
@@ -132,7 +134,7 @@ public class SellNiceCarView implements CrawlerContract.View {
     @Override
     public boolean openNumberPage(@NonNull final AccessibilityNodeInfo rootNode) {
         boolean clickResult = NodeUtils.clickNode(rootNode, "电话咨询");
-        if (!clickResult){
+        if (!clickResult) {
             clickResult = NodeUtils.clickNode(rootNode, "com.maihaoche.bentley:id/contact");
         }
         return clickResult;
@@ -215,12 +217,38 @@ public class SellNiceCarView implements CrawlerContract.View {
 
     @Override
     public boolean needExitModelList(final AccessibilityNodeInfo rootNode) {
-        return rootNode != null && (NodeUtils.hasText(rootNode, "没有更多了") || NodeUtils.hasText(rootNode, "发布寻车")) ;
+        return rootNode != null && (NodeUtils.hasText(rootNode, "没有更多了") || NodeUtils.hasText(rootNode, "发布寻车"));
     }
 
     @Override
     public boolean needExitDetail(final AccessibilityNodeInfo rootNode) {
         return false;
+    }
+
+    @Override
+    public void resolveNotWorked(final AccessibilityNodeInfo rootNode, final int mode, final String currentClassName) {
+        Log.e(TAG, "resolveNotWorked: " + mode + " / " + currentClassName);
+
+
+        if (isDetailPage(currentClassName)) {    //在详情页
+            if (mode == CrawlerContract.Model.MODE_GET_INFO || mode == CrawlerContract.Model.MODE_GET_NUMBER) {
+                if (openNumberPage(rootNode)) {
+                    ShellUtils.clickBack();
+                }
+            } else if (mode == CrawlerContract.Model.MODE_SELECT_CAR_MODEL) {
+                ShellUtils.clickBack();
+            }
+        } else if (isModelsPage(currentClassName)) {  //在车款列表页
+            if (mode == CrawlerContract.Model.MODE_GET_INFO) {
+                ShellUtils.execCmd("input tap 100 400");
+            } else if (mode == CrawlerContract.Model.MODE_SELECT_CAR_SERIES) {
+                ShellUtils.clickBack();
+            } else if (mode == CrawlerContract.Model.MODE_SELECT_CAR_MODEL) {
+                ShellUtils.execCmd(DataCrawlerService.sSwipeCmd);
+            }
+        } else if (isRecyclerView(currentClassName)) {
+            ShellUtils.execCmd(DataCrawlerService.sSwipeCmd);
+        }
     }
 
 

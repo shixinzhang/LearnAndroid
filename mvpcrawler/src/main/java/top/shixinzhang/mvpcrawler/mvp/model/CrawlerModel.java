@@ -19,6 +19,7 @@ package top.shixinzhang.mvpcrawler.mvp.model;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.accessibility.AccessibilityNodeInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +33,7 @@ import java.util.Map;
 import java.util.Set;
 
 import io.reactivex.Observable;
-import top.shixinzhang.mvpcrawler.Config;
+import top.shixinzhang.mvpcrawler.helper.Config;
 import top.shixinzhang.mvpcrawler.DataCrawlerService;
 import top.shixinzhang.mvpcrawler.entity.SupplierInfoBean;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
@@ -66,6 +67,8 @@ public class CrawlerModel implements CrawlerContract.Model {
     private Map<String, String> mPhoneMap = new HashMap<>();
     private String mLastIterateModelName;
     private String mLastIterateSeriesName;
+    private String mCurrentClassName;
+    private AccessibilityNodeInfo mRootNode;
 
     public static CrawlerModel create() {
         return new CrawlerModel();
@@ -107,13 +110,26 @@ public class CrawlerModel implements CrawlerContract.Model {
 
     @Nullable
     @Override
-    public String getCurrentCarName() {
-        return null;
+    public String getCurrentClassName() {
+        return mCurrentClassName;
+    }
+
+    @Override
+    public void setCurrentClassName(@NonNull final String currentClassName) {
+        mCurrentClassName = currentClassName;
     }
 
     @Override
     public void setCurrentSupplier(@NonNull final SupplierInfoBean supplier) {
         mCurrentSupplier = supplier;
+    }
+
+    public AccessibilityNodeInfo getRootNode() {
+        return mRootNode;
+    }
+
+    public void setRootNode(final AccessibilityNodeInfo rootNode) {
+        mRootNode = rootNode;
     }
 
     @Override

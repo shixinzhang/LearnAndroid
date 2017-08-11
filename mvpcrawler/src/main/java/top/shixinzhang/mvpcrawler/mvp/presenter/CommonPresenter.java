@@ -67,7 +67,8 @@ public class CommonPresenter extends BasePresenter {
         if (!getView().isCorePage(className)) {
             return;
         }
-
+        getModel().setCurrentClassName(className);
+        getModel().setRootNode(rootNode);
         int mode = getModel().getMode();
         Log.d(TAG, "mode: " + mode);
         switch (mode) {
@@ -158,7 +159,7 @@ public class CommonPresenter extends BasePresenter {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.e(TAG, e.getMessage());
+//                    Log.e(TAG, e.getMessage());
                 }
             }
 
@@ -214,14 +215,14 @@ public class CommonPresenter extends BasePresenter {
                     // TODO: 17/8/8 如何判断遍历结束
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.e(TAG, e.getMessage());
+//                    Log.e(TAG, e.getMessage());
                 }
             }
             if (checkIndex >= recyclerViewCount) {
-                if (!TextUtils.isEmpty(carSeriesName) && carSeriesName.equals(getModel().getLastSeriesName())){
+                if (!TextUtils.isEmpty(carSeriesName) && carSeriesName.equals(getModel().getLastSeriesName())) {
                     getModel().setMode(MODE_SELECT_BRAND);
                     clickBack();
-                }else {
+                } else {
                     getModel().setLastSeriesName(carSeriesName);
                     swipeUp();
                 }
@@ -289,10 +290,10 @@ public class CommonPresenter extends BasePresenter {
                 getModel().saveInfo();
 
                 //这次遍历的最后一个和上次的最后一个一样，即到达最低端
-                if (!TextUtils.isEmpty(modelIdentityStr) && modelIdentityStr.equals(getModel().getLastModelName())){
+                if (!TextUtils.isEmpty(modelIdentityStr) && modelIdentityStr.equals(getModel().getLastModelName())) {
                     getModel().setMode(MODE_SELECT_CAR_SERIES);
                     clickBack();
-                }else {
+                } else {
                     getModel().setLastModelName(modelIdentityStr);
                     swipeUp();
                 }
