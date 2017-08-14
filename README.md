@@ -3,7 +3,6 @@
 
 # 目前主要包括以下内容
 
-- VasSonic 使用
 - Weex 使用
 - RxJava Sample
 - MVP Sample
@@ -11,7 +10,7 @@
 - IPC Sample
 - 模仿 butterKnife 的编译时注解
 - 数据结构练习 demo
-- ...
+- 其他...
 
 submodule 链接：
 

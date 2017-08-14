@@ -1,2 +1,3 @@
 include ':app', ':sxframework', ':WeexSDK', ':sxdebugkit', ':service', ':ioc-processor', ':ioc',
-        ':ioc-annotation', ':rxjavademo', ':crawler', ':mvpcrawler', 'android-utils', 'tencent-sonic'
+        ':ioc-annotation', ':rxjavademo', ':crawler', ':mvpcrawler', 'android-utils', 'tencent-sonic',
+        'DroidPlugin'

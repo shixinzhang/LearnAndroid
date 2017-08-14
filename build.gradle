@@ -39,4 +39,6 @@ ext {
     rxandroidVersion = '2.0.1'
     butterknifeVersion = '8.4.0'
     gsonVersion = '2.4'
+    compileSdkVersion = 25
+    buildToolsVersion = "25.0.2"
 }
