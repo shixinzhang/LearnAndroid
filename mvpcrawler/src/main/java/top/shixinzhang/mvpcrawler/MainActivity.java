@@ -19,6 +19,7 @@ package top.shixinzhang.mvpcrawler;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -28,6 +29,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
 import top.shixinzhang.mvpcrawler.mvp.model.CrawlerModel;
+import top.shixinzhang.mvpcrawler.mvp.view.EjAutoView;
 import top.shixinzhang.mvpcrawler.mvp.view.SellNiceCarView;
 import top.shixinzhang.utils.ServiceUtils;
 import top.shixinzhang.utils.ShellUtils;
@@ -75,12 +77,31 @@ public class MainActivity extends AppCompatActivity {
         if (!hasEnv()) {
             goToOpenAccessibility(0);
         } else {
-            DataCrawlerService.setPresenter(SellNiceCarView.create(), CrawlerModel.create());
-
-            Intent intent = new Intent(this, DataCrawlerService.class);
-            intent.putExtra(MODE_KEY, MODE_START);
-            startService(intent);
+            startCrawlerService(SellNiceCarView.create());
         }
+    }
+
+
+    @OnClick(R.id.btn_yi_jie_hao_che)
+    public void crawlerEjAuto() {
+        if (!hasEnv()) {
+            goToOpenAccessibility(0);
+        } else {
+            startCrawlerService(EjAutoView.create());
+        }
+    }
+
+    /**
+     * 开启爬
+     *
+     * @param view
+     */
+    private void startCrawlerService(@NonNull final CrawlerContract.View view) {
+        DataCrawlerService.setPresenter(view, CrawlerModel.create());
+
+        Intent intent = new Intent(this, DataCrawlerService.class);
+        intent.putExtra(MODE_KEY, MODE_START);
+        startService(intent);
     }
 
     @OnClick(R.id.btn_stop)

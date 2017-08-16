@@ -55,7 +55,7 @@ public class CrawlerModel implements CrawlerContract.Model {
     private final String TAG = this.getClass().getSimpleName();
 
     @EventMode
-    private int mMode = MODE_START;
+    private volatile int mMode = MODE_START;
     private int mLastSavePhoneSize; //上次保存时的电话数量
     private SupplierInfoBean mCurrentSupplier;
     private String mFileTimeStamp = DateUtils.getMMddhhmmss(System.currentTimeMillis());
@@ -200,7 +200,7 @@ public class CrawlerModel implements CrawlerContract.Model {
     }
 
     @Override
-    public void setMode(@EventMode final int mode) {
+    public synchronized void setMode(@EventMode final int mode) {
         mMode = mode;
     }
 
@@ -218,7 +218,7 @@ public class CrawlerModel implements CrawlerContract.Model {
                 @Override
                 public void run() {
                     FileUtils.writeFile(path, phoneSet.size() + "\n" + phoneSet.toString(), false);
-                    // TODO: 17/8/10 数据格式为 JSON
+                    //数据格式为 JSON
                     FileUtils.writeFile(fullInfoPath, getSupplierInfoSet().size() + "\n" + getJsonResult(getSupplierInfoSet()), false);
                 }
             }).start();

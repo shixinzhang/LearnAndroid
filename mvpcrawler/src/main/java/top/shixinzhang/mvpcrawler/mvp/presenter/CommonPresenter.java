@@ -70,6 +70,7 @@ public class CommonPresenter extends BasePresenter {
         getModel().setCurrentClassName(className);
         getModel().setRootNode(rootNode);
         int mode = getModel().getMode();
+
         Log.d(TAG, "mode: " + mode);
         switch (mode) {
             case MODE_START:
@@ -147,6 +148,9 @@ public class CommonPresenter extends BasePresenter {
                 }
                 try {
                     brandNode = getView().getBrandNodeFromItem(child);
+                    if (brandNode == null || brandNode.getText() == null) {
+                        continue;
+                    }
                     carBrandName = brandNode.getText().toString();
 
                     if (!TextUtils.isEmpty(carBrandName) && !getModel().getClickedBrands().contains(carBrandName)) {
@@ -240,14 +244,12 @@ public class CommonPresenter extends BasePresenter {
     public void selectSourceType(final AccessibilityNodeInfo rootNode, final String className) {
         if (getView().isModelsPage(className)) {
             getModel().setMode(MODE_SELECT_CAR_MODEL);
-            return;
+            iterateModels(rootNode, className);
         }
-        if (!getView().isSourceTypePage(className)) {
-            Log.e(TAG, "不是来源页，" + className);
-            getModel().setMode(MODE_SELECT_CAR_MODEL);
-        }
-
-
+//        if (!getView().isSourceTypePage(className)) {
+//            Log.e(TAG, "不是来源页，" + className);
+//            getModel().setMode(MODE_SELECT_CAR_MODEL);
+//        }
     }
 
     @Override
@@ -342,7 +344,11 @@ public class CommonPresenter extends BasePresenter {
             if (TextUtils.isEmpty(supplierInfoBean.getPhone())) {        //没拿到电话数据
                 if (getView().openNumberPage(rootNode)) {   //打开电话页面
                     getModel().setMode(MODE_GET_NUMBER);
+                    getNumber(rootNode, className);
                 }
+            } else if (!TextUtils.isEmpty(supplierInfoBean.getName())) {    //名字也拿到了，都拿到了
+                getModel().setMode(MODE_GET_INFO);
+                clickBack();
             }
         }
 
