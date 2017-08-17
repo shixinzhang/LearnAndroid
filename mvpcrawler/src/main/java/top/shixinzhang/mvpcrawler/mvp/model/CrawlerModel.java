@@ -55,7 +55,7 @@ public class CrawlerModel implements CrawlerContract.Model {
     private final String TAG = this.getClass().getSimpleName();
 
     @EventMode
-    private volatile int mMode = MODE_START;
+    private int mMode = MODE_START;
     private int mLastSavePhoneSize; //上次保存时的电话数量
     private SupplierInfoBean mCurrentSupplier;
     private String mFileTimeStamp = DateUtils.getMMddhhmmss(System.currentTimeMillis());
@@ -200,7 +200,7 @@ public class CrawlerModel implements CrawlerContract.Model {
     }
 
     @Override
-    public synchronized void setMode(@EventMode final int mode) {
+    public void setMode(@EventMode final int mode) {
         mMode = mode;
     }
 

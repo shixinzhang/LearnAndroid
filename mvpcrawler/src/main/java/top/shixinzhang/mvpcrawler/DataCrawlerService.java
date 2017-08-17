@@ -26,6 +26,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
 
 import top.shixinzhang.mvpcrawler.helper.MonitorThread;
@@ -81,14 +82,20 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
+//        getPresenter().receiveEvent(getRootInActiveWindow(), event);
         int eventType = event.getEventType();
         switch (eventType) {
             case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:  //监听进入界面
             case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
+//            default:
                 getPresenter().receiveEvent(getRootInActiveWindow(), event);
                 break;
         }
     }
+
+//    public static AccessibilityNodeInfo getRootNode(){
+//        return getRootInActiveWindow();
+//    }
 
     private void initMonitorThread() {
         mMonitorThread = new MonitorThread("MVP监控");
@@ -96,7 +103,7 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
         mMonitorThread.start();
     }
 
-    private void destoryMonitor() {
+    private void destroyMonitor() {
         if (mMonitorThread != null) {
             mMonitorThread.quit();
             mMonitorThread = null;
@@ -165,7 +172,7 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
     @Override
     public void onDestroy() {
         super.onDestroy();
-        destoryMonitor();
+        destroyMonitor();
     }
 
 }

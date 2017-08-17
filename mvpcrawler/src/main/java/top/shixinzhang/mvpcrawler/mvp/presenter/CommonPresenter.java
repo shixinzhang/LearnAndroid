@@ -27,6 +27,7 @@ import java.util.Map;
 
 import top.shixinzhang.mvpcrawler.DataCrawlerService;
 import top.shixinzhang.mvpcrawler.entity.SupplierInfoBean;
+import top.shixinzhang.mvpcrawler.helper.Config;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
 import top.shixinzhang.utils.ApplicationUtils;
 import top.shixinzhang.utils.NodeUtils;
@@ -71,7 +72,7 @@ public class CommonPresenter extends BasePresenter {
         getModel().setRootNode(rootNode);
         int mode = getModel().getMode();
 
-        Log.d(TAG, "mode: " + mode);
+        Log.d(TAG, "receiveEvent   mode: " + mode);
         switch (mode) {
             case MODE_START:
                 prepare(className);
@@ -90,10 +91,14 @@ public class CommonPresenter extends BasePresenter {
                 iterateModels(rootNode, className);
                 break;
             case MODE_GET_INFO:   //详情页
-                getInfo(rootNode, className);
+                if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+                    getInfo(rootNode, className);
+                }
                 break;
             case MODE_GET_NUMBER:   //电话
-                getNumber(rootNode, className);
+                if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+                    getNumber(rootNode, className);
+                }
                 break;
         }
 
@@ -260,6 +265,7 @@ public class CommonPresenter extends BasePresenter {
         }
 
         if (getView().needExitModelList(rootNode)) {
+            Log.d(TAG, "needExitModelList**********");
             getModel().setMode(MODE_SELECT_CAR_SERIES);
             clickBack();
             return;
@@ -270,6 +276,16 @@ public class CommonPresenter extends BasePresenter {
         AccessibilityNodeInfo listNode = getView().getModelListNode(rootNode);
         if (listNode != null) {
             int recyclerViewCount = listNode.getChildCount();
+            Log.d(TAG, "recyclerViewCount ==  " + recyclerViewCount);
+
+            if (recyclerViewCount == 0) {
+                return;
+            }
+            if (recyclerViewCount == 1) {        //返回遍历车系
+                getModel().setMode(MODE_SELECT_CAR_SERIES);
+                clickBack();
+                return;
+            }
             int checkIndex = 0;
             AccessibilityNodeInfo child;
             String modelIdentityStr = null;  //用来辨识是否点击过该车款的唯一标识
@@ -278,6 +294,7 @@ public class CommonPresenter extends BasePresenter {
                 child = listNode.getChild(checkIndex);
                 try {
                     modelIdentityStr = getView().getModelIdentity(child);
+                    Log.i(TAG, checkIndex + ", " + modelIdentityStr);
                     if (!TextUtils.isEmpty(modelIdentityStr) && !getModel().getClickedModels().contains(modelIdentityStr)) {
                         getModel().addClickedModel(modelIdentityStr);
                         getModel().setMode(MODE_GET_INFO);
@@ -293,6 +310,7 @@ public class CommonPresenter extends BasePresenter {
 
                 //这次遍历的最后一个和上次的最后一个一样，即到达最低端
                 if (!TextUtils.isEmpty(modelIdentityStr) && modelIdentityStr.equals(getModel().getLastModelName())) {
+                    Log.d(TAG, "这次遍历的最后一个和上次的最后一个一样，即到达最低端 ******");
                     getModel().setMode(MODE_SELECT_CAR_SERIES);
                     clickBack();
                 } else {
@@ -319,7 +337,7 @@ public class CommonPresenter extends BasePresenter {
         try {
             supplierInfoBean = getView().getInfo(rootNode);
             if (supplierInfoBean == null || TextUtils.isEmpty(supplierInfoBean.getPublishInfo())
-                    || "nullnull".equals(supplierInfoBean.getPublishInfo())) {
+                    || supplierInfoBean.getPublishInfo().contains("null")) {
                 return;
             }
             Map<String, String> phoneMap = getModel().getPhoneMap();
@@ -340,37 +358,46 @@ public class CommonPresenter extends BasePresenter {
             clickBack();
         }
 
+
         if (supplierInfoBean != null) {
             if (TextUtils.isEmpty(supplierInfoBean.getPhone())) {        //没拿到电话数据
+                getModel().setMode(MODE_GET_NUMBER);
                 if (getView().openNumberPage(rootNode)) {   //打开电话页面
-                    getModel().setMode(MODE_GET_NUMBER);
-                    getNumber(rootNode, className);
+//                    getNumber(event, rootNode, className);
+                } else {
+                    Log.d(TAG, "没打开电话页面 *******");
                 }
-            } else if (!TextUtils.isEmpty(supplierInfoBean.getName())) {    //名字也拿到了，都拿到了
-                getModel().setMode(MODE_GET_INFO);
-                clickBack();
             }
+            // TODO: 17/8/17 返回上一级
+//            else if (!TextUtils.isEmpty(supplierInfoBean.getName())) {    //名字也拿到了，都拿到了
+//                getModel().setMode(MODE_GET_INFO);
+//                clickBack();
+//            }
         }
 
     }
 
     @Override
     public void getNumber(final AccessibilityNodeInfo rootNode, final String className) {
+//        if (!getView().isNumberPage(className) && !Config.EjAuto.CLASS_NAME_DETAIL.equals(className)) {
         if (!getView().isNumberPage(className)) {
-            Log.e(TAG, "不是电话弹出框，" + className);
+            Log.i(TAG, "不是电话弹出框，" + className);
             return;
         }
 
         try {
             SupplierInfoBean supplierInfoBean = getView().getNumberInfo(rootNode);
-            if (supplierInfoBean != null) {
-                getModel().getCurrentSupplier().clone(supplierInfoBean);
-                getModel().addSupplier(getModel().getCurrentSupplier());
-                getModel().getPhoneMap().put(getModel().getCurrentSupplier().getPublishInfo(),
-                        getModel().getCurrentSupplier().getPhone());
-                getModel().setMode(MODE_GET_INFO);
-                clickBack();
+            if (TextUtils.isEmpty(supplierInfoBean.getPhone())) {
+                Log.e(TAG, "没拿到电话");
+                supplierInfoBean.setPhone("-1");
             }
+            Log.i(TAG, supplierInfoBean.getPhone());
+            getModel().getCurrentSupplier().clone(supplierInfoBean);
+            getModel().addSupplier(getModel().getCurrentSupplier());
+            getModel().getPhoneMap().put(getModel().getCurrentSupplier().getPublishInfo(),
+                    getModel().getCurrentSupplier().getPhone());
+            getModel().setMode(MODE_GET_INFO);
+            clickBack();
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(TAG, "获取电话信息失败");

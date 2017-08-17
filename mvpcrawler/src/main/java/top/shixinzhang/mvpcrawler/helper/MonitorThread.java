@@ -79,7 +79,7 @@ public class MonitorThread extends HandlerThread {
                 Log.d(TAG, "monitor 开启");
 
                 while (mRunnable.get()) {
-                    SystemClock.sleep(20_000);  //每隔 20s 检查一次
+                    SystemClock.sleep(10_000);  //每隔 10s 检查一次
 
                     if (getLastNumber() != phoneMap.size()) {
                         setLastNumber(phoneMap.size());
@@ -100,11 +100,11 @@ public class MonitorThread extends HandlerThread {
         }
     }
 
-    public int getLastNumber() {
+    private int getLastNumber() {
         return mLastNumber;
     }
 
-    public MonitorThread setLastNumber(final int lastNumber) {
+    private MonitorThread setLastNumber(final int lastNumber) {
         Log.i(TAG, "Running normal, current size is " + lastNumber);
         mLastNumber = lastNumber;
         return this;

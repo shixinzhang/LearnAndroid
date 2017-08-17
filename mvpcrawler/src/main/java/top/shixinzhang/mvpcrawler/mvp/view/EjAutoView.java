@@ -16,11 +16,11 @@
 
 package top.shixinzhang.mvpcrawler.mvp.view;
 
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
-
-import org.w3c.dom.Node;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +29,7 @@ import top.shixinzhang.mvpcrawler.entity.SupplierInfoBean;
 import top.shixinzhang.mvpcrawler.helper.Config;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
 import top.shixinzhang.utils.NodeUtils;
+import top.shixinzhang.utils.ShellUtils;
 
 /**
  * Description:
@@ -48,7 +49,7 @@ public class EjAutoView implements CrawlerContract.View {
     private List<String> mWhiteList = Arrays.asList(
             Config.EjAuto.CLASS_NAME_MAIN, Config.EjAuto.CLASS_NAME_DETAIL,
             Config.EjAuto.CLASS_NAME_MODELS, Config.EjAuto.CLASS_NAME_SERIES,
-            Config.EjAuto.DIALOG_NAME_CALL,
+            Config.EjAuto.DIALOG_NAME_CALL, Config.CLASS_NAME_LIST_VIEW,
             Config.CLASS_NAME_RECYCLER_VIEW, Config.CLASS_NAME_CALL_DIALOG);
 
     public static EjAutoView create() {
@@ -87,12 +88,12 @@ public class EjAutoView implements CrawlerContract.View {
 
     @Override
     public boolean isSeriesPage(final String className) {
-        return Config.EjAuto.CLASS_NAME_SERIES.equals(className) || isRecyclerView(className);
+        return Config.EjAuto.CLASS_NAME_SERIES.equals(className) || isListView(className);
     }
 
     @Override
     public boolean isModelsPage(final String className) {
-        return Config.EjAuto.CLASS_NAME_MODELS.equals(className) || isRecyclerView(className);
+        return Config.EjAuto.CLASS_NAME_MODELS.equals(className) || isListView(className);
     }
 
     @Override
@@ -102,6 +103,7 @@ public class EjAutoView implements CrawlerContract.View {
 
     @Override
     public boolean isDetailPage(final String className) {
+//        return Config.EjAuto.CLASS_NAME_DETAIL.equals(className) || isListView(className);
         return Config.EjAuto.CLASS_NAME_DETAIL.equals(className);
     }
 
@@ -110,8 +112,8 @@ public class EjAutoView implements CrawlerContract.View {
         return Config.EjAuto.DIALOG_NAME_CALL.equals(className);
     }
 
-    private boolean isRecyclerView(final String className) {
-        return Config.CLASS_NAME_RECYCLER_VIEW.equals(className);
+    private boolean isListView(final String className) {
+        return Config.CLASS_NAME_LIST_VIEW.equals(className);
     }
 
     @Override
@@ -125,9 +127,10 @@ public class EjAutoView implements CrawlerContract.View {
 
     @Override
     public boolean openNumberPage(@NonNull final AccessibilityNodeInfo rootNode) {
-        boolean clickResult = NodeUtils.clickNode(rootNode, "电话");
-        if (!clickResult){
-            clickResult = NodeUtils.clickNode(rootNode, "cn.ejauto.app:id/btn_to_phone");
+
+        boolean clickResult = NodeUtils.clickNode(rootNode, "cn.ejauto.app:id/btn_to_phone");
+        if (!clickResult) {
+            clickResult = NodeUtils.clickNode(rootNode, "电话");
         }
         return clickResult;
     }
@@ -224,6 +227,7 @@ public class EjAutoView implements CrawlerContract.View {
 
     @Override
     public SupplierInfoBean getNumberInfo(@NonNull final AccessibilityNodeInfo rootNode) throws Exception {
+//        AccessibilityNodeInfo node = NodeUtils.findNode(rootNode, "cn.ejauto.app:id/tv_title");
         String phone = NodeUtils.getTextByNodeId(rootNode, "cn.ejauto.app:id/tv_title");//电话
         return new SupplierInfoBean().setPhone(phone);
     }
@@ -235,7 +239,8 @@ public class EjAutoView implements CrawlerContract.View {
 
     @Override
     public boolean needExitModelList(final AccessibilityNodeInfo rootNode) {
-        return rootNode != null && rootNode.getChildCount() == 1 && NodeUtils.hasText(rootNode, "发布寻车");
+//        return rootNode != null && rootNode.getChildCount() == 1;
+        return false;
     }
 
     @Override
@@ -247,6 +252,28 @@ public class EjAutoView implements CrawlerContract.View {
     public void resolveNotWorked(final AccessibilityNodeInfo rootNode, final int mode, final String currentClassName) {
         Log.e(TAG, "resolveNotWorked: " + mode + " / " + currentClassName);
 
+        if (mode == CrawlerContract.Model.MODE_SELECT_CAR_SERIES) { //应该在车系列表
+            if (Config.EjAuto.CLASS_NAME_MODELS.equals(currentClassName)) {  //实际在车款列表
+                ShellUtils.clickBack();
+            }
+        } else if (mode == CrawlerContract.Model.MODE_SELECT_CAR_MODEL) {       //应该在车款列表
+            if (Config.EjAuto.CLASS_NAME_DETAIL.equals(currentClassName)) {  //实际在详情
+                ShellUtils.clickBack();
+            }
+        } else if (mode == CrawlerContract.Model.MODE_GET_INFO) {     //应该在详情
+            if (Config.EjAuto.CLASS_NAME_DETAIL.equals(currentClassName)) {  //实际也在详情，但就是不动
+                if (openNumberPage(rootNode)) {
+                    SystemClock.sleep(200);
+                    ShellUtils.clickBack();
+                }
+            } else if (Config.EjAuto.CLASS_NAME_MODELS.equals(currentClassName)) {    //实际在车款列表页
+                ShellUtils.execCmd("input tab 200 400");
+            }
+        } else if (mode == CrawlerContract.Model.MODE_GET_NUMBER) {
+            if (Config.EjAuto.CLASS_NAME_DETAIL.equals(currentClassName)) {
+                ShellUtils.clickBack();
+            }
+        }
     }
 
 }

@@ -51,6 +51,7 @@ public class Config {
     public static final String CLASS_NAME_SNC_DETAIL = PKG_SELL_NICE_CAR + ".source.activity.SkuDetailActivity";    //详情
     public static final String DIALOG_NAME_CALL = PKG_SELL_NICE_CAR + ".source.c.c";    //拨号对话框
 
+    public final static String CLASS_NAME_LIST_VIEW = "android.widget.ListView";
     public final static String CLASS_NAME_RECYCLER_VIEW = "android.support.v7.widget.RecyclerView";   //List 改变
     public final static String CLASS_NAME_CALL_DIALOG = "android.support.v7.app.AlertDialog";  //弹出的对话框
 
@@ -63,6 +64,6 @@ public class Config {
         String CLASS_NAME_SOURCE_TYPE = "";
         String CLASS_NAME_MODELS = PKG_EJ_AUTO + ".activity.carsource.CarSourceFilterListActivity";
         String CLASS_NAME_DETAIL = PKG_EJ_AUTO + ".activity.carsource.CarSourceDetailActivity";
-        String DIALOG_NAME_CALL = PKG_EJ_AUTO + ".android.app.Dialog";
+        String DIALOG_NAME_CALL = "android.app.Dialog";
     }
 }
