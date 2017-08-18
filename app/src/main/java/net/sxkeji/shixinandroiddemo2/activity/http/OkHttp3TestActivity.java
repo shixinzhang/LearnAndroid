@@ -22,7 +22,6 @@ import android.widget.TextView;
 
 import net.sxkeji.shixinandroiddemo2.BaseActivity;
 import net.sxkeji.shixinandroiddemo2.R;
-import net.sxkeji.shixinandroiddemo2.network.okhttp3.ResponseExecutor;
 import net.sxkeji.shixinandroiddemo2.network.okhttp3.SafeCallBack;
 import net.sxkeji.shixinandroiddemo2.network.okhttp3.SxHttpClient;
 
@@ -32,14 +31,12 @@ import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import top.shixinzhang.sxframework.config.Config;
-import top.shixinzhang.sxframework.utils.LogUtils;
 
 /**
  * Description:

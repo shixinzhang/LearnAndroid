@@ -19,13 +19,14 @@ package net.sxkeji.shixinandroiddemo2.activity.http;
 import net.sxkeji.shixinandroiddemo2.network.okhttp3.SxHttpClient;
 
 import java.io.IOException;
+import java.util.concurrent.ConcurrentHashMap;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import top.shixinzhang.sxframework.utils.LogUtils;
+import top.shixinzhang.utils.LogUtils;
 
 /**
  * Description:
@@ -78,6 +79,11 @@ public class Test {
     }
 
     public static void main(String[] args) {
+
+        ConcurrentHashMap<String, String> concurrentHashMap = new ConcurrentHashMap<>();
+        concurrentHashMap.put("name", "shixinzhang");
+        String name = concurrentHashMap.get("name");
+
         Test test = new Test();
         test.get();
     }

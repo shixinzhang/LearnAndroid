@@ -229,7 +229,7 @@ public class CommonPresenter extends BasePresenter {
             }
             if (checkIndex >= recyclerViewCount) {
                 if (!TextUtils.isEmpty(carSeriesName) && carSeriesName.equals(getModel().getLastSeriesName())) {
-                    getModel().setMode(MODE_SELECT_BRAND);
+//                    getModel().setMode(MODE_SELECT_BRAND);
                     clickBack();
                 } else {
                     getModel().setLastSeriesName(carSeriesName);
