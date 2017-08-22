@@ -20,6 +20,7 @@ import android.support.annotation.NonNull;
 
 import top.shixinzhang.mvpcrawler.DataCrawlerService;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
+import top.shixinzhang.utils.ApplicationUtils;
 import top.shixinzhang.utils.ShellUtils;
 
 /**
@@ -65,6 +66,10 @@ public abstract class BasePresenter implements CrawlerContract.Presenter {
         setView(null);
     }
 
+    @Override
+    public void startApp() {
+        ApplicationUtils.startApplication(DataCrawlerService.mContext, getView().getAppPackageName());
+    }
     /**
      * 上滑
      */

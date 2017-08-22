@@ -45,7 +45,7 @@ public class SellNiceCarView implements CrawlerContract.View {
     private final String TAG = this.getClass().getSimpleName();
     private List<String> mCoreClassNameList = Arrays.asList(Config.CLASS_NAME_SNC_MAIN_TAB,
             Config.CLASS_NAME_SNC_SERIES, Config.CLASS_NAME_SNC_MODELS, Config.CLASS_NAME_SNC_DETAIL,
-            Config.DIALOG_NAME_CALL, Config.CLASS_NAME_RECYCLER_VIEW, Config.CLASS_NAME_CALL_DIALOG);
+            Config.DIALOG_NAME_CALL, Config.CLASS_NAME_RECYCLER_VIEW, Config.CLASS_NAME_DIALOG);
 
     public static SellNiceCarView create() {
         return new SellNiceCarView();

@@ -18,7 +18,6 @@ package top.shixinzhang.mvpcrawler.mvp.view;
 
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
 
@@ -50,7 +49,7 @@ public class EjAutoView implements CrawlerContract.View {
             Config.EjAuto.CLASS_NAME_MAIN, Config.EjAuto.CLASS_NAME_DETAIL,
             Config.EjAuto.CLASS_NAME_MODELS, Config.EjAuto.CLASS_NAME_SERIES,
             Config.EjAuto.DIALOG_NAME_CALL, Config.CLASS_NAME_LIST_VIEW,
-            Config.CLASS_NAME_RECYCLER_VIEW, Config.CLASS_NAME_CALL_DIALOG);
+            Config.CLASS_NAME_RECYCLER_VIEW, Config.CLASS_NAME_DIALOG);
 
     public static EjAutoView create() {
         return new EjAutoView();
@@ -267,7 +266,8 @@ public class EjAutoView implements CrawlerContract.View {
                     ShellUtils.clickBack();
                 }
             } else if (Config.EjAuto.CLASS_NAME_MODELS.equals(currentClassName)) {    //实际在车款列表页
-                ShellUtils.execCmd("input tab 200 400");
+                // TODO: 17/8/21 下拉通知栏
+//                ShellUtils.execCmd("input tab 200 400");
             }
         } else if (mode == CrawlerContract.Model.MODE_GET_NUMBER) {
             if (Config.EjAuto.CLASS_NAME_DETAIL.equals(currentClassName)) {

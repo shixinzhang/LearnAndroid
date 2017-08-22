@@ -25,11 +25,8 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.util.Map;
 
-import top.shixinzhang.mvpcrawler.DataCrawlerService;
 import top.shixinzhang.mvpcrawler.entity.SupplierInfoBean;
-import top.shixinzhang.mvpcrawler.helper.Config;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
-import top.shixinzhang.utils.ApplicationUtils;
 import top.shixinzhang.utils.NodeUtils;
 
 import static top.shixinzhang.mvpcrawler.mvp.CrawlerContract.Model.MODE_GET_INFO;
@@ -109,10 +106,7 @@ public class CommonPresenter extends BasePresenter {
 
     }
 
-    @Override
-    public void startApp() {
-        ApplicationUtils.startApplication(DataCrawlerService.mContext, getView().getAppPackageName());
-    }
+
 
     /**
      * 打开品牌列表页面

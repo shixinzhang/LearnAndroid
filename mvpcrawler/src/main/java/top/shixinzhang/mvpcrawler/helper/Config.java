@@ -39,6 +39,7 @@ public class Config {
     // app 名称
     public final static String APP_NAME_SELL_NICE_CAR = "卖好车";
     public final static String APP_NAME_YI_JIE_HAO_CHE = "易捷好车";
+    public final static String APP_NAME_TIAO_BAN = "跳板网";
 
     //包名
     public static final String PKG_SELL_NICE_CAR = "com.maihaoche.bentley";
@@ -53,10 +54,10 @@ public class Config {
 
     public final static String CLASS_NAME_LIST_VIEW = "android.widget.ListView";
     public final static String CLASS_NAME_RECYCLER_VIEW = "android.support.v7.widget.RecyclerView";   //List 改变
-    public final static String CLASS_NAME_CALL_DIALOG = "android.support.v7.app.AlertDialog";  //弹出的对话框
+    public final static String CLASS_NAME_DIALOG = "android.support.v7.app.AlertDialog";  //弹出的对话框
 
     //易捷好车
-    public interface EjAuto{
+    public interface EjAuto {
         String PKG_EJ_AUTO = "cn.ejauto.app";
 
         String CLASS_NAME_MAIN = PKG_EJ_AUTO + ".MainActivity";
@@ -65,5 +66,17 @@ public class Config {
         String CLASS_NAME_MODELS = PKG_EJ_AUTO + ".activity.carsource.CarSourceFilterListActivity";
         String CLASS_NAME_DETAIL = PKG_EJ_AUTO + ".activity.carsource.CarSourceDetailActivity";
         String DIALOG_NAME_CALL = "android.app.Dialog";
+    }
+
+    //跳板网
+    public interface Tiaoban {
+        String PKG_TIAO_BAN = "com.eage.tbw";
+
+        String CLASS_NAME_MAIN = PKG_TIAO_BAN + ".module.mainpage.MainPageActivity";
+        String CLASS_NAME_BRAND_LIST = PKG_TIAO_BAN + ".module.common.filtercar.FilterCarActivity";
+        String CLASS_NAME_Models = CLASS_NAME_MAIN;
+        String CLASS_NAME_DETAIL = PKG_TIAO_BAN + ".module.carsource.info.CarSourceInfoActivity";
+        String CLASS_NAME_NUMBER = PKG_TIAO_BAN + ".module.cardealer.info.CardealerInfoActivity";
+
     }
 }
