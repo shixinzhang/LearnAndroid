@@ -63,7 +63,7 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
     public void onCreate() {
         super.onCreate();
         int screenHeight = getApplicationContext().getResources().getDisplayMetrics().heightPixels;
-        sSwipeCmd = String.format("input swipe %d %d %d %d", 10, screenHeight - 200, 10, 100);
+        sSwipeCmd = String.format("input swipe %d %d %d %d", 10, screenHeight - 200, 10, 200);
         mContext = this;
     }
 
@@ -74,7 +74,6 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
             Log.i(TAG, "onStartCommand mode:" + mMode);
             if (mMode == MODE_START && mPresenter != null) {
                 getPresenter().startApp();
-                initMonitorThread();
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -82,25 +81,23 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-//        getPresenter().receiveEvent(getRootInActiveWindow(), event);
         int eventType = event.getEventType();
         switch (eventType) {
             case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:  //监听进入界面
             case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
-//            default:
+
+                initMonitorThread();
                 getPresenter().receiveEvent(getRootInActiveWindow(), event);
                 break;
         }
     }
 
-//    public static AccessibilityNodeInfo getRootNode(){
-//        return getRootInActiveWindow();
-//    }
-
     private void initMonitorThread() {
-        mMonitorThread = new MonitorThread("MVP监控");
-        mMonitorThread.setUIHandler(new Handler(this));
-        mMonitorThread.start();
+        if (mMonitorThread == null) {
+            mMonitorThread = new MonitorThread("MVP监控");
+            mMonitorThread.setUIHandler(new Handler(this));
+            mMonitorThread.start();
+        }
     }
 
     private void destroyMonitor() {
@@ -116,9 +113,9 @@ public class DataCrawlerService extends AccessibilityService implements Handler.
         return mPresenter;
     }
 
-    public static void setPresenter(@NonNull final CrawlerContract.View view, @NonNull final CrawlerContract.Model model) {
-        mPresenter = new CommonPresenter(view, model);
-        mCurrentApp = view.getAppName();
+    public static void setPresenter(@NonNull BasePresenter presenter) {
+        mPresenter = presenter;
+        mCurrentApp = presenter.getView().getAppName();
     }
 
     public static String getCurrentApp() {

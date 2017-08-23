@@ -7,7 +7,7 @@
     android:canRetrieveWindowContent="true"
     android:description="@string/description"
     android:label="@string/title"
-    android:packageNames="cn.ejauto.app,com.maihaoche.bentley"/>
+    android:packageNames="cn.ejauto.app,com.maihaoche.bentley,com.eage.tbw"/>
 
     <!--
     typeViewClicked

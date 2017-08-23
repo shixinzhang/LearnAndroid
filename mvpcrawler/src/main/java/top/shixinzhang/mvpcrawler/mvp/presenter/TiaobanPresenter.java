@@ -17,9 +17,14 @@
 package top.shixinzhang.mvpcrawler.mvp.presenter;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import top.shixinzhang.mvpcrawler.helper.Config;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
+import top.shixinzhang.utils.NodeUtils;
 
 /**
  * Description:
@@ -40,6 +45,22 @@ public class TiaobanPresenter extends CommonPresenter {
         super(view, model);
     }
 
+    @Override
+    public void receiveEvent(final AccessibilityNodeInfo rootNode, final AccessibilityEvent event) {
+        if (event == null || TextUtils.isEmpty(event.getClassName())) {
+            return;
+        }
+        String className = event.getClassName().toString();
+        if (Config.CLASS_NAME_DIALOG.equals(className)) {
+            boolean hasButton = NodeUtils.hasText(rootNode, "随便逛逛");
+            if (hasButton) {
+                boolean clickResult = NodeUtils.actionText(rootNode, "随便逛逛");
+                Log.d(TAG, "关闭对话框 " + clickResult);
+            }
+        }
+        super.receiveEvent(rootNode, event);
+    }
+
     /**
      * 修改逻辑
      *
@@ -53,7 +74,7 @@ public class TiaobanPresenter extends CommonPresenter {
         }
         if (getView().openBrandList(rootNode)) {
             getModel().setMode(CrawlerContract.Model.MODE_SELECT_CAR_MODEL);    //直接进入详情
-            iterateBrands(rootNode, className);
+            iterateModels(rootNode, className);
         }
     }
 

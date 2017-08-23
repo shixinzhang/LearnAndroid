@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright (c) 2017. shixinzhang (shixinzhang2016@gmail.com)
   ~
@@ -15,11 +16,7 @@
   -->
 
 <resources>
-    <string name="app_name">mvpcrawler</string>
-    <string name="sell_nice_car">卖好车</string>
-    <string name="yi_jie_hao_che">易捷好车</string>
-    <string name="title">mvpcrawler-数据爬取</string>
-    <string name="description">开启辅助服务后即可模拟点击</string>
-    <string name="app_name_maihaoche">com.maihaoche.bentley</string>
-    <string name="tiao_ban_wang">跳板网</string>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
 </resources>

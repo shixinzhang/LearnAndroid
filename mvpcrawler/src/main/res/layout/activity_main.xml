@@ -53,6 +53,14 @@
         android:text="@string/yi_jie_hao_che"/>
 
     <Button
+        android:id="@+id/btn_tiao_ban"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_yi_jie_hao_che"
+        android:layout_marginTop="8dp"
+        android:text="@string/tiao_ban_wang"/>
+
+    <Button
         android:id="@+id/btn_stop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

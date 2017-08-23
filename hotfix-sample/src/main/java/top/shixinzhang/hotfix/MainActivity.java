@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package top.shixinzhang.hook_sample;
+package top.shixinzhang.hotfix;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
 /**
  * Description:
- * <br> 插件化 ，Hook 练习
+ * <br> 热修复练习
+ * https://github.com/Tencent/tinker
+ * https://juejin.im/post/5951d5265188250d8f602225
  * <p>
  * <br> Created by shixinzhang on 17/8/18.
  * <p>
@@ -38,13 +37,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Button btnNext = (Button) findViewById(R.id.btn_jump_second);
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                startActivity(new Intent(MainActivity.this, SecondActivity.class));
-            }
-        });
     }
 }

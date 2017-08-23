@@ -16,9 +16,13 @@
 
 package top.shixinzhang.mvpcrawler.mvp.view;
 
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
+
+import org.w3c.dom.Node;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,7 +49,13 @@ public class TiaobanView implements CrawlerContract.View {
     private List<String> mWhiteList = Arrays.asList(
             Config.Tiaoban.CLASS_NAME_MAIN, Config.Tiaoban.CLASS_NAME_BRAND_LIST,
             Config.Tiaoban.CLASS_NAME_Models, Config.Tiaoban.CLASS_NAME_DETAIL,
-            Config.Tiaoban.CLASS_NAME_NUMBER, Config.CLASS_NAME_DIALOG);
+            Config.Tiaoban.CLASS_NAME_NUMBER, Config.CLASS_NAME_DIALOG,
+            Config.CLASS_NAME_LIST_VIEW);
+
+
+    public static TiaobanView create() {
+        return new TiaobanView();
+    }
 
     @Override
     public String getAppName() {
@@ -69,7 +79,13 @@ public class TiaobanView implements CrawlerContract.View {
 
     @Override
     public boolean isBrandListPage(final AccessibilityNodeInfo rootNode, final String className) {
-        return NodeUtils.hasText(rootNode, "平行进口");
+        return false;
+//        return NodeUtils.hasText(rootNode, "平行进口");
+    }
+
+
+    private boolean isListView(final String className) {
+        return Config.CLASS_NAME_LIST_VIEW.equals(className);
     }
 
     @Override
@@ -79,7 +95,7 @@ public class TiaobanView implements CrawlerContract.View {
 
     @Override
     public boolean isModelsPage(final String className) {
-        return Config.Tiaoban.CLASS_NAME_Models.equals(className);
+        return Config.Tiaoban.CLASS_NAME_Models.equals(className) || isListView(className);
     }
 
     @Override
@@ -105,18 +121,20 @@ public class TiaobanView implements CrawlerContract.View {
 
     @Override
     public boolean openNumberPage(@NonNull final AccessibilityNodeInfo rootNode) {
-        return false;
+        boolean result = NodeUtils.clickNode(rootNode, "com.eage.tbw:id/sourdetail_relativelayout_company");
+        return result;
     }
 
     @Override
     public AccessibilityNodeInfo getBrandListNode(@NonNull final AccessibilityNodeInfo rootNode) {
-
-
-        return null;
+//        AccessibilityNodeInfo listNode = NodeUtils.findNode(rootNode, "com.eage.tbw:id/carsource_listview_carsource");
+        return NodeUtils.findNode(rootNode, "com.eage.tbw:id/carsource_listview_carsource");
     }
 
     @Override
     public AccessibilityNodeInfo getBrandNodeFromItem(@NonNull final AccessibilityNodeInfo itemNode) throws Exception {
+
+
         return null;
     }
 
@@ -132,22 +150,66 @@ public class TiaobanView implements CrawlerContract.View {
 
     @Override
     public AccessibilityNodeInfo getModelListNode(@NonNull final AccessibilityNodeInfo rootNode) {
-        return null;
+        return NodeUtils.findNode(rootNode, "com.eage.tbw:id/carsource_listview_carsource");
     }
 
     @Override
     public String getModelIdentity(@NonNull final AccessibilityNodeInfo itemNode) throws Exception {
-        return null;
+
+        AccessibilityNodeInfo nameNode = NodeUtils.findNode(itemNode, "com.eage.tbw:id/carsource_textview_title");
+        if (nameNode == null || nameNode.getText() == null) {
+            Log.e(TAG, "车源型号名称节点 没找到！");
+            return null;
+        }
+
+        AccessibilityNodeInfo priceNode = NodeUtils.findNode(itemNode, "com.eage.tbw:id/carsource_textview_price");
+        AccessibilityNodeInfo dateNode = NodeUtils.findNode(itemNode, "com.eage.tbw:id/carsource_textview_datetime");
+
+        StringBuilder stringBuilder = new StringBuilder(nameNode.getText().toString());
+        NodeUtils.safetyAppendString(stringBuilder, priceNode);
+        NodeUtils.safetyAppendString(stringBuilder, dateNode);
+
+        return stringBuilder.toString();
     }
 
     @Override
     public SupplierInfoBean getInfo(@NonNull final AccessibilityNodeInfo rootNode) throws Exception {
-        return null;
+        String name = NodeUtils.getTextByNodeId(rootNode, "com.eage.tbw:id/sourdetail_textview_name");
+        String carName = NodeUtils.getTextByNodeId(rootNode, "com.eage.tbw:id/sourdetail_textview_cartitle");
+        String price = NodeUtils.getTextByNodeId(rootNode, "com.eage.tbw:id/sourdetail_textview_carprice");
+        String note = NodeUtils.getTextByNodeId(rootNode, "com.eage.tbw:id/sourdetail_textview_carnote");   //备注
+        String company = NodeUtils.getTextByNodeId(rootNode, "com.eage.tbw:id/sourdetail_textview_company");
+
+        return new SupplierInfoBean(null, name, company, carName + price + note);
     }
 
     @Override
     public SupplierInfoBean getNumberInfo(@NonNull final AccessibilityNodeInfo rootNode) throws Exception {
-        return null;
+        boolean clickDetailResult = NodeUtils.clickNode(rootNode, "com.eage.tbw:id/button3");   //点击 联系我们
+
+        SystemClock.sleep(50);
+        String phone = NodeUtils.getTextByNodeId(rootNode, "com.eage.tbw:id/textview2");
+        if (TextUtils.isEmpty(phone)) {
+            Log.i(TAG, "phone : " + phone);
+        }
+//
+//        AccessibilityNodeInfo listViewNode = NodeUtils.findNode(rootNode, "com.eage.tbw:id/listview1");
+//        if (listViewNode != null) {
+//            int childCount = listViewNode.getChildCount();
+//            Log.d(TAG, String.format("有 %d 个联系人信息", childCount));
+//
+//            if (childCount < 3) {
+//                return new SupplierInfoBean();
+//            }
+//
+//            AccessibilityNodeInfo child;
+//            for (int i = 2; i < childCount; i++) {
+//                child = listViewNode.getChild(i);
+//                NodeUtils.findNode(child)
+//            }
+//        }
+
+        return new SupplierInfoBean().setPhone(phone);
     }
 
     @Override
@@ -167,7 +229,7 @@ public class TiaobanView implements CrawlerContract.View {
 
     @Override
     public void resolveNotWorked(final AccessibilityNodeInfo rootNode, final int mode, final String currentClassName) {
-
+        Log.e(TAG, "resolveNotWorked: " + mode + " / " + currentClassName);
     }
 
     @Override

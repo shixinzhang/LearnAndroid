@@ -29,8 +29,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
 import top.shixinzhang.mvpcrawler.mvp.model.CrawlerModel;
+import top.shixinzhang.mvpcrawler.mvp.presenter.BasePresenter;
+import top.shixinzhang.mvpcrawler.mvp.presenter.CommonPresenter;
+import top.shixinzhang.mvpcrawler.mvp.presenter.TiaobanPresenter;
 import top.shixinzhang.mvpcrawler.mvp.view.EjAutoView;
 import top.shixinzhang.mvpcrawler.mvp.view.SellNiceCarView;
+import top.shixinzhang.mvpcrawler.mvp.view.TiaobanView;
 import top.shixinzhang.utils.ServiceUtils;
 import top.shixinzhang.utils.ShellUtils;
 
@@ -50,19 +54,6 @@ import static top.shixinzhang.mvpcrawler.mvp.CrawlerContract.Model.MODE_START;
 
 public class MainActivity extends AppCompatActivity {
 
-
-    @BindView(R.id.btn_sell_nice_car)
-    Button mBtnSellNiceCar;
-    @BindView(R.id.btn_yi_jie_hao_che)
-    Button mBtnYiJieHaoChe;
-    @BindView(R.id.btn_stop)
-    Button mBtnStop;
-    @BindView(R.id.activity_main)
-    RelativeLayout mActivityMain;
-
-    private CrawlerContract.Model mCrawlerModel;
-    private CrawlerContract.View mCrawlerAppView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         ShellUtils.testRoot(this);
     }
-
 
     @OnClick(R.id.btn_sell_nice_car)
     public void crawlerSellNiceCar() {
@@ -81,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     @OnClick(R.id.btn_yi_jie_hao_che)
     public void crawlerEjAuto() {
         if (!hasEnv()) {
@@ -91,14 +80,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @OnClick(R.id.btn_tiao_ban)
+    public void crawlerTiaoban() {
+        if (!hasEnv()) {
+            goToOpenAccessibility(0);
+        } else {
+            startCrawlerService(new TiaobanPresenter(TiaobanView.create(), CrawlerModel.create()));
+        }
+    }
+
     /**
      * 开启爬
      *
      * @param view
      */
     private void startCrawlerService(@NonNull final CrawlerContract.View view) {
-        DataCrawlerService.setPresenter(view, CrawlerModel.create());
+        startCrawlerService(new CommonPresenter(view, CrawlerModel.create()));
+    }
 
+    private void startCrawlerService(@NonNull BasePresenter presenter) {
+        DataCrawlerService.setPresenter(presenter);
         Intent intent = new Intent(this, DataCrawlerService.class);
         intent.putExtra(MODE_KEY, MODE_START);
         startService(intent);

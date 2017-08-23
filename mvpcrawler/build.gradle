@@ -33,3 +33,7 @@ dependencies {
 //    compile "com.github.shixinzhang:android-utils:$rootProject.utilsVersion"
     compile project(path: ':android-utils')
 }
+
+tasks.whenTaskAdded { task ->
+    println(task.name + " =====")
+}
