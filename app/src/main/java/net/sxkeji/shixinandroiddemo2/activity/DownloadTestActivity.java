@@ -18,8 +18,8 @@ import top.shixinzhang.sxframework.network.download.IAPKDownloader;
 import top.shixinzhang.sxframework.network.download.imp.DefaultDownloader;
 import top.shixinzhang.sxframework.manager.update.APKDownloader;
 import top.shixinzhang.sxframework.manager.update.model.UpdateResponseInfo;
-import top.shixinzhang.sxframework.utils.ApplicationUtils;
-import top.shixinzhang.sxframework.utils.DateUtils;
+import top.shixinzhang.utils.ApplicationUtils;
+import top.shixinzhang.utils.DateUtils;
 
 /**
  * Description:

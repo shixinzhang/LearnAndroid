@@ -27,7 +27,7 @@ import android.support.annotation.Nullable;
 
 import net.sxkeji.shixinandroiddemo2.helper.ConfigHelper;
 
-import top.shixinzhang.sxframework.utils.LogUtils;
+import top.shixinzhang.utils.LogUtils;
 
 /**
  * Description:

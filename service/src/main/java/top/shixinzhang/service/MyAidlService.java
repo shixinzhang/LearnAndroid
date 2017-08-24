@@ -25,7 +25,7 @@ import android.support.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import top.shixinzhang.sxframework.utils.LogUtils;
+import top.shixinzhang.utils.LogUtils;
 
 /**
  * Description:

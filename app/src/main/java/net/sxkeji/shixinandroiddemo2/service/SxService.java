@@ -14,8 +14,8 @@ import net.sxkeji.shixinandroiddemo2.activity.ServiceTestActivity;
 import net.sxkeji.shixinandroiddemo2.helper.ConfigHelper;
 import net.sxkeji.shixinandroiddemo2.util.AlarmManagerUtil;
 
-import top.shixinzhang.sxframework.utils.DateUtils;
-import top.shixinzhang.sxframework.utils.LogUtils;
+import top.shixinzhang.utils.DateUtils;
+import top.shixinzhang.utils.LogUtils;
 
 /**
  * <br/> Description: 服务

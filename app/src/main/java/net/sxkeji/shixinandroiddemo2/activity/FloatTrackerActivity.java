@@ -11,8 +11,8 @@ import net.sxkeji.shixinandroiddemo2.service.AssistantService;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import top.shixinzhang.sxframework.utils.AlertUtils;
-import top.shixinzhang.sxframework.utils.SettingUtils;
+import top.shixinzhang.utils.AlertUtils;
+import top.shixinzhang.utils.SettingUtils;
 
 /**
  * Description:

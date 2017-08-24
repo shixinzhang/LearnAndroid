@@ -30,7 +30,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import top.shixinzhang.sxframework.manager.ThreadPoolManager;
-import top.shixinzhang.sxframework.utils.LogUtils;
+import top.shixinzhang.utils.LogUtils;
 
 /**
  * Description:

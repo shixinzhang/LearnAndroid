@@ -16,41 +16,24 @@
 
 package top.shixinzhang.hook_sample;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
 /**
  * Description:
- * <br> 插件化 ，Hook 练习
+ * <br>
  * <p>
- * <br> Created by shixinzhang on 17/8/18.
+ * <br> Created by shixinzhang on 17/8/23.
  * <p>
  * <br> Email: shixinzhang2016@gmail.com
  * <p>
  * <br> https://about.me/shixinzhang
  */
-public class MainActivity extends BaseActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        Button btnNext = (Button) findViewById(R.id.btn_jump_second);
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                StackTraceUtils.printStackTrace();
-                startActivity(new Intent(MainActivity.this, SecondActivity.class));
-            }
-        });
-    }
+public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
         super.onResume();
+        StackTraceUtils.printStackTrace();
     }
 }

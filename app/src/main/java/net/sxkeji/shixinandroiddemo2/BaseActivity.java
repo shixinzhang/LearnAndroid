@@ -17,7 +17,7 @@ import net.sxkeji.shixinandroiddemo2.annotation.AutoRegister;
 import net.sxkeji.shixinandroiddemo2.annotation.ContentView;
 import net.sxkeji.shixinandroiddemo2.bean.ActivityBean;
 
-import top.shixinzhang.sxframework.utils.LogUtils;
+import top.shixinzhang.utils.LogUtils;
 
 /**
  * description: 基类

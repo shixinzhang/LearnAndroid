@@ -71,6 +71,12 @@ public class OkHttp3TestActivity extends BaseActivity {
         setContentView(R.layout.activity_okhttp);
         ButterKnife.bind(this);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        StackTr
         get();
     }
 

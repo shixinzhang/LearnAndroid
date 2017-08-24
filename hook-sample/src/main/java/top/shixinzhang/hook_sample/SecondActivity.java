@@ -34,7 +34,7 @@ import android.widget.Button;
  * <br> https://about.me/shixinzhang
  */
 
-public class SecondActivity extends AppCompatActivity {
+public class SecondActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {

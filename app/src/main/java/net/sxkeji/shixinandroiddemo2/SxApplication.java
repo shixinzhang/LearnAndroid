@@ -9,6 +9,7 @@ import com.github.anrwatchdog.ANRError;
 import com.github.anrwatchdog.ANRWatchDog;
 import com.taobao.weex.InitConfig;
 import com.taobao.weex.WXSDKEngine;
+import com.umeng.analytics.MobclickAgent;
 
 import net.sxkeji.shixinandroiddemo2.hybrid.handler.UIHandler;
 import net.sxkeji.shixinandroiddemo2.hybrid.handler.internal.HybridFactory;
@@ -19,10 +20,11 @@ import net.sxkeji.shixinandroiddemo2.weex.adapter.PlayDebugAdapter;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import top.shixinzhang.sxframework.statistic.CrashHandler;
-import top.shixinzhang.sxframework.utils.ApplicationUtils;
+import top.shixinzhang.utils.ApplicationUtils;
 
 /**
  * <br/> Description:
+ * 初始化操作能放到线程的放到线程，最好使用 RxJava 分到多个线程，然后组合
  * <p>
  * <br/> Created by shixinzhang on 16/12/21.
  * <p>
@@ -34,9 +36,17 @@ import top.shixinzhang.sxframework.utils.ApplicationUtils;
 public class SxApplication extends MultiDexApplication {
     private final String TAG = this.getClass().getSimpleName();
 
+    private static SxApplication mApplication;
+
+    public static SxApplication getApplication() {
+        return mApplication;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        mApplication = this;
 
         if (BuildConfig.DEBUG) {
 //            enableStrictMode();
@@ -54,6 +64,16 @@ public class SxApplication extends MultiDexApplication {
 //        initRealm();
 
         initWeex();
+
+        initUmengAnalytics();
+    }
+
+    /**
+     * 友盟统计
+     */
+    private void initUmengAnalytics() {
+        MobclickAgent.setDebugMode(BuildConfig.DEBUG);
+        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
     }
 
     /**

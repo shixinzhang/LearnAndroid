@@ -34,20 +34,24 @@ import java.lang.reflect.Field;
  */
 
 public class MyApplication extends Application {
+    private final String TAG = this.getClass().getSimpleName();
 
     @Override
     public void onCreate() {
         super.onCreate();
 
+        StackTraceUtils.printStackTrace();
+
         hookActivityStart();
     }
+
 
     /**
      * 简单的 hook 启动 activity
      * 思路：
-     *  启动由 ActivityThread 中的 mInstrumentation 进行，而一个进程中只有一个静态 activityThread 对象
-     *  因此只要替换这个对象的 mInstrumentation 为新的，即可拦截 Activity 启动
-     *  使用反射
+     * 启动由 ActivityThread 中的 mInstrumentation 进行，而一个进程中只有一个静态 activityThread 对象
+     * 因此只要替换这个对象的 mInstrumentation 为新的，即可拦截 Activity 启动
+     * 使用反射
      */
     private void hookActivityStart() {
         Class activityThreadClass;

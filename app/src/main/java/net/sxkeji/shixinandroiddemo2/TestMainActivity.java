@@ -48,10 +48,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import top.shixinzhang.sxframework.utils.DateUtils;
-import top.shixinzhang.sxframework.utils.FileUtils;
-import top.shixinzhang.sxframework.utils.LogUtils;
-import top.shixinzhang.sxframework.utils.SettingUtils;
+import top.shixinzhang.utils.DateUtils;
+import top.shixinzhang.utils.FileUtils;
+import top.shixinzhang.utils.LogUtils;
+import top.shixinzhang.utils.SettingUtils;
 import top.shixinzhang.sxframework.views.adapter.rvbaseadapter.BaseQuickAdapter;
 
 /**

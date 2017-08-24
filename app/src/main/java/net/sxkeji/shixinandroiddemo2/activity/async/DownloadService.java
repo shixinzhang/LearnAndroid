@@ -28,7 +28,7 @@ import java.io.BufferedInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import top.shixinzhang.sxframework.utils.DateUtils;
+import top.shixinzhang.utils.DateUtils;
 
 /**
  * Description:

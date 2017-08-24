@@ -4,7 +4,7 @@ import android.accessibilityservice.AccessibilityService;
 import android.content.Intent;
 import android.view.accessibility.AccessibilityEvent;
 
-import top.shixinzhang.sxframework.utils.LogUtils;
+import top.shixinzhang.utils.LogUtils;
 
 /**
  * Description:

@@ -10,8 +10,8 @@ import android.support.annotation.NonNull;
 import net.sxkeji.shixinandroiddemo2.helper.ConfigHelper;
 import net.sxkeji.shixinandroiddemo2.receiver.RepeatReceiver;
 
-import top.shixinzhang.sxframework.utils.DateUtils;
-import top.shixinzhang.sxframework.utils.LogUtils;
+import top.shixinzhang.utils.DateUtils;
+import top.shixinzhang.utils.LogUtils;
 
 /**
  * <br/> Description: 定时器任务工具类

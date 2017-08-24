@@ -62,8 +62,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import top.shixinzhang.sxframework.manager.ThreadPoolManager;
-import top.shixinzhang.sxframework.utils.DateUtils;
-import top.shixinzhang.sxframework.utils.LogUtils;
+import top.shixinzhang.utils.DateUtils;
+import top.shixinzhang.utils.LogUtils;
 
 
 /**

@@ -19,8 +19,8 @@ import net.sxkeji.shixinandroiddemo2.service.SxService;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import top.shixinzhang.sxframework.utils.DateUtils;
-import top.shixinzhang.sxframework.utils.SpUtils;
+import top.shixinzhang.utils.DateUtils;
+import top.shixinzhang.utils.SpUtils;
 
 /**
  * <br/> Description:定时服务

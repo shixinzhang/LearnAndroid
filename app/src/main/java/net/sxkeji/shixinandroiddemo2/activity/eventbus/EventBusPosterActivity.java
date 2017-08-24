@@ -12,7 +12,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import top.shixinzhang.sxframework.eventsubscribe.third.eventbus.EventBus;
-import top.shixinzhang.sxframework.utils.DateUtils;
+import top.shixinzhang.utils.DateUtils;
 
 /**
  * <header>
