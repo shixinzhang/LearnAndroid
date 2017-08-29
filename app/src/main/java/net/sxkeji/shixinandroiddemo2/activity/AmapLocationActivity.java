@@ -2,7 +2,6 @@ package net.sxkeji.shixinandroiddemo2.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,12 +9,12 @@ import android.widget.TextView;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
 
-import net.sxkeji.shixinandroiddemo2.BaseActivity;
 import net.sxkeji.shixinandroiddemo2.R;
 import net.sxkeji.shixinandroiddemo2.helper.LocationHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import top.shixinzhang.sxframework.common.base.BaseActivity;
 
 /**
  * <br/> Description:
@@ -45,23 +44,21 @@ public class AmapLocationActivity extends BaseActivity {
         addListeners();
     }
 
-    @Override
     public void initViews() {
         LocationHelper.getInstance(this).setLocationListener(new AMapLocationListener() {
             @Override
             public void onLocationChanged(AMapLocation aMapLocation) {
                 if (aMapLocation == null){
-                    showErrorLog("location failed !");
+//                    showErrorLog("location failed !");
                     return;
                 }
                 String locationResult = aMapLocation.getAddress() + ", " + aMapLocation.getLocationDetail() + ", (" + aMapLocation.getLatitude() + "," + aMapLocation.getLongitude() + ")";
-                showErrorLog(locationResult);
+//                showErrorLog(locationResult);
                 mTvLocationResult.setText(locationResult);
             }
         });
     }
 
-    @Override
     public void loadData() {
 //        getSupportFragmentManager().beginTransaction().replace()
     }

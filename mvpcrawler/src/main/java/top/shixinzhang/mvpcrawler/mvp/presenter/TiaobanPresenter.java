@@ -78,4 +78,14 @@ public class TiaobanPresenter extends CommonPresenter {
         }
     }
 
+
+    @Override
+    public void getNumber(final AccessibilityNodeInfo rootNode, final String className) {
+        if (!getView().isNumberPage(className)) {
+            return;
+        }
+        getView().openNumberExtra(rootNode, className);
+
+        super.getNumber(rootNode, className);
+    }
 }

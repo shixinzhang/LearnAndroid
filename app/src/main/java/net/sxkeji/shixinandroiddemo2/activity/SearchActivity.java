@@ -5,17 +5,20 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 
 import net.sxkeji.shixinandroiddemo2.R;
 
+import top.shixinzhang.sxframework.common.base.BaseActivity;
+import top.shixinzhang.sxframework.statistic.ubt.PageEventInfo;
+
 /**
  * 搜索
  * Created by zhangshixin on 8/30/2016.
  */
-public class SearchActivity extends AppCompatActivity {
+@PageEventInfo(pageName = "search", pageId = "search-id")
+public class SearchActivity extends BaseActivity {
 
     private BuyCarTabFragment mBuyCarTabFragment;
     private OnBackPressFragmentListener mOnBackPressFragmentListener;
@@ -30,7 +33,9 @@ public class SearchActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setPageEventParam("search-param");
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_search);
         mBuyCarTabFragment = new BuyCarTabFragment();
         mOnBackPressFragmentListener = mBuyCarTabFragment;

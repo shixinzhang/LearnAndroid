@@ -5,12 +5,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.TextView;
 
-import net.sxkeji.shixinandroiddemo2.BaseActivity;
 import net.sxkeji.shixinandroiddemo2.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import top.shixinzhang.sxframework.common.base.BaseActivity;
+import top.shixinzhang.sxframework.statistic.ubt.PageEventInfo;
 
 /**
  * Description:
@@ -23,12 +24,15 @@ import butterknife.OnClick;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public class SingleTaskActivity extends BaseActivity{
+@PageEventInfo(pageName = "StandardActivity")
+public class SingleTaskActivity extends BaseActivity {
     @BindView(R.id.tv_title)
     TextView mTvTitle;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setPageEventParam("SingleTaskActivity params" );
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch_mode);
         ButterKnife.bind(this);
@@ -60,17 +64,4 @@ public class SingleTaskActivity extends BaseActivity{
         startActivity(intent);
     }
 
-    @Override
-    public void initViews() {
-
-    }
-
-    @Override
-    public void loadData() {
-
-    }
-
-    public void addListeners() {
-
-    }
 }

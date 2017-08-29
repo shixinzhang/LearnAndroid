@@ -18,9 +18,10 @@ package net.sxkeji.shixinandroiddemo2.network.okhttp3;
 
 import java.io.IOException;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
+import top.shixinzhang.sxframework.network.third.okhttp3.Call;
+import top.shixinzhang.sxframework.network.third.okhttp3.Callback;
+import top.shixinzhang.sxframework.network.third.okhttp3.Response;
+
 
 /**
  * Description:

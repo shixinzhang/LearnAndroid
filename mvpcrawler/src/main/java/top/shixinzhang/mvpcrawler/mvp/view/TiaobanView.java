@@ -16,13 +16,10 @@
 
 package top.shixinzhang.mvpcrawler.mvp.view;
 
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
-
-import org.w3c.dom.Node;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +27,9 @@ import java.util.List;
 import top.shixinzhang.mvpcrawler.entity.SupplierInfoBean;
 import top.shixinzhang.mvpcrawler.helper.Config;
 import top.shixinzhang.mvpcrawler.mvp.CrawlerContract;
+import top.shixinzhang.mvpcrawler.mvp.presenter.BasePresenter;
 import top.shixinzhang.utils.NodeUtils;
+import top.shixinzhang.utils.StringUtils;
 
 /**
  * Description:
@@ -45,6 +44,8 @@ import top.shixinzhang.utils.NodeUtils;
 
 public class TiaobanView implements CrawlerContract.View {
     private final String TAG = this.getClass().getSimpleName();
+
+    private BasePresenter mBasePresenter;
 
     private List<String> mWhiteList = Arrays.asList(
             Config.Tiaoban.CLASS_NAME_MAIN, Config.Tiaoban.CLASS_NAME_BRAND_LIST,
@@ -178,36 +179,37 @@ public class TiaobanView implements CrawlerContract.View {
         String carName = NodeUtils.getTextByNodeId(rootNode, "com.eage.tbw:id/sourdetail_textview_cartitle");
         String price = NodeUtils.getTextByNodeId(rootNode, "com.eage.tbw:id/sourdetail_textview_carprice");
         String note = NodeUtils.getTextByNodeId(rootNode, "com.eage.tbw:id/sourdetail_textview_carnote");   //备注
+
+        String numberFromString = StringUtils.getNumberFromString(note);
+        String phone = null;
+        if (!TextUtils.isEmpty(numberFromString) && numberFromString.length() == 11){
+            phone = numberFromString;
+        }
+
         String company = NodeUtils.getTextByNodeId(rootNode, "com.eage.tbw:id/sourdetail_textview_company");
 
-        return new SupplierInfoBean(null, name, company, carName + price + note);
+        return new SupplierInfoBean(phone, name, company, carName + price + note);
     }
 
     @Override
-    public SupplierInfoBean getNumberInfo(@NonNull final AccessibilityNodeInfo rootNode) throws Exception {
-        boolean clickDetailResult = NodeUtils.clickNode(rootNode, "com.eage.tbw:id/button3");   //点击 联系我们
+    public synchronized SupplierInfoBean getNumberInfo(@NonNull final AccessibilityNodeInfo rootNode) throws Exception {
 
-        SystemClock.sleep(50);
-        String phone = NodeUtils.getTextByNodeId(rootNode, "com.eage.tbw:id/textview2");
-        if (TextUtils.isEmpty(phone)) {
-            Log.i(TAG, "phone : " + phone);
+        AccessibilityNodeInfo phoneNode = NodeUtils.findNode(rootNode, "com.eage.tbw:id/linearlayout");
+        if (phoneNode == null) {
+
         }
-//
-//        AccessibilityNodeInfo listViewNode = NodeUtils.findNode(rootNode, "com.eage.tbw:id/listview1");
-//        if (listViewNode != null) {
-//            int childCount = listViewNode.getChildCount();
-//            Log.d(TAG, String.format("有 %d 个联系人信息", childCount));
-//
-//            if (childCount < 3) {
-//                return new SupplierInfoBean();
-//            }
-//
-//            AccessibilityNodeInfo child;
-//            for (int i = 2; i < childCount; i++) {
-//                child = listViewNode.getChild(i);
-//                NodeUtils.findNode(child)
-//            }
-//        }
+        String phone = "-11";
+        List<AccessibilityNodeInfo> list = rootNode.findAccessibilityNodeInfosByViewId("com.eage.tbw:id/textview2");
+        for (AccessibilityNodeInfo textNode : list) {
+            CharSequence text = textNode.getText();
+            if (text != null && text.length() == 11 && text.toString().contains("1")) {
+                phone = text.toString();
+                break;
+            }
+        }
+
+        Log.i(TAG, "phone : " + phone);
+
 
         return new SupplierInfoBean().setPhone(phone);
     }
@@ -228,12 +230,21 @@ public class TiaobanView implements CrawlerContract.View {
     }
 
     @Override
-    public void resolveNotWorked(final AccessibilityNodeInfo rootNode, final int mode, final String currentClassName) {
+    public void resolveNotWorked(final AccessibilityNodeInfo rootNode, final int mode,
+                                 final String currentClassName) {
         Log.e(TAG, "resolveNotWorked: " + mode + " / " + currentClassName);
+        if (mode == 2) {
+            mBasePresenter.getModel().setMode(3);
+        }
+    }
+
+    @Override
+    public void openNumberExtra(final AccessibilityNodeInfo rootNode, final String className) {
+        boolean clickDetailResult = NodeUtils.clickNode(rootNode, "com.eage.tbw:id/button3");   //点击 联系我们
     }
 
     @Override
     public void setPresenter(@NonNull final CrawlerContract.Presenter presenter) {
-
+        mBasePresenter = (BasePresenter) presenter;
     }
 }

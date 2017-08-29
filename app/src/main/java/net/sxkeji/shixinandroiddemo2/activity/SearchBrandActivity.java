@@ -30,13 +30,14 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import top.shixinzhang.sxframework.common.base.BaseActivity;
 import top.shixinzhang.sxframework.views.adapter.rvbaseadapter.BaseQuickAdapter;
 
 /**
  * 搜索品牌或车型
  * Created by zhangshixin on 9/6/2016.
  */
-public class SearchBrandActivity extends Activity implements TextWatcher{
+public class SearchBrandActivity extends BaseActivity implements TextWatcher{
     @BindView(R.id.et_search)
     EditText mEtSearch;
     @BindView(R.id.ll_search)

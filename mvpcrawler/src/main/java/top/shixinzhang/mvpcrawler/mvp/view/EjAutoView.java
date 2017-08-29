@@ -276,4 +276,9 @@ public class EjAutoView implements CrawlerContract.View {
         }
     }
 
+    @Override
+    public void openNumberExtra(final AccessibilityNodeInfo rootNode, final String className) {
+
+    }
+
 }

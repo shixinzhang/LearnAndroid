@@ -107,7 +107,6 @@ public class CommonPresenter extends BasePresenter {
     }
 
 
-
     /**
      * 打开品牌列表页面
      *
@@ -344,8 +343,7 @@ public class CommonPresenter extends BasePresenter {
 
             getModel().setCurrentSupplier(supplierInfoBean);        //保存当前的信息，为了下一步继续使用
 
-
-            phoneMap.put(supplierInfoBean.getPublishInfo(), "1");
+            phoneMap.put(supplierInfoBean.getPublishInfo(), TextUtils.isEmpty(supplierInfoBean.getPhone()) ? supplierInfoBean.getPhone() : "1");
         } catch (Exception e) {
             e.printStackTrace();
             getModel().setMode(MODE_SELECT_CAR_MODEL);
@@ -361,12 +359,14 @@ public class CommonPresenter extends BasePresenter {
                 } else {
                     Log.d(TAG, "没打开电话页面 *******");
                 }
+            } else if (!TextUtils.isEmpty(supplierInfoBean.getName())) {    //名字也拿到了，都拿到了
+                Log.d(TAG, "直接拿到电话了：" + supplierInfoBean.getPhone());
+                getModel().addSupplier(supplierInfoBean);
+                getModel().getPhoneMap().put(getModel().getCurrentSupplier().getPublishInfo(), supplierInfoBean.getPhone());
+
+                getModel().setMode(MODE_SELECT_CAR_MODEL);
+                clickBack();
             }
-            // TODO: 17/8/17 返回上一级
-//            else if (!TextUtils.isEmpty(supplierInfoBean.getName())) {    //名字也拿到了，都拿到了
-//                getModel().setMode(MODE_GET_INFO);
-//                clickBack();
-//            }
         }
 
     }

@@ -41,6 +41,7 @@ public abstract class BasePresenter implements CrawlerContract.Presenter {
     public BasePresenter(@NonNull final CrawlerContract.View view, @NonNull final CrawlerContract.Model model) {
         mView = view;
         mModel = model;
+        mView.setPresenter(this);
     }
 
     public CrawlerContract.View getView() {

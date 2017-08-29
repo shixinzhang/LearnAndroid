@@ -3,7 +3,6 @@ package net.sxkeji.shixinandroiddemo2;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.multidex.MultiDexApplication;
 
 import com.github.anrwatchdog.ANRError;
 import com.github.anrwatchdog.ANRWatchDog;
@@ -19,6 +18,7 @@ import net.sxkeji.shixinandroiddemo2.weex.adapter.PlayDebugAdapter;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import top.shixinzhang.sxframework.BaseApplication;
 import top.shixinzhang.sxframework.statistic.CrashHandler;
 import top.shixinzhang.utils.ApplicationUtils;
 
@@ -33,7 +33,7 @@ import top.shixinzhang.utils.ApplicationUtils;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-public class SxApplication extends MultiDexApplication {
+public class SxApplication extends BaseApplication {
     private final String TAG = this.getClass().getSimpleName();
 
     private static SxApplication mApplication;
@@ -52,8 +52,6 @@ public class SxApplication extends MultiDexApplication {
 //            enableStrictMode();
             enableStetho();
         }
-
-        addLifecycleListener();
 
         registerHybridHandler();
 
@@ -151,47 +149,6 @@ public class SxApplication extends MultiDexApplication {
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
 
-    }
-
-    private void addLifecycleListener() {
-
-        //生命周期监听
-        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
-            @Override
-            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-                initCommonView(activity, savedInstanceState);
-            }
-
-            @Override
-            public void onActivityStarted(Activity activity) {
-
-            }
-
-            @Override
-            public void onActivityResumed(Activity activity) {
-
-            }
-
-            @Override
-            public void onActivityPaused(Activity activity) {
-//                Log.d(TAG, activity.getLocalClassName() + " onActivityPaused");
-            }
-
-            @Override
-            public void onActivityStopped(Activity activity) {
-
-            }
-
-            @Override
-            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-
-            }
-
-            @Override
-            public void onActivityDestroyed(Activity activity) {
-
-            }
-        });
     }
 
     /**

@@ -8,12 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import net.sxkeji.shixinandroiddemo2.BaseActivity;
 import net.sxkeji.shixinandroiddemo2.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import top.shixinzhang.sxframework.common.base.BaseActivity;
+import top.shixinzhang.sxframework.statistic.ubt.EventRecorder;
+import top.shixinzhang.sxframework.statistic.ubt.PageEventInfo;
 
 /**
  * Description:
@@ -25,7 +27,7 @@ import butterknife.OnClick;
  * <p>
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
-
+@PageEventInfo(pageName = "StandardActivity")
 public class StandardActivity extends BaseActivity {
     @BindView(R.id.tv_title)
     TextView mTvTitle;
@@ -36,6 +38,8 @@ public class StandardActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setPageEventParam("StandardActivity params" );
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch_mode);
         ButterKnife.bind(this);
@@ -47,24 +51,28 @@ public class StandardActivity extends BaseActivity {
 
     @OnClick(R.id.btn_start_standard)
     public void startStandard() {
+        EventRecorder.onClickEvent(this, "startStandard");
         Intent intent = new Intent(this, StandardActivity.class);
         startActivity(intent);
     }
 
     @OnClick(R.id.btn_start_singleTop)
     public void startSingleTop() {
+        EventRecorder.onClickEvent(this, "startSingleTop");
         Intent intent = new Intent(this, SingleTopActivity.class);
         startActivity(intent);
     }
 
     @OnClick(R.id.btn_start_singleTask)
     public void startSingleTask() {
+        EventRecorder.onClickEvent(this, "startSingleTask");
         Intent intent = new Intent(this, SingleTaskActivity.class);
         startActivity(intent);
     }
 
     @OnClick(R.id.btn_start_singleInstance)
     public void startSingleInstance() {
+        EventRecorder.onClickEvent(this, "startSingleInstance");
         Intent intent = new Intent(this, SingleInstanceActivity.class);
         startActivity(intent);
     }
@@ -89,17 +97,4 @@ public class StandardActivity extends BaseActivity {
         }
     }
 
-    @Override
-    public void initViews() {
-
-    }
-
-    @Override
-    public void loadData() {
-
-    }
-
-    public void addListeners() {
-
-    }
 }

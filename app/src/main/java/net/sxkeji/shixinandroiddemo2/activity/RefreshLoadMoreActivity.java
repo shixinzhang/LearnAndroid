@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 
-import net.sxkeji.shixinandroiddemo2.BaseActivity;
 import net.sxkeji.shixinandroiddemo2.R;
 import net.sxkeji.shixinandroiddemo2.view.refreshloadmoreview.RefreshLoadMoreAdapter;
 import net.sxkeji.shixinandroiddemo2.view.refreshloadmoreview.RefreshLoadMoreRecyclerView;
@@ -13,6 +12,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import top.shixinzhang.sxframework.common.base.BaseActivity;
 
 /**
  * <header>
@@ -48,7 +48,6 @@ public class RefreshLoadMoreActivity extends BaseActivity {
         initViews();
     }
 
-    @Override
     public void initViews() {
         mAdapter = new RefreshLoadMoreAdapter(this, mData);
         mLinearLayoutManager = new LinearLayoutManager(this);
@@ -57,7 +56,6 @@ public class RefreshLoadMoreActivity extends BaseActivity {
         mRefreshLoadMoreView.setLayoutManager(mLinearLayoutManager);
     }
 
-    @Override
     public void loadData() {
         mData = new ArrayList<>();
         for (int i = 0; i < 20; i++) {

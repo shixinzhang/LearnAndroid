@@ -30,13 +30,13 @@ import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.Call;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 import top.shixinzhang.sxframework.config.Config;
+import top.shixinzhang.sxframework.network.third.okhttp3.Call;
+import top.shixinzhang.sxframework.network.third.okhttp3.FormBody;
+import top.shixinzhang.sxframework.network.third.okhttp3.OkHttpClient;
+import top.shixinzhang.sxframework.network.third.okhttp3.Request;
+import top.shixinzhang.sxframework.network.third.okhttp3.RequestBody;
+import top.shixinzhang.sxframework.network.third.okhttp3.Response;
 
 /**
  * Description:

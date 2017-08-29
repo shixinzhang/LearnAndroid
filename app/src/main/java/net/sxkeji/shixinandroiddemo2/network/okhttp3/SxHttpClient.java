@@ -16,7 +16,6 @@
 
 package net.sxkeji.shixinandroiddemo2.network.okhttp3;
 
-import java.io.File;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
@@ -24,15 +23,13 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 
-import okhttp3.Cache;
-import okhttp3.Call;
-import okhttp3.Cookie;
-import okhttp3.CookieJar;
-import okhttp3.HttpUrl;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import top.shixinzhang.sxframework.config.Config;
+import top.shixinzhang.sxframework.network.third.okhttp3.Call;
+import top.shixinzhang.sxframework.network.third.okhttp3.Cookie;
+import top.shixinzhang.sxframework.network.third.okhttp3.CookieJar;
+import top.shixinzhang.sxframework.network.third.okhttp3.HttpUrl;
+import top.shixinzhang.sxframework.network.third.okhttp3.MediaType;
+import top.shixinzhang.sxframework.network.third.okhttp3.OkHttpClient;
+import top.shixinzhang.sxframework.network.third.okhttp3.Request;
 
 /**
  * Description:
@@ -72,6 +69,7 @@ public class SxHttpClient {
     private static OkHttpClient getOkHttpClient() {
         if (mClient == null) {
             synchronized (SxHttpClient.class) {
+                assert Thread.holdsLock(SxHttpClient.class);
                 if (mClient == null) {
                     mClient = initOkHttpClient();
                 }

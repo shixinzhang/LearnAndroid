@@ -70,11 +70,11 @@ public class DownloadTestActivity extends BaseActivity {
 
     @OnClick(R.id.btn_test_auto_install)
     public void autoInstall() {
-        try {
-            ApplicationUtils.autoInstallApp("shixinzhang.apk");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            ApplicationUtils.autoInstallApp("shixinzhang.apk");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @OnClick(R.id.btn_download)

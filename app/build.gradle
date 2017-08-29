@@ -18,13 +18,13 @@ android {
             storePassword 'zsx250'
         }
     }
-    compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "net.sxkeji.shixinandroiddemo2"
-        minSdkVersion 16
-        targetSdkVersion 23
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1010
         versionName "1.1"
 
@@ -103,7 +103,7 @@ android {
     }
 
     lintOptions {
-        warningsAsErrors true
+        warningsAsErrors false
         abortOnError true
         htmlReport true
     }
@@ -178,7 +178,8 @@ dependencies {
     compile project(':ioc')
     compile project(':ioc-annotation')
     apt project(':ioc-processor')
-
-    compile 'com.facebook.stetho:stetho:1.5.0'  //okhttp chrome 调试
+    compile 'com.facebook.stetho:stetho:1.5.0'
+    //okhttp chrome 调试
     compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+    compile project(path: ':android-utils')
 }

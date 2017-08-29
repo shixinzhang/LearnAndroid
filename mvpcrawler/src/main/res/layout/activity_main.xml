@@ -27,13 +27,21 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="top.shixinzhang.mvpcrawler.MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="188dp"
+        android:layout_marginTop="25dp"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/progressBar"
+        android:layout_centerHorizontal="true"
         android:text="The MVP Crawler Sample"/>
 
     <Button
@@ -68,12 +76,13 @@
         android:text="stop"
         android:textAllCaps="false"/>
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/btn_open_setting"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="65dp"/>
+        android:layout_above="@id/btn_stop"
+        android:text="open setting"
+        android:textAllCaps="false"/>
+
+
 </RelativeLayout>

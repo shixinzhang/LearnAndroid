@@ -179,6 +179,8 @@ public interface CrawlerContract {
         boolean needExitDetail(AccessibilityNodeInfo rootNode);  //需要退出车款详情页面
 
         void resolveNotWorked(final AccessibilityNodeInfo rootNode, int mode, String currentClassName);   //解决停止工作的情况
+
+        void openNumberExtra(AccessibilityNodeInfo rootNode, String className);
     }
 
     /**

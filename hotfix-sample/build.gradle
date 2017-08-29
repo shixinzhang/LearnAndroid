@@ -15,7 +15,7 @@
  */
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.tencent.tinker.patch'
+//apply plugin: 'com.tencent.tinker.patch'
 
 android {
     compileSdkVersion 26
@@ -48,7 +48,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     //optional, help to generate the final application
-    provided('com.tencent.tinker:tinker-android-anno:1.8.1')
-    //tinker's main Android lib
-    compile('com.tencent.tinker:tinker-android-lib:1.8.1')
+//    provided('com.tencent.tinker:tinker-android-anno:1.8.1')
+//    //tinker's main Android lib
+//    compile('com.tencent.tinker:tinker-android-lib:1.8.1')
 }
