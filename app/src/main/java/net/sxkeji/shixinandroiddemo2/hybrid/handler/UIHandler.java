@@ -20,8 +20,8 @@ import java.util.HashMap;
  * <a  href="https://about.me/shixinzhang">About me</a>
  */
 
-@HybridHandler(scheme = "shixinzhang", type = "ui")
-public class UIHandler {
+@HybridHandler(scheme = "shixinzhang", authority = "ui")
+public class UIHandler extends BaseHandler{
 
     @HybridMethodHandler(path = "/toast")
     public HybridHandlerResult showToast(HybridEvent hybridEvent) {
@@ -35,5 +35,10 @@ public class UIHandler {
         }
         return HybridHandlerResult.HANDLE_NOT;
 
+    }
+
+    @Override
+    public HybridHandlerResult reactEvent(final HybridEvent event) {
+        return null;
     }
 }

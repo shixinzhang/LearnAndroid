@@ -19,5 +19,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface HybridHandler {
     String scheme();  //定义协议
-    String[] type();    //处理类型
+    String[] authority();    //处理类型
 }

@@ -11,7 +11,6 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import net.sxkeji.shixinandroiddemo2.hybrid.handler.internal.HybridFactory;
 import net.sxkeji.shixinandroiddemo2.hybrid.handler.internal.HybridHandlerResult;
 
 /**

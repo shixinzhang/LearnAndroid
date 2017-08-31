@@ -1,15 +1,37 @@
-package net.sxkeji.shixinandroiddemo2.hybrid.handler.internal;
+/*
+ * Copyright (c) 2017. shixinzhang (shixinzhang2016@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-import android.net.Uri;
+package net.sxkeji.shixinandroiddemo2.hybrid.handler;
+
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
-import java.lang.reflect.InvocationTargetException;
+import net.sxkeji.shixinandroiddemo2.hybrid.handler.internal.HybridEvent;
+import net.sxkeji.shixinandroiddemo2.hybrid.handler.internal.HybridHandler;
+import net.sxkeji.shixinandroiddemo2.hybrid.handler.internal.HybridHandlerResult;
+import net.sxkeji.shixinandroiddemo2.hybrid.handler.internal.HybridMethodHandler;
+
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
 /**
  * <br/> Description:
+ * <p>
+ * 做两件事：1.注册 2.调用处理
  * <p>
  * <br/> Created by shixinzhang on 16/12/24.
  * <p>
@@ -42,19 +64,20 @@ public class HybridFactory {
         }
     }
 
-    public void registerHandlers(Class... classes) {
-        for (Class handlerClass : classes) {
+    @SafeVarargs
+    public final void registerHandlers(Class<BaseHandler>... classes) {
+        for (Class<BaseHandler> handlerClass : classes) {
             registerHandler(handlerClass);
         }
     }
 
-    public void registerHandler(Class clz) {
-        HybridHandler annotation = (HybridHandler) clz.getAnnotation(HybridHandler.class);
+    private void registerHandler(@NonNull Class<BaseHandler> clz) {
+        HybridHandler annotation = clz.getAnnotation(HybridHandler.class);
         if (annotation == null) {
             return;
         }
         String scheme = annotation.scheme();
-        String[] types = annotation.type();
+        String[] types = annotation.authority();
         String methodPath;
         for (String type : types) {
             Method[] methods = clz.getMethods();

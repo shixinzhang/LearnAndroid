@@ -4,7 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 
 import net.sxkeji.shixinandroiddemo2.hybrid.handler.internal.HybridEvent;
-import net.sxkeji.shixinandroiddemo2.hybrid.handler.internal.HybridFactory;
+import net.sxkeji.shixinandroiddemo2.hybrid.handler.HybridFactory;
 import net.sxkeji.shixinandroiddemo2.hybrid.handler.internal.HybridHandlerResult;
 import net.sxkeji.shixinandroiddemo2.util.GsonUtils;
 

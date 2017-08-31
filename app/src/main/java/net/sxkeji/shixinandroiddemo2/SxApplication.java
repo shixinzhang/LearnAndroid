@@ -11,7 +11,7 @@ import com.taobao.weex.WXSDKEngine;
 import com.umeng.analytics.MobclickAgent;
 
 import net.sxkeji.shixinandroiddemo2.hybrid.handler.UIHandler;
-import net.sxkeji.shixinandroiddemo2.hybrid.handler.internal.HybridFactory;
+import net.sxkeji.shixinandroiddemo2.hybrid.handler.HybridFactory;
 import net.sxkeji.shixinandroiddemo2.weex.adapter.DefaultWebSocketAdapterFactory;
 import net.sxkeji.shixinandroiddemo2.weex.adapter.ImageAdapter;
 import net.sxkeji.shixinandroiddemo2.weex.adapter.PlayDebugAdapter;
