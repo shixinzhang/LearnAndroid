@@ -212,6 +212,11 @@
             android:launchMode="singleTop"/>
 
         <activity
+            android:name=".activity.image.ImageLoadActivity"
+            android:label="@string/image_load"
+            android:launchMode="singleTop"/>
+
+        <activity
             android:name=".activity.eventbus.EventBusRegisterActivity"
             android:label="@string/eventbus_sample"
             android:launchMode="singleTop"/>

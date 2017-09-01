@@ -50,4 +50,5 @@
     <string name="eventbus_sticky">EventBus 粘性事件</string>
     <string name="eventbus_post">EventBus 消息发送页面</string>
     <string name="recycler_test">测试 RecyclerView 滑动</string>
+    <string name="image_load">图片加载库</string>
 </resources>

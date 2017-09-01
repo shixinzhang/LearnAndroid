@@ -13,6 +13,7 @@ import net.sxkeji.shixinandroiddemo2.activity.ANRTestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.AmapLocationActivity;
 import net.sxkeji.shixinandroiddemo2.activity.AnnotationTestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.ChangeThemeActivity;
+import net.sxkeji.shixinandroiddemo2.activity.image.ImageLoadActivity;
 import net.sxkeji.shixinandroiddemo2.activity.view.DIYView1Activity;
 import net.sxkeji.shixinandroiddemo2.activity.DownloadTestActivity;
 import net.sxkeji.shixinandroiddemo2.activity.FloatTrackerActivity;
@@ -164,7 +165,8 @@ public class TestMainActivity extends BaseActivity {
                 new ActivityBean(getString(R.string.intent_service_test), IntentServiceActivity.class),
                 new ActivityBean(getString(R.string.ipc_test), IPCTestActivity.class),
                 new ActivityBean(getString(R.string.eventbus_sample), EventBusRegisterActivity.class),
-                new ActivityBean(getString(R.string.okhttp_test), OkHttp3TestActivity.class));
+                new ActivityBean(getString(R.string.okhttp_test), OkHttp3TestActivity.class),
+                new ActivityBean(getString(R.string.image_load), ImageLoadActivity.class));
     }
 
     @Override
