@@ -42,9 +42,9 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import top.shixinzhang.sxframework.network.third.retrofit2.request.Call;
+import top.shixinzhang.sxframework.network.third.retrofit2.request.Callback;
+import top.shixinzhang.sxframework.network.third.retrofit2.request.Response;
 
 /**
  * <br/> Description: 嘿嘿嘿

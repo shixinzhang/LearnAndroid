@@ -27,10 +27,12 @@ import net.sxkeji.shixinandroiddemo2.network.okhttp3.SxHttpClient;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import top.shixinzhang.sxframework.config.Config;
+import top.shixinzhang.sxframework.network.third.okhttp3.CacheControl;
 import top.shixinzhang.sxframework.network.third.okhttp3.Call;
 import top.shixinzhang.sxframework.network.third.okhttp3.FormBody;
 import top.shixinzhang.sxframework.network.third.okhttp3.OkHttpClient;
@@ -160,7 +162,20 @@ public class OkHttp3TestActivity extends BaseActivity {
 
     @Override
     public void initViews() {
+        Request request = new Request.Builder()
+                .cacheControl(new CacheControl.Builder()
+                        .noCache()
+                        .maxAge(10, TimeUnit.MILLISECONDS)
+                        .noStore()
+                        .onlyIfCached()
+                        .build())
+                .url("")
+                .build();
 
+
+        Request build = new Request.Builder()
+                .cacheControl(CacheControl.FORCE_CACHE)
+                .build();
     }
 
     @Override

@@ -2,22 +2,16 @@ package net.sxkeji.shixinandroiddemo2.network;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import net.sxkeji.shixinandroiddemo2.network.SafelyResponseBody;
-
 import java.io.IOException;
 
-import okhttp3.HttpUrl;
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
-import retrofit2.GsonConverterFactory;
-import retrofit2.Retrofit;
+import top.shixinzhang.sxframework.network.third.okhttp3.HttpUrl;
+import top.shixinzhang.sxframework.network.third.okhttp3.Interceptor;
+import top.shixinzhang.sxframework.network.third.okhttp3.OkHttpClient;
+import top.shixinzhang.sxframework.network.third.okhttp3.Request;
+import top.shixinzhang.sxframework.network.third.okhttp3.RequestBody;
+import top.shixinzhang.sxframework.network.third.okhttp3.Response;
+import top.shixinzhang.sxframework.network.third.retrofit2.converter.GsonConverterFactory;
+import top.shixinzhang.sxframework.network.third.retrofit2.request.Retrofit;
 
 /**
  * <br/> Description: 封装的请求类，目前使用 Retrofit、okHttp

@@ -30,8 +30,9 @@ dependencies {
     compile "com.jakewharton:butterknife:$rootProject.butterknifeVersion"
     apt "com.jakewharton:butterknife-compiler:$rootProject.butterknifeVersion"
 
-//    compile "com.github.shixinzhang:android-utils:$rootProject.utilsVersion"
-    compile project(path: ':android-utils')
+
+    compile 'com.github.shixinzhang:android-utils:1.0.4'
+//    compile project(path: ':android-utils')
 }
 
 tasks.whenTaskAdded { task ->

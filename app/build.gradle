@@ -182,5 +182,7 @@ dependencies {
     compile 'com.facebook.stetho:stetho:1.5.0'
     //okhttp chrome 调试
     compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
-    compile project(path: ':android-utils')
+
+    compile 'com.github.shixinzhang:android-utils:1.0.4'
+//    compile project(path: ':android-utils')
 }

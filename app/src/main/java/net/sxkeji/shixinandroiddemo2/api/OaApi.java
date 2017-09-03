@@ -5,9 +5,10 @@ import net.sxkeji.shixinandroiddemo2.bean.OaLoginResultBean;
 import net.sxkeji.shixinandroiddemo2.bean.OaStatusBean;
 import net.sxkeji.shixinandroiddemo2.bean.OaUserInfoBean;
 
-import retrofit2.Call;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
+import top.shixinzhang.sxframework.network.third.retrofit2.http.GET;
+import top.shixinzhang.sxframework.network.third.retrofit2.http.Query;
+import top.shixinzhang.sxframework.network.third.retrofit2.request.Call;
+
 
 /**
  * <br/> Description:
