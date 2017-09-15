@@ -17,6 +17,7 @@
 package top.shixinzhang.hook_sample;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -48,5 +49,12 @@ public class SecondActivity extends BaseActivity {
             }
         });
         setContentView(button);
+
+        Intent intent = getIntent();
+        if (!Intent.ACTION_VIEW.equals(intent.getAction())) {
+            return;
+        }
+        Uri data = intent.getData();
+        button.setText(data.getHost());
     }
 }

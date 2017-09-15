@@ -37,7 +37,17 @@
 
         <activity
             android:name=".SecondActivity"
-            android:launchMode="standard"/>
+            android:launchMode="standard">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <!--<category android:name="android.intent.category.APP_BROWSER"/>-->
+                <data
+                    android:scheme="zsx"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
